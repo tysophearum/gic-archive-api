@@ -2,41 +2,18 @@ import 'reflect-metadata';
 import express from 'express';
 import { ApolloServer } from 'apollo-server-express';
 import { Arg, buildSchema, Mutation, Query, Resolver, Field as GqlField, } from 'type-graphql';
-// import { HelloModel } from './models/HelloModel';
-import { getModelForClass } from '@typegoose/typegoose';
 import { connectDB } from './config/DBConfig';
-import { prop as DbField, modelOptions } from '@typegoose/typegoose';
+import Resolvers from './resolvers';
+import { connectAmqp } from './config/rabbitmqConfig';
 
 async function startServer() {
   const app = express();
   await connectDB();
-
-  class Hello {
-    @DbField()
-    @GqlField()
-    message!: string;
-  }
-  
-  const HelloModel = getModelForClass(Hello);
-  
-  @Resolver()
-  class HelloResolver {
-    @Query(() => [Hello])
-    async hello() {
-      const helloData = await HelloModel.find();
-      return helloData ? helloData : 'Hello world!';
-    }
-
-    @Mutation(() => Hello)
-    async createHelloMessage(@Arg('message') message: string) {
-      const hello = await HelloModel.create({ message });
-      return hello.message;
-    }
-  }
+  await connectAmqp();
 
   // Build GraphQL schema
   const schema = await buildSchema({
-    resolvers: [HelloResolver],
+    resolvers: Resolvers as any,
   });
 
   // Create an ApolloServer instance with your schema

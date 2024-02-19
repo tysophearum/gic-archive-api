@@ -12,6 +12,7 @@
   "license": "ISC",
   "dependencies": {
     "@typegoose/typegoose": "^12.1.0",
+    "amqplib": "^0.10.3",
     "apollo-server-express": "^3.13.0",
     "compression": "^1.7.4",
     "cookie-parser": "^1.4.6",
@@ -24,6 +25,7 @@
     "type-graphql": "^1.1.1"
   },
   "devDependencies": {
+    "@types/amqplib": "^0.10.4",
     "@types/compression": "^1.7.5",
     "@types/cookie-parser": "^1.4.6",
     "@types/cors": "^2.8.17",
