@@ -1,3 +1,5 @@
 import { Hello } from './hello'
+import { User } from './user'
+import { Document } from './document'
 
-export { Hello }
+export { Hello, User, Document }

@@ -16,6 +16,6 @@ export class HelloResolver {
   @Mutation(() => Hello)
   @UseMiddleware(testMiddleware)
   async createHelloMessage(@Arg('message') message: string) {
-    return await createHelloAction({message});
+    return await createHelloAction(message);
   }
 }

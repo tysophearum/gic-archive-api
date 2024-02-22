@@ -5,6 +5,7 @@ import { Arg, buildSchema, Mutation, Query, Resolver, Field as GqlField, } from 
 import { connectDB } from './config/DBConfig';
 import Resolvers from './resolvers';
 import { connectAmqp } from './config/rabbitmqConfig';
+import { graphqlUploadExpress } from 'graphql-upload-minimal';
 
 async function startServer() {
   const app = express();
@@ -14,6 +15,7 @@ async function startServer() {
   // Build GraphQL schema
   const schema = await buildSchema({
     resolvers: Resolvers as any,
+    // validate: { forbidUnknownValues: false }
   });
 
   // Create an ApolloServer instance with your schema
@@ -21,6 +23,7 @@ async function startServer() {
 
   await server.start();
 
+  app.use(graphqlUploadExpress())
   // Apply the Apollo middleware to Express
   server.applyMiddleware({ app });
 
