@@ -1,7 +1,8 @@
 import { getAllUsersAction, registerUserAction } from "../controllers/user";
-import { User, UserRegisterInput } from "../entities/user";
+import { ListUsersResponse, User, UserRegisterInput } from "../entities/user";
 import { Arg, Mutation, Query, Resolver } from "type-graphql";
 import {FileUpload, GraphQLUpload} from 'graphql-upload-minimal';
+import { PaginationInput } from "../typeDefs";
 
 @Resolver()
 export class UserResolver {
@@ -13,8 +14,10 @@ export class UserResolver {
         return await registerUserAction(user, file);
     }
 
-    @Query(() => [User])
-    async getAllUsers() {
-        return await getAllUsersAction();
+    @Query(() => ListUsersResponse)
+    async listUser(
+        @Arg("pager", () => PaginationInput) pager: PaginationInput,
+    ) {
+        return await getAllUsersAction(pager);
     }
 }

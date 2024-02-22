@@ -9,7 +9,7 @@ const HelloModel = getModelForClass(Hello);
 @Resolver()
 export class HelloResolver {
   @Query(() => [Hello])
-  async getAllHello() {
+  async listHello() {
     return await getAllHellosAction();
   }
 

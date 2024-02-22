@@ -1,5 +1,8 @@
-import { User } from "../entities/user";
+import { PaginationInput } from "../typeDefs";
+import { ListUsersResponse, User } from "../entities/user";
 import { UserRepository } from "../repositories/userRepository";
+import calculatePagination from "../util/calculatePaginationResponse";
+
 
 export class UserService {
     private userRepository: UserRepository
@@ -12,8 +15,15 @@ export class UserService {
         return await this.userRepository.createUser(user);
     }
 
-    async getAllUsers() {
-        return await this.userRepository.findAllUsers();
+    async getAllUsers(pager: PaginationInput): Promise<ListUsersResponse> {
+        const users = await this.userRepository.findAllUsers(pager);
+        const totalUsers = await this.userRepository.countUsers();
+        const pagination = calculatePagination(pager, totalUsers);
+        
+        return {
+            users,
+            pagination
+        }
     }
 
     async getUserById(id: string) {

@@ -5,6 +5,7 @@ import { DocumentService } from "../../services"
 import validateUserId from "../../util/validateUserId"
 import { FileUpload } from "graphql-upload-minimal"
 import saveFile from "../../util/saveFileUtil"
+import { Types } from "mongoose"
 
 const createDocumentAction =async (documentInput:CreateDocumentInput, file: FileUpload): Promise<Document> => {
     const documentRepository = new DocumentRepositoryImpl()
@@ -21,13 +22,12 @@ const createDocumentAction =async (documentInput:CreateDocumentInput, file: File
         throw new Error("User not found")
     }
 
-    collaborators.forEach(async (collaborator) => {
-        const haveUser = await validateUserId(collaborator)
+    await Promise.all(collaborators.map(async (collaborator) => {
+        const haveUser = await validateUserId(collaborator);
         if (!haveUser) {
-            throw new Error("One or more of the collaborators is not found")
-        } 
-        return haveUser; 
-    })
+            throw new Error("One or more of the collaborators is not found");
+        }
+    }));
 
     if (!file) {
         throw new Error("File is required")
@@ -39,7 +39,7 @@ const createDocumentAction =async (documentInput:CreateDocumentInput, file: File
         description,
         documentLink,
         repositoryLink,
-        userId,
+        user: userId,
         collaborators,
         isApproved: false,
     }

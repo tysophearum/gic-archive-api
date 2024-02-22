@@ -1,6 +1,9 @@
-import { ObjectType, Field as GqlField, InputType } from "type-graphql";
-import { Prop as DBField } from "@typegoose/typegoose";
-import { IsEmail, IsOptional, IsString } from "class-validator";
+import { ObjectType, Field as GqlField, InputType, ID } from "type-graphql";
+import { Prop as DBField, Ref } from "@typegoose/typegoose";
+import { IsOptional, IsString } from "class-validator";
+import { User } from "./user";
+import { Pagination } from "../typeDefs";
+
 
 @ObjectType()
 export class Document {
@@ -12,12 +15,12 @@ export class Document {
     @DBField({type: String, required: true})
     description: string;
 
-    @GqlField(() => String, { nullable: false })
-    @DBField({type: String, required: true})
-    userId: string;
+    @GqlField(() => User) // Change field type to User
+    @DBField({type: String, ref: User, required: true}) // Reference the User model
+    user: string;
 
-    @GqlField(() => [String], {nullable: true})
-    @DBField({type: [String], required: false, default: []})
+    @GqlField(() => [User], {nullable: true})
+    @DBField({type: [String], ref: User, required: false, default: []})
     collaborators: string[];
     
     @GqlField(() => String, { nullable: false })
@@ -33,6 +36,15 @@ export class Document {
     isApproved: boolean;
 }
 
+@ObjectType()
+export class ListDocumentResponse {
+    @GqlField(() => [Document])
+    documents: Document[];
+
+    @GqlField(() => Pagination)
+    pagination: Pagination;
+}
+
 @InputType()
 export class CreateDocumentInput {
     @GqlField(() => String)
@@ -43,7 +55,7 @@ export class CreateDocumentInput {
     @IsString()
     description: string;
 
-    @GqlField(() => String)
+    @GqlField(() => ID)
     @IsString()
     userId: string;
 
@@ -51,7 +63,7 @@ export class CreateDocumentInput {
     @IsString()
     repositoryLink: string;
 
-    @GqlField(() => [String])
+    @GqlField(() => [ID])
     @IsOptional()
     @IsString({each: true})
     collaborators: string[];
