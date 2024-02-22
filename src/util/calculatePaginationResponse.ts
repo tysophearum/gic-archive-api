@@ -4,7 +4,6 @@ export default function calculatePaginationResponse(
   { page, limit }: PaginationInput,
   totalItems: number
 ): Pagination {
-  // const totalItems;
   const totalPages = Math.ceil(totalItems / limit);
 
   const hasNextPage = page < totalPages;

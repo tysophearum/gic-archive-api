@@ -16,7 +16,7 @@ export class UserResolver {
 
     @Query(() => ListUsersResponse)
     async listUser(
-        @Arg("pager", () => PaginationInput) pager: PaginationInput,
+        @Arg("pager", () => PaginationInput, { nullable: true }) pager: PaginationInput,
     ) {
         return await getAllUsersAction(pager);
     }

@@ -34,6 +34,10 @@ export class Document {
     @GqlField(() => Boolean, { nullable: false })
     @DBField({type: Boolean, required: true, default: false})
     isApproved: boolean;
+
+    // @GqlField(() => Number, { nullable: false })
+    // @DBField({type: Number, required: true, default: 0})
+    // likeAmount: number;
 }
 
 @ObjectType()

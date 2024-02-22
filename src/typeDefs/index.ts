@@ -23,9 +23,9 @@ export class Pagination {
 
 @InputType()
 export class PaginationInput {
-    @GqlField(type => Number)
+    @GqlField(type => Number, {nullable: true, defaultValue: 1})
     page: number;
 
-    @GqlField(type => Number)
+    @GqlField(type => Number, {nullable: true, defaultValue: 2})
     limit: number;
 }

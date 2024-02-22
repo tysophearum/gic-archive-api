@@ -4,6 +4,8 @@ import { PaginationInput } from "../../typeDefs";
 import { ListUsersResponse } from "../../entities/user";
 
 const getAllUsersAction = async (pager: PaginationInput): Promise<ListUsersResponse> => {
+    console.log(pager);
+    
     const userRepository = new UserRepositoryImpl();
     const userService = new UserService(userRepository);
 
