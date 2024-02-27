@@ -15,8 +15,12 @@ export class UserService {
         return await this.userRepository.createUser(user);
     }
 
-    async getAllUsers(pager: PaginationInput): Promise<ListUsersResponse> {
-        const users = await this.userRepository.findAllUsers(pager);
+    async getUsers(pager: PaginationInput=null, query: any=null): Promise<ListUsersResponse> {
+        if (!pager) {
+            pager.limit = 1;
+            pager.page = 1;
+        }
+        const users = await this.userRepository.findUsers(pager, query);
         const totalUsers = await this.userRepository.countUsers();
         const pagination = calculatePagination(pager, totalUsers);
         

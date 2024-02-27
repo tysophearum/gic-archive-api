@@ -4,7 +4,7 @@ import { PaginationInput } from "../typeDefs";
 
 export interface DocumentRepository {
   createDocument(document: Document): Promise<Document>;
-  getAllDocuments(pager: PaginationInput): Promise<Document[]>;
+  findDocuments(pager: PaginationInput, query: any): Promise<Document[]>;
   countDocuments(): Promise<number>;
 }
 
@@ -22,7 +22,7 @@ export class DocumentRepositoryImpl implements DocumentRepository {
     ).populate("collaborators");
   }
 
-  async getAllDocuments({ page, limit }: PaginationInput): Promise<Document[]> {
+  async findDocuments({ page, limit }: PaginationInput, query: any = null): Promise<Document[]> {
     const skip = (page - 1) * limit;
     
     return await this.documentModel

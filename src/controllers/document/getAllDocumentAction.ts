@@ -8,7 +8,7 @@ const getAllDocumentsAction =async (pager: PaginationInput): Promise<ListDocumen
     const documentRepository = new DocumentRepositoryImpl()
     const documentService = new DocumentService(documentRepository)
 
-    return await documentService.getAllDocuments(pager)
+    return await documentService.getDocuments(pager)
 }
 
 export default getAllDocumentsAction;

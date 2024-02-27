@@ -4,21 +4,20 @@ import { IsEmail, IsString } from "class-validator";
 import { Pagination } from "../typeDefs";
 import { Types } from "mongoose";
 
-
 @ObjectType()
 export class User {
     @GqlField(() => ID, { name: 'id' })
     readonly _id?: Types.ObjectId;
-    
+
     @GqlField(() => String, { nullable: false })
-    @DBField({type: String, required: true})
+    @DBField({type: String, required: true, unique: true})
     username: string;
 
     @DBField({type: String, required: true})
     password: string;
 
     @GqlField(() => String, { nullable: false })
-    @DBField({type: String, required: true})
+    @DBField({type: String, required: true, unique: true})
     email: string;
 
     @DBField({type: String, required: false})

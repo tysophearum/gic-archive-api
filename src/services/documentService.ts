@@ -14,8 +14,8 @@ export class DocumentService {
         return await this.documentRepository.createDocument(document);
     }
 
-    async getAllDocuments(pager: PaginationInput) {
-        const documents = await this.documentRepository.getAllDocuments(pager);
+    async getDocuments(pager: PaginationInput, query: any=null) {
+        const documents = await this.documentRepository.findDocuments(pager, query);
         const totalDocuments = await this.documentRepository.countDocuments();
         const pagination = calculatePaginationResponse(pager, totalDocuments);
 

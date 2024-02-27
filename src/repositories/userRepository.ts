@@ -4,7 +4,7 @@ import { PaginationInput } from "../typeDefs";
 
 export interface UserRepository {
   createUser(user: User): Promise<User>;
-  findAllUsers(pager: PaginationInput): Promise<User[]>;
+  findUsers(pager: PaginationInput, query: any): Promise<User[]>;
   findUserById(id: string): Promise<User>;
   countUsers(query?: unknown): Promise<number>
 }
@@ -20,10 +20,10 @@ export class UserRepositoryImpl implements UserRepository {
     return await this.userModel.create(user);
   }
 
-  async findAllUsers({ page, limit }: PaginationInput): Promise<User[]> {
+  async findUsers({ page, limit }: PaginationInput, query: any): Promise<User[]> {
     const skip = (page - 1) * limit;
     return await this.userModel
-        .find()
+        .find(query)
         .skip(skip)
         .limit(limit)
         .exec();

@@ -7,7 +7,7 @@ const getAllUsersAction = async (pager: PaginationInput): Promise<ListUsersRespo
     const userRepository = new UserRepositoryImpl();
     const userService = new UserService(userRepository);
 
-    return await userService.getAllUsers(pager);
+    return await userService.getUsers(pager);
 }
 
 export default getAllUsersAction;
