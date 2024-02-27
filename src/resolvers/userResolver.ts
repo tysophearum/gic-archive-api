@@ -15,13 +15,13 @@ export class UserResolver {
         return await registerUserAction(user, file);
     }
 
-    @Mutation(() => UserResponse)
-    async logIn(
-        @Arg("username") username: string,
-        @Arg("password") password: string,
-    ): Promise<UserResponse> {
-        return await registerUserAction(user, file);
-    }
+    // @Mutation(() => UserResponse)
+    // async logIn(
+    //     @Arg("username") username: string,
+    //     @Arg("password") password: string,
+    // ): Promise<UserResponse> {
+    //     return await registerUserAction(user, file);
+    // }
 
     @Query(() => ListUsersResponse)
     async listUser(
