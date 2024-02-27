@@ -8,9 +8,6 @@ import { UserService } from "../services";
 const JWT_SECRET = process.env.JWT_SECRET;
 
 const UserMiddleware: MiddlewareFn<any> = async ({ context }, next) => {
-  const userRepository = new UserRepositoryImpl();
-  const userService = new UserService(userRepository);
-
   if(!context.authorization) {
     throw new Error('Invalid token')
   }
@@ -20,15 +17,22 @@ const UserMiddleware: MiddlewareFn<any> = async ({ context }, next) => {
     token = token.substring(7, token.length);
   }
   
-  const payload:any = jwt.verify(token, JWT_SECRET);
-  
-  const user = await userService.getUserById(payload.user._id);
-
-  if (!user) {
-    throw new Error('Invalid token')
+  try {
+    const payload:any = jwt.verify(token, JWT_SECRET);
+    
+    // Check if the payload contains the necessary user ID
+    if (!payload || !payload.user || !payload.user._id) {
+      throw new Error('Invalid token');
+    }
+    
+    // If the token is valid, you can attach the user ID to the context
+    context.userId = payload.user._id;
+    
+    // Continue with the next middleware or resolver
+    return next();
+  } catch (error) {
+    throw new Error('Invalid token');
   }
-  
-  return next();
 }
 
 export default UserMiddleware;
