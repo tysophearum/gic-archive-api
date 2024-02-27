@@ -26,6 +26,15 @@ export class User {
 }
 
 @ObjectType()
+export class UserResponse {
+    @GqlField(() => User)
+    user: User;
+
+    @GqlField(() => String)
+    token: string;
+}
+
+@ObjectType()
 export class ListUsersResponse{
     @GqlField(() => [User])
     users: User[];

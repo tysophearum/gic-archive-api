@@ -1,12 +1,12 @@
 import { FileUpload } from "graphql-upload-minimal";
-import { User, UserRegisterInput } from "../../entities/user";
+import { User, UserRegisterInput, UserResponse } from "../../entities";
 import { UserRepositoryImpl } from "../../repositories/userRepository";
 import { UserService } from "../../services/userService";
 import saveFile from "../../util/saveFileUtil";
 import bcrypt from 'bcrypt';
 import generateToken from "../../util/generateToken";
 
-const registerUserAction = async ({username, password, confirm_password, email }: UserRegisterInput, file: FileUpload) => {
+const registerUserAction = async ({username, password, confirm_password, email }: UserRegisterInput, file: FileUpload): Promise<UserResponse> => {
     const userRepository = new UserRepositoryImpl();
     const userService = new UserService(userRepository);
 
@@ -18,7 +18,10 @@ const registerUserAction = async ({username, password, confirm_password, email }
         throw new Error('Passwords do not match');
     }
 
-    const picture = await saveFile(file)
+    let picture = '';
+    if(file){
+        picture = await saveFile(file)
+    }
 
     const hashedPassword = await bcrypt.hash(password, 10);
 
@@ -28,8 +31,14 @@ const registerUserAction = async ({username, password, confirm_password, email }
         email,
         picture,
     }
-    
-    return userService.register(user);
+
+    const registeredUser = await userService.register(user);
+    const token = generateToken(registeredUser);
+
+    return {
+        user: registeredUser,
+        token,
+    }
 }
 
 export default registerUserAction;
