@@ -1,11 +1,15 @@
-import { ObjectType, Field as GqlField, InputType } from "type-graphql";
+import { ObjectType, Field as GqlField, InputType, ID } from "type-graphql";
 import { Prop as DBField } from "@typegoose/typegoose";
 import { IsEmail, IsString } from "class-validator";
 import { Pagination } from "../typeDefs";
+import { Types } from "mongoose";
 
 
 @ObjectType()
 export class User {
+    @GqlField(() => ID, { name: 'id' })
+    readonly _id?: Types.ObjectId;
+    
     @GqlField(() => String, { nullable: false })
     @DBField({type: String, required: true})
     username: string;

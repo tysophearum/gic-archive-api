@@ -3,6 +3,8 @@ import { User, UserRegisterInput } from "../../entities/user";
 import { UserRepositoryImpl } from "../../repositories/userRepository";
 import { UserService } from "../../services/userService";
 import saveFile from "../../util/saveFileUtil";
+import bcrypt from 'bcrypt';
+import generateToken from "../../util/generateToken";
 
 const registerUserAction = async ({username, password, confirm_password, email }: UserRegisterInput, file: FileUpload) => {
     const userRepository = new UserRepositoryImpl();
@@ -18,14 +20,15 @@ const registerUserAction = async ({username, password, confirm_password, email }
 
     const picture = await saveFile(file)
 
+    const hashedPassword = await bcrypt.hash(password, 10);
+
     const user: User = {
         username,
-        password,
+        password: hashedPassword,
         email,
         picture,
     }
-
-
+    
     return userService.register(user);
 }
 

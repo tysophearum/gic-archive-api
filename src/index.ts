@@ -19,7 +19,12 @@ async function startServer() {
   });
 
   // Create an ApolloServer instance with your schema
-  const server = new ApolloServer({ schema });
+  const server = new ApolloServer({ 
+    schema,
+    context: ({ req }) => {
+      return req.headers
+    },
+  });
 
   await server.start();
 

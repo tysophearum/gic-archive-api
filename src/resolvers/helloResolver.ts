@@ -1,4 +1,4 @@
-import { Arg, Mutation, Query, Resolver, UseMiddleware } from 'type-graphql';
+import { Arg, Ctx, Mutation, Query, Resolver, UseMiddleware } from 'type-graphql';
 import { Hello } from '../entities';
 import { getModelForClass } from '@typegoose/typegoose';
 import { createHelloAction, getAllHellosAction } from '../controllers/hello';
@@ -9,13 +9,14 @@ const HelloModel = getModelForClass(Hello);
 @Resolver()
 export class HelloResolver {
   @Query(() => [Hello])
-  async listHello() {
+  @UseMiddleware(testMiddleware)
+  async listHello(@Ctx()context: any) {
     return await getAllHellosAction();
   }
 
   @Mutation(() => Hello)
   @UseMiddleware(testMiddleware)
-  async createHelloMessage(@Arg('message') message: string) {
+  async createHelloMessage(@Arg('message') message: string, @Ctx()context: any) {
     return await createHelloAction(message);
   }
 }
