@@ -26,7 +26,7 @@ export class DocumentRepositoryImpl implements DocumentRepository {
     const skip = (page - 1) * limit;
     
     return await this.documentModel
-      .find()
+      .find(query)
       .populate("user")
       .populate("collaborators")
       .lean()

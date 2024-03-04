@@ -2,6 +2,7 @@ import { PaginationInput } from "../typeDefs";
 import { ListUsersResponse, User } from "../entities/user";
 import { UserRepository } from "../repositories/userRepository";
 import calculatePagination from "../util/calculatePaginationResponse";
+require('dotenv').config()
 
 
 export class UserService {
@@ -15,11 +16,7 @@ export class UserService {
         return await this.userRepository.createUser(user);
     }
 
-    async getUsers(pager: PaginationInput=null, query: any=null): Promise<ListUsersResponse> {
-        if (!pager) {
-            pager.limit = 1;
-            pager.page = 1;
-        }
+    async getUsers(pager: PaginationInput={page: 1, limit: Number(process.env.MAX_LIMIT)}, query: any=null): Promise<ListUsersResponse> {
         const users = await this.userRepository.findUsers(pager, query);
         const totalUsers = await this.userRepository.countUsers();
         const pagination = calculatePagination(pager, totalUsers);

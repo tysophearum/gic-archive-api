@@ -20,7 +20,7 @@ export class DocumentResolver {
   @Query(() => ListDocumentResponse)
   @UseMiddleware(UserMiddleware)
   async listDocument(
-    @Arg("pager", () => PaginationInput) pager: PaginationInput,
+    @Arg("pager", () => PaginationInput, { nullable: true }) pager: PaginationInput,
   ) {
     return await getAllDocumentsAction(pager);
   }
