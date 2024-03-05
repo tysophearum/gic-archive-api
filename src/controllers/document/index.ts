@@ -1,7 +1,9 @@
 import createDocumentAction from "./createDocumentAction";
-import getAllDocumentsAction from "./getAllDocumentAction";
+import listDocumentsAction from "./listDocumentsAction";
+import listApprovedDocumentsAction from "./listApprovedDocumentsAction";
 
 export {
     createDocumentAction,
-    getAllDocumentsAction
+    listDocumentsAction,
+    listApprovedDocumentsAction,
 }

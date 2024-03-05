@@ -30,6 +30,7 @@ const registerUserAction = async ({username, password, confirm_password, email }
         password: hashedPassword,
         email,
         picture,
+        role: "user"
     }
 
     const registeredUser = await userService.register(user);

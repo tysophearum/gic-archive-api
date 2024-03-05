@@ -1,7 +1,7 @@
 import { CreateDocumentInput, ListDocumentResponse } from "../entities/document";
 import { Arg, Mutation, Query, Resolver, UseMiddleware } from "type-graphql";
 import { Document } from "../entities";
-import { createDocumentAction, getAllDocumentsAction } from "../controllers/document";
+import { createDocumentAction, listDocumentsAction, listApprovedDocumentsAction } from "../controllers/document";
 import { FileUpload, GraphQLUpload } from "graphql-upload-minimal";
 import { PaginationInput } from "../typeDefs";
 import UserMiddleware from "../middleware/UserMiddleware";
@@ -19,9 +19,16 @@ export class DocumentResolver {
 
   @Query(() => ListDocumentResponse)
   @UseMiddleware(UserMiddleware)
-  async listDocument(
+  async listDocuments(
     @Arg("pager", () => PaginationInput, { nullable: true }) pager: PaginationInput,
   ) {
-    return await getAllDocumentsAction(pager);
+    return await listDocumentsAction(pager);
+  }
+
+  @Query(() => ListDocumentResponse)
+  async listApprovedDocuments(
+    @Arg("pager", () => PaginationInput, { nullable: true }) pager: PaginationInput,
+  ) {
+    return await listApprovedDocumentsAction(pager);
   }
 }

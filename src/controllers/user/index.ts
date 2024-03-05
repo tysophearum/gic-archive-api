@@ -1,5 +1,5 @@
 import registerUserAction from "./registerUserAction";
-import getAllUsersAction from "./getAllUsersAction";
+import listUsersAction from "./listUsersAction";
 import getUserByIdAction from "./getUserByIdAction";
 
-export { registerUserAction, getAllUsersAction, getUserByIdAction }; 
+export { registerUserAction, listUsersAction, getUserByIdAction }; 

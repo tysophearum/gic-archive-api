@@ -10,7 +10,7 @@ import { graphqlUploadExpress } from 'graphql-upload-minimal';
 async function startServer() {
   const app = express();
   await connectDB();
-  await connectAmqp();
+  // await connectAmqp();
 
   // Build GraphQL schema
   const schema = await buildSchema({

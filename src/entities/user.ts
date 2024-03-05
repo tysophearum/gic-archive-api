@@ -22,6 +22,10 @@ export class User {
 
     @DBField({type: String, required: false})
     picture: string
+
+    @GqlField(() => String)
+    @DBField({type: String, enum: ['user', 'admin'], default: 'user'})
+    role: string;
 }
 
 @ObjectType()
