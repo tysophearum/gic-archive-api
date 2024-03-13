@@ -1,4 +1,5 @@
 import { User, UserResponse, UserRegisterInput } from './user'
-import { Document } from './document'
+import { Thesis } from './thesis/thesis'
+import { ThesisCategory, CreateThesisCategoryInput } from './thesis/thesisCategory'
 
-export { User, Document, UserResponse, UserRegisterInput }
+export { User, Thesis, UserResponse, UserRegisterInput, ThesisCategory, CreateThesisCategoryInput }

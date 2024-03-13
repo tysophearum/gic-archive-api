@@ -15,6 +15,10 @@ const logInUserAction = async (username: string, password: string): Promise<User
 
     const usersResponse: ListUsersResponse = await userService.getUsers(undefined, {username});
     const user = usersResponse.users[0];
+    
+    if (!user) {
+        throw new Error('Invalid username');
+    }
 
     const isCorrectPassword = await bcrypt.compare(password, user.password);
 

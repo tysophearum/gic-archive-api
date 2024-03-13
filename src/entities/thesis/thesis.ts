@@ -1,12 +1,13 @@
-import { ObjectType, Field as GqlField, InputType, ID } from "type-graphql";
+import { ObjectType, Field as GqlField, InputType, ID, Float } from "type-graphql";
 import { Prop as DBField, Ref } from "@typegoose/typegoose";
 import { IsOptional, IsString } from "class-validator";
-import { User } from "./user";
-import { Pagination } from "../typeDefs";
+import { User } from "../user";
+import { Pagination } from "../../typeDefs";
+import { ThesisCategory } from "../thesis/thesisCategory";
 
 
 @ObjectType()
-export class Document {
+export class Thesis {
     @GqlField(() => String, { nullable: false })
     @DBField({type: String, required: true})
     title: string;
@@ -15,9 +16,13 @@ export class Document {
     @DBField({type: String, required: true})
     description: string;
 
-    @GqlField(() => User) // Change field type to User
-    @DBField({type: String, ref: User, required: true}) // Reference the User model
+    @GqlField(() => User)
+    @DBField({type: String, ref: User, required: true})
     user: string;
+
+    @GqlField(() => ThesisCategory)
+    @DBField({type: String, ref: ThesisCategory, required: true})
+    category: string;
 
     @GqlField(() => [User], {nullable: true})
     @DBField({type: [String], ref: User, required: false, default: []})
@@ -25,7 +30,7 @@ export class Document {
     
     @GqlField(() => String, { nullable: false })
     @DBField({type: String, required: true})
-    documentLink: string;
+    thesisLink: string;
 
     @GqlField(() => String, { nullable: false })
     @DBField({type: String, required: true})
@@ -34,23 +39,39 @@ export class Document {
     @GqlField(() => Boolean, { nullable: false })
     @DBField({type: Boolean, required: true, default: false})
     isApproved: boolean;
+    
+    @GqlField(() => Number, { nullable: false })
+    @DBField({type: Number, required: true, default: 0})
+    likeAmount: number;
 
-    // @GqlField(() => Number, { nullable: false })
-    // @DBField({type: Number, required: true, default: 0})
-    // likeAmount: number;
+    @GqlField(() => Float, { name: 'createdAt' })
+    @DBField({
+      type: Number,
+      default: Date.now,
+      alias: 'createdAt',
+    })
+    created_at?: number;
+  
+    @GqlField(() => Float, { name: 'updatedAt' })
+    @DBField({
+      type: Number,
+      default: 0,
+      alias: 'updatedAt',
+    })
+    updated_at?: number;
 }
 
 @ObjectType()
-export class ListDocumentResponse {
-    @GqlField(() => [Document])
-    documents: Document[];
+export class ListThesisResponse {
+    @GqlField(() => [Thesis])
+    thesis: Thesis[];
 
     @GqlField(() => Pagination)
     pagination: Pagination;
 }
 
 @InputType()
-export class CreateDocumentInput {
+export class CreateThesisInput {
     @GqlField(() => String)
     @IsString()
     title: string;
@@ -58,10 +79,6 @@ export class CreateDocumentInput {
     @GqlField(() => String)
     @IsString()
     description: string;
-
-    @GqlField(() => ID)
-    @IsString()
-    userId: string;
 
     @GqlField(() => String)
     @IsString()
@@ -71,4 +88,9 @@ export class CreateDocumentInput {
     @IsOptional()
     @IsString({each: true})
     collaborators: string[];
+
+    @GqlField(() => ID)
+    @IsOptional()
+    @IsString()
+    category: string;
 }

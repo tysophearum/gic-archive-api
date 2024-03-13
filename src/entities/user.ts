@@ -1,4 +1,4 @@
-import { ObjectType, Field as GqlField, InputType, ID } from "type-graphql";
+import { ObjectType, Field as GqlField, InputType, ID, Float } from "type-graphql";
 import { Prop as DBField } from "@typegoose/typegoose";
 import { IsEmail, IsString } from "class-validator";
 import { Pagination } from "../typeDefs";
@@ -26,6 +26,22 @@ export class User {
     @GqlField(() => String)
     @DBField({type: String, enum: ['user', 'admin'], default: 'user'})
     role: string;
+
+    @GqlField(() => Float, { name: 'createdAt' })
+    @DBField({
+      type: Number,
+      default: Date.now,
+      alias: 'createdAt',
+    })
+    created_at?: number;
+  
+    @GqlField(() => Float, { name: 'updatedAt' })
+    @DBField({
+      type: Number,
+      default: 0,
+      alias: 'updatedAt',
+    })
+    updated_at?: number;
 }
 
 @ObjectType()
