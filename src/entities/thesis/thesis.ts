@@ -4,10 +4,14 @@ import { IsOptional, IsString } from "class-validator";
 import { User } from "../user";
 import { Pagination } from "../../typeDefs";
 import { ThesisCategory } from "../thesis/thesisCategory";
+import { Types } from "mongoose";
 
 
 @ObjectType()
 export class Thesis {
+    @GqlField(() => ID, { name: 'id' })
+    readonly _id?: Types.ObjectId;
+
     @GqlField(() => String, { nullable: false })
     @DBField({type: String, required: true})
     title: string;

@@ -1,9 +1,13 @@
-import { ObjectType, Field as GqlField, Float, InputType } from "type-graphql";
+import { ObjectType, Field as GqlField, Float, InputType, ID } from "type-graphql";
 import { Prop as DBField, Ref } from "@typegoose/typegoose";
 import { IsString } from "class-validator";
+import { Types } from "mongoose";
 
 @ObjectType()
 export class ThesisCategory {
+    @GqlField(() => ID, { name: 'id' })
+    readonly _id?: Types.ObjectId;
+
     @GqlField(() => String, { nullable: false })
     @DBField({type: String, required: true})
     name: string;

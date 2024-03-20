@@ -6,6 +6,7 @@ export interface ThesisRepository {
   createThesis(document: Thesis): Promise<Thesis>;
   findThesis(pager: PaginationInput, query: any): Promise<Thesis[]>;
   countThesis(): Promise<number>;
+  findThesisById(id: string): Promise<Thesis>;
 }
 
 export class ThesisRepositoryImpl implements ThesisRepository {
@@ -28,10 +29,17 @@ export class ThesisRepositoryImpl implements ThesisRepository {
     return await this.thesisModel
       .find(query)
       .populate("user")
-      .populate("collaborators")
       .lean()
       .skip(skip)
       .limit(limit)
+      .exec();
+  }
+
+  async findThesisById(id: string): Promise<Thesis> {
+    return await this.thesisModel.findById(id)
+      .populate("user")
+      .populate("collaborators")
+      .populate("category")
       .exec();
   }
 }
