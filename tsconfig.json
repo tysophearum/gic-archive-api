@@ -9,8 +9,8 @@
     "experimentalDecorators": true,
     "emitDecoratorMetadata": true,
     "target": "es2017",
-    "maxNodeModuleJsDepth": 10, 
-//  "module": "nodenext",
+    "maxNodeModuleJsDepth": 10
+    //  "module": "nodenext",
   },
-  "include": ["src/**/*"],
+  "include": ["src/**/*"]
 }

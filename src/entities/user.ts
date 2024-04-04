@@ -1,11 +1,23 @@
-import { ObjectType, Field as GqlField, InputType, ID, Float } from "type-graphql";
-import { Prop as DBField } from "@typegoose/typegoose";
-import { IsEmail, IsOptional, IsString } from "class-validator";
-import { Pagination } from "../typeDefs";
-import { Types } from "mongoose";
+import { ObjectType, Field as GqlField, InputType, ID, Float } from 'type-graphql';
+import { Prop as DBField } from '@typegoose/typegoose';
+import { IsEmail, IsOptional, IsString } from 'class-validator';
+import { Pagination } from '../typeDefs';
+import { Types } from 'mongoose';
+import { ThesisCategory } from '../entities';
 
 @ObjectType()
-class ContactInfo {
+export class ContactInfo {
+  @GqlField(() => String)
+  @DBField({ type: String, required: true, unique: false })
+  type: string;
+
+  @GqlField(() => String)
+  @DBField({ type: String, required: true, unique: false })
+  value: string;
+}
+
+@InputType()
+class ContactInfoInput {
   @GqlField(() => String)
   type: string;
 
@@ -19,16 +31,20 @@ export class User {
   readonly _id?: Types.ObjectId;
 
   @GqlField(() => String, { nullable: false })
-  @DBField({ type: String, required: true, unique: true })
+  @DBField({ type: String, required: true })
   firstName: string;
 
   @GqlField(() => String, { nullable: false })
-  @DBField({ type: String, required: true, unique: true })
+  @DBField({ type: String, required: true })
   lastName: string;
 
   @GqlField(() => String, { nullable: false })
-  @DBField({ type: String, required: true, unique: true })
-  username: string;
+  @DBField({ type: String, required: true, unique: true, index: true })
+  email: string;
+
+  @GqlField(() => String, { nullable: false })
+  @DBField({ type: String, required: true })
+  gender: string;
 
   @DBField({ type: String, required: true })
   password: string;
@@ -37,12 +53,54 @@ export class User {
   @DBField({ type: [ContactInfo], _id: false, default: [] })
   contacts: ContactInfo[];
 
+  @GqlField(() => String, { nullable: true })
   @DBField({ type: String, required: false })
-  image: string
+  image: string;
 
   @GqlField(() => String)
   @DBField({ type: String, enum: ['student', 'teacher', 'admin'], default: 'user' })
   role: string;
+
+  @GqlField(() => [ThesisCategory], { nullable: true })
+  @DBField({ type: [String], ref: ThesisCategory, required: false, default: [] })
+  thesisCategory?: ThesisCategory[];
+
+  @GqlField(() => Float, { name: 'createdAt' })
+  @DBField({
+    type: Number,
+    default: Date.now,
+    alias: 'createdAt',
+  })
+  created_at?: number;
+
+  @GqlField(() => Float, { name: 'updatedAt' })
+  @DBField({
+    type: Number,
+    default: 0,
+    alias: 'updatedAt',
+  })
+  updated_at?: number;
+}
+
+@ObjectType()
+export class MinUser {
+  @GqlField(() => ID, { name: 'id' })
+  readonly _id?: Types.ObjectId;
+
+  @GqlField(() => String, { nullable: false })
+  firstName: string;
+
+  @GqlField(() => String, { nullable: false })
+  lastName: string;
+
+  @GqlField(() => String, { nullable: false })
+  email: string;
+
+  @GqlField(() => String, { nullable: false })
+  gender: string;
+
+  @GqlField(() => String, { nullable: true })
+  image: string;
 
   @GqlField(() => Float, { name: 'createdAt' })
   @DBField({
@@ -76,7 +134,7 @@ export class ListUsersResponse {
   users: User[];
 
   @GqlField(() => Pagination)
-  pagination: Pagination
+  pagination: Pagination;
 }
 
 @InputType()
@@ -90,18 +148,18 @@ export class UserRegisterInput {
   lastName: string;
 
   @GqlField(() => String)
+  @IsEmail()
+  email: string;
+
+  @GqlField(() => String)
   @IsString()
-  username: string;
+  gender: string;
 
   @GqlField(() => String)
   @IsString()
   password: string;
 
-  @GqlField(() => String)
-  @IsString()
-  confirm_password: string;
-
   @IsOptional()
-  @GqlField(() => [ContactInfo])
-  contacts: ContactInfo[];
+  @GqlField(() => [ContactInfoInput])
+  contacts: ContactInfoInput[];
 }

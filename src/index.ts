@@ -1,7 +1,7 @@
 import 'reflect-metadata';
 import express from 'express';
 import { ApolloServer } from 'apollo-server-express';
-import { Arg, buildSchema, Mutation, Query, Resolver, Field as GqlField, } from 'type-graphql';
+import { Arg, buildSchema, Mutation, Query, Resolver, Field as GqlField } from 'type-graphql';
 import { connectDB } from './config/DBConfig';
 import Resolvers from './resolvers';
 import { connectAmqp } from './config/rabbitmqConfig';
@@ -19,16 +19,16 @@ async function startServer() {
   });
 
   // Create an ApolloServer instance with your schema
-  const server = new ApolloServer({ 
+  const server = new ApolloServer({
     schema,
     context: ({ req }) => {
-      return req.headers
+      return req.headers;
     },
   });
 
   await server.start();
 
-  app.use(graphqlUploadExpress())
+  app.use(graphqlUploadExpress());
   // Apply the Apollo middleware to Express
   server.applyMiddleware({ app });
 

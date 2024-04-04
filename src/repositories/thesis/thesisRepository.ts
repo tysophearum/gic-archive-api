@@ -1,26 +1,33 @@
-import { getModelForClass } from "@typegoose/typegoose";
-import { Thesis, User } from "../../entities";
-import { PaginationInput } from "../../typeDefs";
+import { getModelForClass } from '@typegoose/typegoose';
+import { Thesis, ThesisResponse } from '../../entities';
+import { PaginationInput } from '../../typeDefs';
 
 export interface ThesisRepository {
-  createThesis(document: Thesis): Promise<Thesis>;
+  createThesis(thesis: Thesis): Promise<ThesisResponse>;
   findThesis(pager: PaginationInput, query: any): Promise<Thesis[]>;
-  countThesis(): Promise<number>;
-  findThesisById(id: string): Promise<Thesis>;
+  countThesis(query: any): Promise<number>;
+  findThesisById(id: string): Promise<ThesisResponse>;
+  updateThesis(thesis: Thesis): Promise<ThesisResponse>;
+  deleteThesis(id: string): Promise<boolean>;
 }
 
 export class ThesisRepositoryImpl implements ThesisRepository {
   private thesisModel = getModelForClass(Thesis);
-  private userModel = getModelForClass(User);
-
-  async countThesis(): Promise<number> {
-    return await this.thesisModel.countDocuments();
+  private async populateFields(model: any, fields: string[]): Promise<any> {
+    for (const field of fields) {
+      model = await model.populate(field);
+    }
+    return model;
   }
 
-  async createThesis(thesis: Thesis): Promise<Thesis> {
-    return (
-      await (await this.thesisModel.create(thesis)).populate("user")
-    ).populate("collaborators");
+  async countThesis(query: any): Promise<number> {
+    return await this.thesisModel.countDocuments(query);
+  }
+
+  async createThesis(thesis: Thesis): Promise<ThesisResponse> {
+    let createdThesis = await this.thesisModel.create(thesis);
+    createdThesis = await this.populateFields(createdThesis, ['user', 'collaborators', 'teacher', 'thesisCategory']);
+    return createdThesis;
   }
 
   async findThesis({ page, limit }: PaginationInput, query: any = null): Promise<Thesis[]> {
@@ -28,18 +35,38 @@ export class ThesisRepositoryImpl implements ThesisRepository {
 
     return await this.thesisModel
       .find(query)
-      .populate("user")
+      .populate('user')
+      .populate('thesisCategory')
       .lean()
       .skip(skip)
       .limit(limit)
       .exec();
   }
 
-  async findThesisById(id: string): Promise<Thesis> {
-    return await this.thesisModel.findById(id)
-      .populate("user")
-      .populate("collaborators")
-      .populate("category")
+  async findThesisById(id: string): Promise<ThesisResponse> {
+    const thesis = await this.thesisModel
+      .findById(id)
+      .populate('user')
+      .populate('collaborators')
+      .populate('thesisCategory')
+      .populate('teacher')
       .exec();
+
+    return thesis;
+  }
+
+  async updateThesis(thesis: Thesis): Promise<ThesisResponse> {
+    let updatedThesis = await this.thesisModel.findByIdAndUpdate(thesis._id, thesis, { new: true });
+    updatedThesis = await this.populateFields(updatedThesis, ['user', 'collaborators', 'teacher', 'thesisCategory']);
+    return updatedThesis;
+  }
+
+  async deleteThesis(id: string): Promise<boolean> {
+    try {
+      await this.thesisModel.findByIdAndDelete(id).exec();
+      return true;
+    } catch (error) {
+      return false;
+    }
   }
 }

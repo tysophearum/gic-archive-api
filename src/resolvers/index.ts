@@ -1,5 +1,6 @@
-import { UserResolver } from "./userResolver";
-import { ThesisResolver } from "./thesisResolver";
-import { ThesisCategoryResolver } from "./thesisCategoryResolver";
+import { UserResolver } from './userResolver';
+import { ThesisResolver } from './thesis/thesisResolver';
+import { ThesisCategoryResolver } from './thesis/thesisCategoryResolver';
+import { ThesisCommentResolver } from './thesis/thesisCommentResolver';
 
-export default [UserResolver, ThesisResolver, ThesisCategoryResolver];
+export default [UserResolver, ThesisCategoryResolver, ThesisResolver, ThesisCommentResolver];

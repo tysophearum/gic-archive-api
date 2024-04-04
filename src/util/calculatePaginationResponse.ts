@@ -1,9 +1,6 @@
-import { Pagination, PaginationInput } from "../typeDefs";
+import { Pagination, PaginationInput } from '../typeDefs';
 
-export default function calculatePaginationResponse(
-  { page, limit }: PaginationInput,
-  totalItems: number
-): Pagination {
+export default function calculatePaginationResponse({ page, limit }: PaginationInput, totalItems: number): Pagination {
   const totalPages = Math.ceil(totalItems / limit);
 
   const hasNextPage = page < totalPages;

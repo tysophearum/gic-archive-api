@@ -1,33 +1,35 @@
-import { PaginationInput } from "../typeDefs";
-import { ListUsersResponse, User } from "../entities/user";
-import { UserRepository } from "../repositories/userRepository";
-import calculatePagination from "../util/calculatePaginationResponse";
-require('dotenv').config()
-
+import { PaginationInput } from '../typeDefs';
+import { ListUsersResponse, User } from '../entities/user';
+import { UserRepository } from '../repositories/userRepository';
+import calculatePagination from '../util/calculatePaginationResponse';
+require('dotenv').config();
 
 export class UserService {
-    private userRepository: UserRepository
+  private userRepository: UserRepository;
 
-    constructor (userRepository: UserRepository) {
-        this.userRepository = userRepository;
-    }
+  constructor(userRepository: UserRepository) {
+    this.userRepository = userRepository;
+  }
 
-    async register(user: User) {
-        return await this.userRepository.createUser(user);
-    }
+  async register(user: User) {
+    return await this.userRepository.createUser(user);
+  }
 
-    async getUsers(pager: PaginationInput={page: 1, limit: Number(process.env.MAX_LIMIT)}, query: any=null): Promise<ListUsersResponse> {
-        const users = await this.userRepository.findUsers(pager, query);
-        const totalUsers = await this.userRepository.countUsers();
-        const pagination = calculatePagination(pager, totalUsers);
-        
-        return {
-            users,
-            pagination
-        }
-    }
+  async getUsers(
+    pager: PaginationInput = { page: 1, limit: Number(process.env.MAX_LIMIT) },
+    query: any = null,
+  ): Promise<ListUsersResponse> {
+    const users = await this.userRepository.findUsers(pager, query);
+    const totalUsers = await this.userRepository.countUsers();
+    const pagination = calculatePagination(pager, totalUsers);
 
-    async getUserById(id: string) {
-        return await this.userRepository.findUserById(id);
-    }
+    return {
+      users,
+      pagination,
+    };
+  }
+
+  async getUserById(id: string) {
+    return await this.userRepository.findUserById(id);
+  }
 }
