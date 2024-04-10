@@ -1,11 +1,11 @@
-import { CreateThesisInput, ListThesisResponse, Thesis, UpdateThesisInput, ThesisResponse } from '../../entities';
+import { CreateThesisInput, ListThesisResponse, User, UpdateThesisInput, ThesisResponse } from '../../entities';
 import { Arg, Ctx, Mutation, Query, Resolver, UseMiddleware } from 'type-graphql';
 import {
   createThesisAction,
   listThesisAction,
   getThesisAction,
   deleteThesisAction,
-  updateThesisAction
+  updateThesisAction,
 } from '../../controllers/thesis';
 import { FileUpload, GraphQLUpload } from 'graphql-upload-minimal';
 import { PaginationInput } from '../../typeDefs';
@@ -19,9 +19,9 @@ export class ThesisResolver {
     @Arg('thesis') thesis: CreateThesisInput,
     @Arg('file', () => GraphQLUpload, { nullable: true }) file: FileUpload | null,
     @Arg('image', () => GraphQLUpload, { nullable: true }) image: FileUpload | null,
-    @Ctx() { userId }: any,
+    @Ctx() { user }: any,
   ) {
-    return await createThesisAction(userId, thesis, file, image);
+    return await createThesisAction(user, thesis, file, image);
   }
 
   @Query(() => ListThesisResponse)
@@ -44,9 +44,9 @@ export class ThesisResolver {
   }
 
   @Query(() => ListThesisResponse)
-  async listUserThesis(
+  async listThesisByUser(
     @Arg('userId', () => String, { nullable: false }) userId: string,
-    @Arg('pager', () => PaginationInput, { nullable: true }) pager: PaginationInput
+    @Arg('pager', () => PaginationInput, { nullable: true }) pager: PaginationInput,
   ) {
     return await listThesisAction(pager, {
       user: userId,
@@ -66,12 +66,12 @@ export class ThesisResolver {
 
   @Mutation(() => ThesisResponse)
   @UseMiddleware(StudentMiddleware)
-   async updateThesis(
+  async updateThesis(
     @Arg('thesis') thesis: UpdateThesisInput,
     @Arg('file', () => GraphQLUpload, { nullable: true }) file: FileUpload | null,
     @Arg('image', () => GraphQLUpload, { nullable: true }) image: FileUpload | null,
-    @Ctx() { userId }: any,
+    @Ctx() { user }: any,
   ) {
-    return await updateThesisAction(userId, thesis, file, image);
+    return await updateThesisAction(user, thesis, file, image);
   }
 }

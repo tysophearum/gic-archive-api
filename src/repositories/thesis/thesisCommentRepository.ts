@@ -19,7 +19,9 @@ export class ThesisCommentRepositoryImpl implements ThesisCommentRepository {
   }
 
   async updateThesisComment(thesisComment: ThesisComment): Promise<ThesisComment> {
-    return await this.thesisCommentModel.findByIdAndUpdate(thesisComment._id, thesisComment, { new: true }).populate('user');
+    return await this.thesisCommentModel
+      .findByIdAndUpdate(thesisComment._id, thesisComment, { new: true })
+      .populate('user');
   }
 
   async deleteThesisComment(thesisCommentId: string): Promise<void> {
@@ -29,12 +31,7 @@ export class ThesisCommentRepositoryImpl implements ThesisCommentRepository {
   async findThesisComments({ page, limit }: PaginationInput, query: any): Promise<ThesisComment[]> {
     const skip = (page - 1) * limit;
 
-    return await this.thesisCommentModel
-      .find(query)
-      .populate('user')
-      .skip(skip)
-      .limit(limit)
-      .exec();
+    return await this.thesisCommentModel.find(query).populate('user').skip(skip).limit(limit).exec();
   }
 
   async countThesisComments(query: any): Promise<number> {

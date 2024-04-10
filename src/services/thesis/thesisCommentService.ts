@@ -1,7 +1,7 @@
-import { ThesisCommentRepository } from "../../repositories"
-import { ListThesisCommentResponse, ThesisComment, ThesisCommentResponse } from "../../entities"
-import { PaginationInput } from "typeDefs";
-import calculatePaginationResponse from "../../util/calculatePaginationResponse";
+import { ThesisCommentRepository } from '../../repositories';
+import { ListThesisCommentResponse, ThesisComment, ThesisCommentResponse } from '../../entities';
+import { PaginationInput } from 'typeDefs';
+import calculatePaginationResponse from '../../util/calculatePaginationResponse';
 
 export class ThesisCommentService {
   private thesisCommentRepository: ThesisCommentRepository;
@@ -19,7 +19,7 @@ export class ThesisCommentService {
       await this.thesisCommentRepository.deleteThesisComment(id);
       return true;
     } catch (error) {
-      return false
+      return false;
     }
   }
 
@@ -35,14 +35,13 @@ export class ThesisCommentService {
     pager: PaginationInput = { page: 1, limit: Number(process.env.MAX_LIMIT) },
     query: any = null,
   ): Promise<ListThesisCommentResponse> {
-    const thesis = await this.thesisCommentRepository.findThesisComments(pager, query);
+    const comment = await this.thesisCommentRepository.findThesisComments(pager, query);
     const totalThesisComment = await this.thesisCommentRepository.countThesisComments(query);
     const pagination = calculatePaginationResponse(pager, totalThesisComment);
 
     return {
-      thesis,
+      comment,
       pagination,
     };
   }
-
 }

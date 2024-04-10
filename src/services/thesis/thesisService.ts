@@ -36,7 +36,15 @@ export class ThesisService {
   async updateThesis(thesis: Thesis): Promise<ThesisResponse> {
     return await this.thesisRepository.updateThesis(thesis);
   }
+
   async deleteThesis(id: string): Promise<boolean> {
     return await this.thesisRepository.deleteThesis(id);
+  }
+
+  async incrementThesisLike(id: string): Promise<boolean> {
+    return await this.thesisRepository.incrementThesisLike(id);
+  }
+  async decrementThesisLike(id: string): Promise<boolean> {
+    return await this.thesisRepository.decrementThesisLike(id);
   }
 }

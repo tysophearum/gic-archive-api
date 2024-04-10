@@ -1,9 +1,28 @@
 import { User, MinUser, UserRegisterInput, UserResponse, ContactInfo } from './user';
-import { Thesis, MinThesis, CreateThesisInput, UpdateThesisInput, ListThesisResponse, ThesisResponse } from './thesis/thesis';
+import {
+  Thesis,
+  MinThesis,
+  CreateThesisInput,
+  UpdateThesisInput,
+  ListThesisResponse,
+  ThesisResponse,
+} from './thesis/thesis';
 import { ThesisCategory, CreateThesisCategoryInput, UpdateThesisCategoryInput } from './thesis/thesisCategory';
 import { FeaturedThesis, CreateFeaturedThesisInput } from './thesis/featuredThesis';
-import { ThesisComment, CreateThesisCommentInput, ThesisCommentResponse, UpdateThesisCommentInput, ListThesisCommentResponse } from './thesis/thesisComment';
-import { ThesisFeedback, CreateThesisFeedbackInput } from './thesis/thesisFeedback';
+import {
+  ThesisComment,
+  CreateThesisCommentInput,
+  ThesisCommentResponse,
+  UpdateThesisCommentInput,
+  ListThesisCommentResponse,
+} from './thesis/thesisComment';
+import {
+  ThesisFeedback,
+  CreateThesisFeedbackInput,
+  ThesisFeedbackResponse,
+  ListThesisFeedbackResponse,
+  UpdateThesisFeedbackInput,
+} from './thesis/thesisFeedback';
 import { ThesisLike, CreateThesisLikeInput } from './thesis/thesisLike';
 import { ClassProject, CreateClassProjectInput } from './classProject/classProject';
 import { ClassProjectCategory, CreateClassProjectCategoryInput } from './classProject/classProjectCategory';
@@ -46,5 +65,8 @@ export {
   ThesisResponse,
   ThesisCommentResponse,
   UpdateThesisCommentInput,
-  ListThesisCommentResponse
+  ListThesisCommentResponse,
+  ThesisFeedbackResponse,
+  ListThesisFeedbackResponse,
+  UpdateThesisFeedbackInput,
 };

@@ -1,24 +1,25 @@
 import { CreateThesisInput } from '../../entities/thesis/thesis';
-import { Thesis, ThesisResponse } from '../../entities';
-import { ThesisRepositoryImpl } from '../../repositories';
-import { ThesisService } from '../../services';
-import validateUserId from '../../util/validateUserId';
+import { Thesis, ThesisResponse, User } from '../../entities';
+import { ThesisRepositoryImpl, UserRepositoryImpl } from '../../repositories';
+import { ThesisService, UserService } from '../../services';
 import { FileUpload } from 'graphql-upload-minimal';
 import saveFile from '../../util/saveFileUtil';
 import validateThesisCategoryId from '../../util/validateThesisCategoryId';
 
 const createThesisAction = async (
-  userId: string,
+  user: User,
   thesisInput: CreateThesisInput,
   file: FileUpload,
   imageInput: FileUpload,
 ): Promise<ThesisResponse> => {
   const thesisRepository = new ThesisRepositoryImpl();
   const thesisService = new ThesisService(thesisRepository);
+  const userRepository = new UserRepositoryImpl();
+  const userService = new UserService(userRepository);
 
   const { title, description, teacher, thesisCategory, collaborators, repositoryLink, videoLink } = thesisInput;
 
-  if (!title || !description || !repositoryLink || !userId || !thesisCategory) {
+  if (!title || !description || !repositoryLink || !user || !thesisCategory) {
     throw new Error('Invalid input');
   }
 
@@ -27,14 +28,17 @@ const createThesisAction = async (
     throw new Error('Category not found');
   }
 
-  const haveUser = await validateUserId(userId);
-  if (!haveUser) {
-    throw new Error('User not found');
+  if (!teacher) {
+    throw new Error('Teacher is required');
+  }
+  const haveTeacher = await userService.getUserById(teacher);
+  if (!haveTeacher || haveTeacher.role != 'teacher') {
+    throw new Error('Teacher is not found');
   }
 
   await Promise.all(
     collaborators.map(async (collaborator) => {
-      const haveUser = await validateUserId(collaborator);
+      const haveUser = await userService.getUserById(collaborator);
       if (!haveUser) {
         throw new Error('One or more of the collaborators is not found');
       }
@@ -53,7 +57,7 @@ const createThesisAction = async (
     description,
     thesisLink,
     repositoryLink,
-    user: userId,
+    user: user._id.toString(),
     collaborators,
     isApproved: false,
     likeAmount: 0,

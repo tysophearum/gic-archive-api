@@ -9,6 +9,8 @@ export interface ThesisRepository {
   findThesisById(id: string): Promise<ThesisResponse>;
   updateThesis(thesis: Thesis): Promise<ThesisResponse>;
   deleteThesis(id: string): Promise<boolean>;
+  incrementThesisLike(id: string): Promise<boolean>;
+  decrementThesisLike(id: string): Promise<boolean>;
 }
 
 export class ThesisRepositoryImpl implements ThesisRepository {
@@ -67,6 +69,22 @@ export class ThesisRepositoryImpl implements ThesisRepository {
       return true;
     } catch (error) {
       return false;
+    }
+  }
+  async incrementThesisLike(id: string): Promise<boolean> {
+    try {
+      await this.thesisModel.findByIdAndUpdate(id, { $inc: { likeAmount: 1 } });
+      return true;
+    } catch (error) {
+      console.log('Unable to like post ', id);
+    }
+  }
+  async decrementThesisLike(id: string): Promise<boolean> {
+    try {
+      await this.thesisModel.findByIdAndUpdate(id, { $inc: { likeAmount: -1 } });
+      return false;
+    } catch (error) {
+      console.log('Unable to dislike post ', id);
     }
   }
 }

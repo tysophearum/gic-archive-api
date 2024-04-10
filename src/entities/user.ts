@@ -3,7 +3,7 @@ import { Prop as DBField } from '@typegoose/typegoose';
 import { IsEmail, IsOptional, IsString } from 'class-validator';
 import { Pagination } from '../typeDefs';
 import { Types } from 'mongoose';
-import { ThesisCategory } from '../entities';
+import { ClassProjectCategory } from '../entities';
 
 @ObjectType()
 export class ContactInfo {
@@ -61,9 +61,9 @@ export class User {
   @DBField({ type: String, enum: ['student', 'teacher', 'admin'], default: 'user' })
   role: string;
 
-  @GqlField(() => [ThesisCategory], { nullable: true })
-  @DBField({ type: [String], ref: ThesisCategory, required: false, default: [] })
-  thesisCategory?: ThesisCategory[];
+  @GqlField(() => [ClassProjectCategory], { nullable: true })
+  @DBField({ type: [String], ref: ClassProjectCategory, required: false, default: [] })
+  classProjectCategory?: ClassProjectCategory[];
 
   @GqlField(() => Float, { name: 'createdAt' })
   @DBField({

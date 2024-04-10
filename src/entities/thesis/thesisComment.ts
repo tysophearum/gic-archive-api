@@ -60,7 +60,7 @@ export class ThesisCommentResponse {
 @ObjectType()
 export class ListThesisCommentResponse {
   @GqlField(() => [ThesisCommentResponse])
-  thesis: ThesisCommentResponse[];
+  comment: ThesisCommentResponse[];
 
   @GqlField(() => Pagination)
   pagination: Pagination;

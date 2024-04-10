@@ -11,5 +11,5 @@ export default async function validateUserId(userIds: string) {
     return false;
   }
 
-  return true;
+  return user;
 }

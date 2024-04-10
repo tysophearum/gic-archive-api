@@ -90,16 +90,16 @@ export class ThesisResponse {
   image: string;
 
   @GqlField(() => MinUser)
-  user: string;
+  user: any;
 
   @GqlField(() => MinUser)
-  teacher: string;
+  teacher: any;
 
   @GqlField(() => ThesisCategory)
   thesisCategory: string;
 
   @GqlField(() => [MinUser], { nullable: true })
-  collaborators: string[];
+  collaborators: any[];
 
   @GqlField(() => String, { nullable: false })
   thesisLink: string;

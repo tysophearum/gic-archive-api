@@ -10,11 +10,11 @@ export class ThesisLike {
   readonly _id?: Types.ObjectId;
 
   @GqlField(() => User)
-  @DBField({ type: String, ref: User, required: true })
+  @DBField({ type: String, ref: () => User, required: true })
   user: string;
 
   @GqlField(() => Thesis)
-  @DBField({ type: String, ref: Thesis, required: true })
+  @DBField({ type: String, ref: () => Thesis, required: true })
   thesis: string;
 
   @GqlField(() => Float, { name: 'createdAt' })

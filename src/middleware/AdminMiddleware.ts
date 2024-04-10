@@ -34,7 +34,7 @@ const AdminMiddleware: MiddlewareFn<any> = async ({ context }, next) => {
       throw new Error('Invalid token4');
     }
     // If the token is valid, you can attach the user ID to the context
-    context.userId = payload.user._id;
+    context.user = user;
 
     // Continue with the next middleware or resolver
     return next();
