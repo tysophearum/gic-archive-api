@@ -1,13 +1,25 @@
 import { PaginationInput } from '../../typeDefs';
-import { ThesisRepositoryImpl } from '../../repositories';
-import { ThesisService } from '../../services';
-import { ListThesisResponse } from '../../entities';
+import { ThesisLikeRepositoryImpl, ThesisRepositoryImpl } from '../../repositories';
+import { ThesisLikeService, ThesisService } from '../../services';
+import { ListThesisResponse, User } from '../../entities';
 
-const listThesisAction = async (pager: PaginationInput, query: any): Promise<ListThesisResponse> => {
+const listThesisAction = async (user: User, pager: PaginationInput, query: any): Promise<ListThesisResponse> => {
   const thesisRepository = new ThesisRepositoryImpl();
   const thesisService = new ThesisService(thesisRepository);
+  const thesisLikeService = new ThesisLikeService(new ThesisLikeRepositoryImpl());
 
-  return await thesisService.getThesis(pager, query);
+  const theses = await thesisService.getThesis(pager, query);
+
+  theses.thesis.forEach(async (thesis) => {
+    thesis.liked = false;
+  });
+  if (user) {
+    for (let i = 0; i < theses.thesis.length; i++) {
+      theses.thesis[i].liked = await thesisLikeService.hasLiked(user._id.toString(), theses.thesis[i]._id.toString());
+    }
+  }
+
+  return theses;
 };
 
 export default listThesisAction;

@@ -43,3 +43,18 @@ export class CreateClassProjectCategoryInput {
   @IsString()
   description: string;
 }
+
+@InputType()
+export class UpdateClassProjectCategoryInput {
+  @GqlField(() => ID)
+  @IsString()
+  id: string;
+
+  @GqlField(() => String)
+  @IsString()
+  name: string;
+
+  @GqlField(() => String)
+  @IsString()
+  description: string;
+}

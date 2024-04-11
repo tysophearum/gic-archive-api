@@ -108,7 +108,6 @@ export class ThesisResponse {
   repositoryLink: string;
 
   @GqlField(() => String, { nullable: true })
-  @DBField({ type: String, required: false })
   videoLink: string;
 
   @GqlField(() => Boolean, { nullable: false })
@@ -159,20 +158,13 @@ export class MinThesis {
   @GqlField(() => Number, { nullable: false })
   likeAmount: number;
 
+  @GqlField(() => Boolean, { defaultValue: false, nullable: false })
+  liked?: boolean;
+
   @GqlField(() => Float, { name: 'createdAt' })
-  @DBField({
-    type: Number,
-    default: Date.now,
-    alias: 'createdAt',
-  })
   created_at?: number;
 
   @GqlField(() => Float, { name: 'updatedAt' })
-  @DBField({
-    type: Number,
-    default: 0,
-    alias: 'updatedAt',
-  })
   updated_at?: number;
 }
 

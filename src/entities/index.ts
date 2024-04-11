@@ -24,11 +24,22 @@ import {
   UpdateThesisFeedbackInput,
 } from './thesis/thesisFeedback';
 import { ThesisLike, CreateThesisLikeInput } from './thesis/thesisLike';
-import { ClassProject, CreateClassProjectInput } from './classProject/classProject';
-import { ClassProjectCategory, CreateClassProjectCategoryInput } from './classProject/classProjectCategory';
-import { ClassProjectComment, CreateClassProjectCommentInput } from './classProject/classProjectComment';
-import { ClassProjectLike, CreateClassProjectLikeInput } from './classProject/classProjectLike';
+import { 
+  ClassProject, 
+  MinClassProject,
+  CreateClassProjectInput,
+  UpdateClassProjectInput,
+  ListClassProjectResponse,
+  ClassProjectResponse, } from './classProject/classProject';
+import { ClassProjectCategory, CreateClassProjectCategoryInput, UpdateClassProjectCategoryInput } from './classProject/classProjectCategory';
 import { FeaturedClassProject, CreateFeaturedClassProjectInput } from './classProject/featuredClassProject';
+import { 
+  ClassProjectComment, 
+  CreateClassProjectCommentInput,
+  ClassProjectCommentResponse,
+  UpdateClassProjectCommentInput,
+  ListClassProjectCommentResponse, } from './classProject/classProjectComment';
+import { ClassProjectLike, CreateClassProjectLikeInput } from './classProject/classProjectLike';
 
 export {
   User,
@@ -69,4 +80,12 @@ export {
   ThesisFeedbackResponse,
   ListThesisFeedbackResponse,
   UpdateThesisFeedbackInput,
+  MinClassProject,
+  UpdateClassProjectInput,
+  ListClassProjectResponse,
+  ClassProjectResponse,
+  UpdateClassProjectCategoryInput,
+  ClassProjectCommentResponse,
+  UpdateClassProjectCommentInput,
+  ListClassProjectCommentResponse,
 };

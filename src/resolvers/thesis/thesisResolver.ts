@@ -10,6 +10,7 @@ import {
 import { FileUpload, GraphQLUpload } from 'graphql-upload-minimal';
 import { PaginationInput } from '../../typeDefs';
 import StudentMiddleware from '../../middleware/StudentMiddleware';
+import OptionalMiddleware from '../../middleware/optionalMiddleware';
 
 @Resolver()
 export class ThesisResolver {
@@ -25,30 +26,45 @@ export class ThesisResolver {
   }
 
   @Query(() => ListThesisResponse)
-  async listThesis(@Arg('pager', () => PaginationInput, { nullable: true }) pager: PaginationInput) {
-    return await listThesisAction(pager, {});
+  @UseMiddleware(OptionalMiddleware)
+  async listThesis(
+    @Arg('pager', () => PaginationInput, { nullable: true }) pager: PaginationInput,
+    @Ctx() { user }: any,
+  ) {
+    const a = await listThesisAction(user, pager, {});
+    return a;
   }
 
   @Query(() => ListThesisResponse)
-  async listApprovedThesis(@Arg('pager', () => PaginationInput, { nullable: true }) pager: PaginationInput) {
-    return await listThesisAction(pager, {
+  @UseMiddleware(OptionalMiddleware)
+  async listApprovedThesis(
+    @Arg('pager', () => PaginationInput, { nullable: true }) pager: PaginationInput,
+    @Ctx() { user }: any,
+  ) {
+    return await listThesisAction(user, pager, {
       isApproved: true,
     });
   }
 
   @Query(() => ListThesisResponse)
-  async listUnapprovedThesis(@Arg('pager', () => PaginationInput, { nullable: true }) pager: PaginationInput) {
-    return await listThesisAction(pager, {
+  @UseMiddleware(OptionalMiddleware)
+  async listUnapprovedThesis(
+    @Arg('pager', () => PaginationInput, { nullable: true }) pager: PaginationInput,
+    @Ctx() { user }: any,
+  ) {
+    return await listThesisAction(user, pager, {
       isApproved: false,
     });
   }
 
   @Query(() => ListThesisResponse)
+  @UseMiddleware(OptionalMiddleware)
   async listThesisByUser(
     @Arg('userId', () => String, { nullable: false }) userId: string,
     @Arg('pager', () => PaginationInput, { nullable: true }) pager: PaginationInput,
+    @Ctx() { user }: any,
   ) {
-    return await listThesisAction(pager, {
+    return await listThesisAction(user, pager, {
       user: userId,
       isApproved: true,
     });

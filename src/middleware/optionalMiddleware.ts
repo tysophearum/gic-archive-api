@@ -9,6 +9,8 @@ const userService = new UserService(new UserRepositoryImpl());
 
 const OptionalMiddleware: MiddlewareFn<any> = async ({ context }, next) => {
   let token = context.authorization;
+  if (!token) return next();
+
   if (token.startsWith('Bearer ')) {
     token = token.substring(7, token.length);
   }

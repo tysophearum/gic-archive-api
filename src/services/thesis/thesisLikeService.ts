@@ -24,4 +24,10 @@ export class ThesisLikeService {
       return await this.thesisService.incrementThesisLike(thesisLike.thesis);
     }
   }
+
+  async hasLiked(user: string, thesis: string) {
+    const likeCount = await this.thesisLikeRepository.countThesisLike({ user, thesis });
+    const a: boolean = likeCount > 0;
+    return a;
+  }
 }
