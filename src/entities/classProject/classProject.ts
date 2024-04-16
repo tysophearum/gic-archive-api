@@ -23,15 +23,15 @@ export class ClassProject {
   image: string;
 
   @GqlField(() => User)
-  @DBField({ type: String, ref: User, required: true })
+  @DBField({ type: String, ref: () => User, required: true })
   user: string;
 
   @GqlField(() => ClassProjectCategory)
-  @DBField({ type: String, ref: ClassProjectCategory, required: true })
+  @DBField({ type: String, ref: () => ClassProjectCategory, required: true })
   classProjectCategory: string;
 
   @GqlField(() => [User], { nullable: true })
-  @DBField({ type: [String], ref: User, required: false, default: [] })
+  @DBField({ type: [String], ref: () => User, required: false, default: [] })
   collaborators: string[];
 
   @GqlField(() => String, { nullable: false })
@@ -95,7 +95,7 @@ export class ClassProjectResponse {
   collaborators: any[];
 
   @GqlField(() => String, { nullable: false })
-  thesisLink: string;
+  classProjectLink: string;
 
   @GqlField(() => String, { nullable: false })
   repositoryLink: string;
@@ -137,7 +137,7 @@ export class MinClassProject {
   classProjectCategory: string;
 
   @GqlField(() => String, { nullable: false })
-  thesisLink: string;
+  classProjectLink: string;
 
   @GqlField(() => String, { nullable: false })
   repositoryLink: string;
@@ -219,7 +219,7 @@ export class UpdateClassProjectInput {
 
   @GqlField(() => ID)
   @IsString()
-  thesisCategory: string;
+  classProjectCategory: string;
 
   @IsOptional()
   @GqlField(() => [ID], { nullable: true })
@@ -228,7 +228,7 @@ export class UpdateClassProjectInput {
 
   @GqlField(() => String, { nullable: false })
   @IsString()
-  thesisLink: string;
+  classProjectLink: string;
 
   @GqlField(() => String, { nullable: false })
   @IsString()

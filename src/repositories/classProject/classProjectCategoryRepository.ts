@@ -7,6 +7,7 @@ export interface ClassProjectCategoryRepository {
   findClassProjectCategoryById(id: string): Promise<ClassProjectCategory>;
   updateClassProjectCategory(classProjectCategory: ClassProjectCategory): Promise<ClassProjectCategory>;
   deleteClassProjectCategory(id: string): Promise<void>;
+  getClassProjectCategoryById(id: string): Promise<ClassProjectCategory>;
 }
 
 export class ClassProjectCategoryRepositoryImpl implements ClassProjectCategoryRepository {
@@ -25,12 +26,14 @@ export class ClassProjectCategoryRepositoryImpl implements ClassProjectCategoryR
   }
 
   async updateClassProjectCategory(classProjectCategory: ClassProjectCategory): Promise<ClassProjectCategory> {
-    return await this.classProjectCategoryModel.findByIdAndUpdate(classProjectCategory._id, classProjectCategory, {
-      new: true,
-    });
+    return await this.classProjectCategoryModel.findByIdAndUpdate(classProjectCategory._id, classProjectCategory, { new: true });
   }
 
   async deleteClassProjectCategory(id: string): Promise<void> {
     await this.classProjectCategoryModel.findByIdAndDelete(id).exec();
+  }
+
+  async getClassProjectCategoryById(id: string): Promise<ClassProjectCategory> {
+    return await this.classProjectCategoryModel.findById(id);
   }
 }

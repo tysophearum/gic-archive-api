@@ -10,7 +10,7 @@ export class FeaturedClassProject {
   readonly _id?: Types.ObjectId;
 
   @GqlField(() => ClassProject)
-  @DBField({ type: String, ref: ClassProject, required: true })
+  @DBField({ type: String, ref: () => ClassProject, required: true })
   classProject: string;
 
   @GqlField(() => Float, { name: 'createdAt' })

@@ -11,11 +11,11 @@ export class ClassProjectComment {
   readonly _id?: Types.ObjectId;
 
   @GqlField(() => User)
-  @DBField({ type: String, ref: User, required: true })
+  @DBField({ type: String, ref: () => User, required: true })
   user: string;
 
   @GqlField(() => ClassProject)
-  @DBField({ type: String, ref: ClassProject, required: true })
+  @DBField({ type: String, ref: () => ClassProject, required: true })
   classProject: string;
 
   @GqlField(() => String, { nullable: false })

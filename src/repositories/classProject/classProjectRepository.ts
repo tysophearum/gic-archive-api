@@ -1,49 +1,89 @@
 import { getModelForClass } from '@typegoose/typegoose';
-import { ClassProject, ClassProjectCategory, User } from '../../entities';
+import { ClassProject, ClassProjectResponse } from '../../entities';
 import { PaginationInput } from '../../typeDefs';
 
 export interface ClassProjectRepository {
-  createClassProject(classProject: ClassProject): Promise<ClassProject>;
+  createClassProject(classProject: ClassProject): Promise<ClassProjectResponse>;
   findClassProject(pager: PaginationInput, query: any): Promise<ClassProject[]>;
   countClassProject(query: any): Promise<number>;
-  findClassProjectById(id: string): Promise<ClassProject>;
-  updateClassProject(classProject: ClassProject): Promise<ClassProject>;
-  deleteClassProject(id: string): Promise<void>;
+  findClassProjectById(id: string): Promise<ClassProjectResponse>;
+  updateClassProject(classProject: ClassProject): Promise<ClassProjectResponse>;
+  deleteClassProject(id: string): Promise<boolean>;
+  incrementClassProjectLike(id: string): Promise<boolean>;
+  decrementClassProjectLike(id: string): Promise<boolean>;
 }
 
 export class ClassProjectRepositoryImpl implements ClassProjectRepository {
   private classProjectModel = getModelForClass(ClassProject);
-  private userModel = getModelForClass(User);
-  private classProjectCategoryModel = getModelForClass(ClassProjectCategory);
-
-  async createClassProject(classProject: ClassProject): Promise<ClassProject> {
-    return (await (await this.classProjectModel.create(classProject)).populate('user')).populate('collaborators');
-  }
-
-  async findClassProject({ page, limit }: PaginationInput, query: any = null): Promise<ClassProject[]> {
-    const skip = (page - 1) * limit;
-
-    return await this.classProjectModel.find(query).populate('user').lean().skip(skip).limit(limit).exec();
+  private async populateFields(model: any, fields: string[]): Promise<any> {
+    for (const field of fields) {
+      model = await model.populate(field);
+    }
+    return model;
   }
 
   async countClassProject(query: any): Promise<number> {
     return await this.classProjectModel.countDocuments(query);
   }
 
-  async findClassProjectById(id: string): Promise<ClassProject> {
+  async createClassProject(classProject: ClassProject): Promise<ClassProjectResponse> {
+    let createdClassProject = await this.classProjectModel.create(classProject);
+    createdClassProject = await this.populateFields(createdClassProject, ['user', 'collaborators', 'classProjectCategory']);
+    return createdClassProject;
+  }
+
+  async findClassProject({ page, limit }: PaginationInput, query: any = null): Promise<ClassProject[]> {
+    const skip = (page - 1) * limit;
+
     return await this.classProjectModel
+      .find(query)
+      .populate('user')
+      .populate('classProjectCategory')
+      .lean()
+      .skip(skip)
+      .limit(limit)
+      .exec();
+  }
+
+  async findClassProjectById(id: string): Promise<ClassProjectResponse> {
+    const classProject = await this.classProjectModel
       .findById(id)
       .populate('user')
       .populate('collaborators')
       .populate('classProjectCategory')
       .exec();
+
+    return classProject;
   }
 
-  async updateClassProject(classProject: ClassProject): Promise<ClassProject> {
-    return await this.classProjectModel.findByIdAndUpdate(classProject._id, classProject, { new: true }).exec();
+  async updateClassProject(classProject: ClassProject): Promise<ClassProjectResponse> {
+    let updatedClassProject = await this.classProjectModel.findByIdAndUpdate(classProject._id, classProject, { new: true });
+    updatedClassProject = await this.populateFields(updatedClassProject, ['user', 'collaborators', 'classProjectCategory']);
+    return updatedClassProject;
   }
 
-  async deleteClassProject(id: string): Promise<void> {
-    await this.classProjectModel.findByIdAndDelete(id).exec();
+  async deleteClassProject(id: string): Promise<boolean> {
+    try {
+      await this.classProjectModel.findByIdAndDelete(id).exec();
+      return true;
+    } catch (error) {
+      return false;
+    }
+  }
+  async incrementClassProjectLike(id: string): Promise<boolean> {
+    try {
+      await this.classProjectModel.findByIdAndUpdate(id, { $inc: { likeAmount: 1 } });
+      return true;
+    } catch (error) {
+      console.log('Unable to like post ', id);
+    }
+  }
+  async decrementClassProjectLike(id: string): Promise<boolean> {
+    try {
+      await this.classProjectModel.findByIdAndUpdate(id, { $inc: { likeAmount: -1 } });
+      return false;
+    } catch (error) {
+      console.log('Unable to dislike post ', id);
+    }
   }
 }
