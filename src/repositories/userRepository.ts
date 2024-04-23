@@ -9,6 +9,7 @@ export interface UserRepository {
   countUsers(query?: unknown): Promise<number>;
   deleteUser(id: string): Promise<void>;
   updateUser(user: User): Promise<User>;
+  searchUsers(name: string): Promise<User[]>;
 }
 
 export class UserRepositoryImpl implements UserRepository {
@@ -37,5 +38,8 @@ export class UserRepositoryImpl implements UserRepository {
 
   async updateUser(user: User): Promise<User> {
     return await this.userModel.findByIdAndUpdate(user._id, user, { new: true }).exec();
+  }
+  async searchUsers(name: string): Promise<User[]> {
+    return await this.userModel.find({ name: { $regex: name, $options: 'i' } }).limit(8).exec();
   }
 }

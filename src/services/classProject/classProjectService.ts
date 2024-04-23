@@ -24,7 +24,7 @@ export class ClassProjectService {
     const pagination = calculatePaginationResponse(pager, totalClassProject);
 
     return {
-      classProject,
+      data: classProject,
       pagination,
     };
   }

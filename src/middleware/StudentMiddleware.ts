@@ -18,7 +18,14 @@ const StudentMiddleware: MiddlewareFn<any> = async ({ context }, next) => {
   }
 
   try {
-    const payload: any = jwt.verify(token, JWT_SECRET);
+    let payload: any;
+    try {
+      payload  = jwt.verify(token, JWT_SECRET);
+      // Handle payload
+    } catch (error) {
+      console.error('Error verifying token:', error);
+      // Handle error
+    }
 
     // Check if the payload contains the necessary user ID
     if (!payload || !payload.user || !payload.user._id) {

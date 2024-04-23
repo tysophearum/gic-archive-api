@@ -7,4 +7,5 @@ export * from './thesis/thesisLikeService';
 export * from './classProject/classProjectService';
 export * from './classProject/classProjectCategoryService';
 export * from './classProject/classProjectCommentService';
+export * from './classProject/classProjectFeedbackService';
 export * from './classProject/classProjectLikeService';

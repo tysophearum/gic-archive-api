@@ -36,7 +36,7 @@ export class ClassProjectCommentResolver {
 
   @Query(() => ListClassProjectCommentResponse)
   async listClassProjectComment(
-    @Arg('classProjectId') classProjectId: string,
+    @Arg('documentId') classProjectId: string,
     @Arg('pager', () => PaginationInput, { nullable: true }) pager: PaginationInput,
   ) {
     return await listClassProjectCommentAction(pager, {

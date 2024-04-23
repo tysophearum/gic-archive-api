@@ -10,7 +10,7 @@ import {
 import { FileUpload, GraphQLUpload } from 'graphql-upload-minimal';
 import { PaginationInput } from '../../typeDefs';
 import StudentMiddleware from '../../middleware/StudentMiddleware';
-import OptionalMiddleware from '../../middleware/optionalMiddleware';
+import OptionalMiddleware from '../../middleware/OptionalMiddleware';
 
 @Resolver()
 export class ThesisResolver {
@@ -48,6 +48,43 @@ export class ThesisResolver {
 
   @Query(() => ListThesisResponse)
   @UseMiddleware(OptionalMiddleware)
+  async listApprovedThesisByCategory(
+    @Arg('pager', () => PaginationInput, { nullable: true }) pager: PaginationInput,
+    @Arg('categoryId', () => String, { nullable: true }) categroyId: string,
+    @Ctx() { user }: any,
+  ) {
+    return await listThesisAction(user, pager, {
+      isApproved: true,
+      thesisCategory: categroyId
+    });
+  }
+
+  @Query(() => ListThesisResponse)
+  @UseMiddleware(OptionalMiddleware)
+  async listMyApprovedThesis(
+    @Arg('pager', () => PaginationInput, { nullable: true }) pager: PaginationInput,
+    @Ctx() { user }: any,
+  ) {
+    return await listThesisAction(user, pager, {
+      isApproved: true,
+      user: user._id
+    });
+  }
+
+  @Query(() => ListThesisResponse)
+  @UseMiddleware(OptionalMiddleware)
+  async listMyUnapprovedThesis(
+    @Arg('pager', () => PaginationInput, { nullable: true }) pager: PaginationInput,
+    @Ctx() { user }: any,
+  ) {
+    return await listThesisAction(user, pager, {
+      isApproved: false,
+      user: user._id
+    });
+  }
+
+  @Query(() => ListThesisResponse)
+  @UseMiddleware(OptionalMiddleware)
   async listUnapprovedThesis(
     @Arg('pager', () => PaginationInput, { nullable: true }) pager: PaginationInput,
     @Ctx() { user }: any,
@@ -71,7 +108,7 @@ export class ThesisResolver {
   }
 
   @Query(() => ThesisResponse)
-  async getThesisById(@Arg('id', () => String, { nullable: false }) id: string) {
+  async getThesisById(@Arg('thesisId', () => String, { nullable: false }) id: string) {
     return await getThesisAction(id);
   }
 

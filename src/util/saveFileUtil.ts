@@ -3,7 +3,7 @@ const fs = require('fs');
 const { createWriteStream } = require('fs');
 
 export default async function saveFile(fileUpload: FileUpload) {
-  try {
+  // try {
     if (!fileUpload) {
       throw new Error('FileUpload is required');
     }
@@ -30,7 +30,7 @@ export default async function saveFile(fileUpload: FileUpload) {
     });
 
     return 'File saved successfully:' + filePath;
-  } catch (error) {
-    throw new Error('Something went wrong when saving file.');
-  }
+  // } catch (error) {
+  //   throw new Error('Something went wrong when saving file.');
+  // }
 }

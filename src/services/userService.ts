@@ -1,5 +1,5 @@
 import { PaginationInput } from '../typeDefs';
-import { ListUsersResponse, User } from '../entities/user';
+import { ListUsersResponse, User, MinUser } from '../entities/user';
 import { UserRepository } from '../repositories/userRepository';
 import calculatePagination from '../util/calculatePaginationResponse';
 require('dotenv').config();
@@ -31,5 +31,9 @@ export class UserService {
 
   async getUserById(id: string) {
     return await this.userRepository.findUserById(id);
+  }
+
+  async searchUsers(name: string): Promise<MinUser[]> {
+    return await this.userRepository.searchUsers(name);
   }
 }

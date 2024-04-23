@@ -11,7 +11,7 @@ import AdminMiddleware from '../../middleware/AdminMiddleware';
 @Resolver()
 export class ThesisCategoryResolver {
   @Mutation(() => ThesisCategory)
-  @UseMiddleware(AdminMiddleware)
+  // @UseMiddleware(AdminMiddleware)
   async createThesisCategory(@Arg('thesis') thesisCategory: CreateThesisCategoryInput) {
     return await createThesisCategoryAction(thesisCategory);
   }

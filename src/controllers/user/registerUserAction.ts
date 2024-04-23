@@ -7,13 +7,13 @@ import bcrypt from 'bcrypt';
 import generateToken from '../../util/generateToken';
 
 const registerUserAction = async (
-  { firstName, lastName, email, gender, password, contacts }: UserRegisterInput,
+  { name, studentId, email, gender, password, contacts }: UserRegisterInput,
   file: FileUpload,
 ): Promise<UserResponse> => {
   const userRepository = new UserRepositoryImpl();
   const userService = new UserService(userRepository);
 
-  if (!firstName || !lastName || !email || !password) {
+  if (!name || !studentId || !email || !password) {
     throw new Error('Invalid data');
   }
 
@@ -25,8 +25,8 @@ const registerUserAction = async (
   const hashedPassword = await bcrypt.hash(password, 10);
 
   const user: User = {
-    firstName,
-    lastName,
+    name,
+    studentId,
     email,
     gender,
     password: hashedPassword,

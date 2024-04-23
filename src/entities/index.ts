@@ -39,6 +39,13 @@ import {
   ClassProjectCommentResponse,
   UpdateClassProjectCommentInput,
   ListClassProjectCommentResponse, } from './classProject/classProjectComment';
+import {
+  ClassProjectFeedback,
+  CreateClassProjectFeedbackInput,
+  ClassProjectFeedbackResponse,
+  ListClassProjectFeedbackResponse,
+  UpdateClassProjectFeedbackInput,
+} from './classProject/classProjectFeedback';
 import { ClassProjectLike, CreateClassProjectLikeInput } from './classProject/classProjectLike';
 
 export {
@@ -88,4 +95,9 @@ export {
   ClassProjectCommentResponse,
   UpdateClassProjectCommentInput,
   ListClassProjectCommentResponse,
+  ClassProjectFeedback,
+  CreateClassProjectFeedbackInput,
+  ClassProjectFeedbackResponse,
+  ListClassProjectFeedbackResponse,
+  UpdateClassProjectFeedbackInput,
 };

@@ -10,12 +10,12 @@ const listThesisAction = async (user: User, pager: PaginationInput, query: any):
 
   const theses = await thesisService.getThesis(pager, query);
 
-  theses.thesis.forEach(async (thesis) => {
+  theses.data.forEach(async (thesis) => {
     thesis.liked = false;
   });
   if (user) {
-    for (let i = 0; i < theses.thesis.length; i++) {
-      theses.thesis[i].liked = await thesisLikeService.hasLiked(user._id.toString(), theses.thesis[i]._id.toString());
+    for (let i = 0; i < theses.data.length; i++) {
+      theses.data[i].liked = await thesisLikeService.hasLiked(user._id.toString(), theses.data[i]._id.toString());
     }
   }
 

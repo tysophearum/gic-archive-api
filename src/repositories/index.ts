@@ -7,4 +7,5 @@ export * from './thesis/thesisLikeRepository';
 export * from './classProject/classProjectRepository';
 export * from './classProject/classProjectCategoryRepository';
 export * from './classProject/classProjectCommentRepository';
+export * from './classProject/classProjectFeedbackRepository';
 export * from './classProject/classProjectLikeRepository';

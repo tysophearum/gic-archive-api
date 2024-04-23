@@ -11,6 +11,10 @@ import createClassProjectCommentAction from './comment/createClassProjectComment
 import deleteClassProjectCommentAction from './comment/deleteClassProjectCommentAction';
 import updateClassProjectCommentAction from './comment/updateClassProjectCommentAction';
 import listClassProjectCommentAction from './comment/listClassProjectCommentAction';
+import createClassProjectFeedbackAction from './feedback/createClassProjectFeedbackAction';
+import deleteClassProjectFeedbackAction from './feedback/deleteClassProjectFeedbackAction';
+import listClassProjectFeedbackAction from './feedback/listClassProjectFeedbackAction';
+import updateClassProjectFeedbackAction from './feedback/updateClassProjectFeedbackAction';
 import createClassProjectLikeAction from './like/createClassProjectLikeAction';
 
 export {
@@ -28,4 +32,8 @@ export {
   updateClassProjectCommentAction,
   listClassProjectCommentAction,
   createClassProjectLikeAction,
+  createClassProjectFeedbackAction,
+  deleteClassProjectFeedbackAction,
+  listClassProjectFeedbackAction,
+  updateClassProjectFeedbackAction
 };

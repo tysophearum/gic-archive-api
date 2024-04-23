@@ -24,7 +24,7 @@ export class ThesisService {
     const pagination = calculatePaginationResponse(pager, totalThesis);
 
     return {
-      thesis,
+      data: thesis,
       pagination,
     };
   }

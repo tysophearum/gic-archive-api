@@ -164,7 +164,7 @@ export class MinClassProject {
 @ObjectType()
 export class ListClassProjectResponse {
   @GqlField(() => [MinClassProject])
-  classProject: MinClassProject[];
+  data: MinClassProject[];
 
   @GqlField(() => Pagination)
   pagination: Pagination;

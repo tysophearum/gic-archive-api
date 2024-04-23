@@ -7,6 +7,7 @@ import { ThesisLikeResolver } from './thesis/thesisLikeResolver';
 import { ClassProjectResolver } from './classProject/classProjectResolver';
 import { ClassProjectCategoryResolver } from './classProject/classProjectCategoryResolver';
 import { ClassProjectCommentResolver } from './classProject/classProjectCommentResolver';
+import { ClassProjectFeedbackResolver } from './classProject/classProjectFeedbackResolver';
 import { ClassProjectLikeResolver } from './classProject/classProjectLikeResolver';
 
 export default [
@@ -19,5 +20,6 @@ export default [
   ClassProjectResolver,
   ClassProjectCategoryResolver,
   ClassProjectCommentResolver,
+  ClassProjectFeedbackResolver,
   ClassProjectLikeResolver
 ];

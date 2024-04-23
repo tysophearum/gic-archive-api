@@ -35,12 +35,12 @@ export class ThesisFeedbackService {
     pager: PaginationInput = { page: 1, limit: Number(process.env.MAX_LIMIT) },
     query: any = null,
   ): Promise<ListThesisFeedbackResponse> {
-    const thesis = await this.thesisFeedbackRepository.findThesisFeedbacks(pager, query);
+    const thesisFeedbacks = await this.thesisFeedbackRepository.findThesisFeedbacks(pager, query);
     const totalThesisFeedback = await this.thesisFeedbackRepository.countThesisFeedbacks(query);
     const pagination = calculatePaginationResponse(pager, totalThesisFeedback);
 
     return {
-      thesis,
+      thesisFeedbacks,
       pagination,
     };
   }

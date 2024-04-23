@@ -137,8 +137,8 @@ export class MinThesis {
   @GqlField(() => String, { nullable: false })
   image: string;
 
-  @GqlField(() => MinUser)
-  user: string;
+  @GqlField(() => MinUser, {nullable: true})
+  user?: string;
 
   @GqlField(() => ThesisCategory)
   thesisCategory: string;
@@ -171,7 +171,7 @@ export class MinThesis {
 @ObjectType()
 export class ListThesisResponse {
   @GqlField(() => [MinThesis])
-  thesis: MinThesis[];
+  data: MinThesis[];
 
   @GqlField(() => Pagination)
   pagination: Pagination;

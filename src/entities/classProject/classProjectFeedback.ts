@@ -1,12 +1,12 @@
 import { Types } from 'mongoose';
 import { ObjectType, Field as GqlField, InputType, ID, Float } from 'type-graphql';
 import { Prop as DBField } from '@typegoose/typegoose';
-import { User, Thesis, MinUser } from '../../entities';
+import { User, ClassProject, MinUser } from '..';
 import { IsString } from 'class-validator';
 import { Pagination } from '../../typeDefs';
 
 @ObjectType()
-export class ThesisFeedback {
+export class ClassProjectFeedback {
   @GqlField(() => ID, { name: 'id' })
   readonly _id?: Types.ObjectId;
 
@@ -14,9 +14,9 @@ export class ThesisFeedback {
   @DBField({ type: String, ref: () => User, required: true })
   user: string;
 
-  @GqlField(() => Thesis)
-  @DBField({ type: String, ref: () => Thesis, required: true })
-  thesis: string;
+  @GqlField(() => ClassProject)
+  @DBField({ type: String, ref: () => ClassProject, required: true })
+  classProject: string;
 
   @GqlField(() => String, { nullable: false })
   @DBField({ type: String, required: true })
@@ -40,7 +40,7 @@ export class ThesisFeedback {
 }
 
 @ObjectType()
-export class ThesisFeedbackResponse {
+export class ClassProjectFeedbackResponse {
   @GqlField(() => ID, { name: 'id' })
   readonly _id?: Types.ObjectId;
 
@@ -58,19 +58,19 @@ export class ThesisFeedbackResponse {
 }
 
 @ObjectType()
-export class ListThesisFeedbackResponse {
-  @GqlField(() => [ThesisFeedbackResponse])
-  thesisFeedbacks: ThesisFeedbackResponse[];
+export class ListClassProjectFeedbackResponse {
+  @GqlField(() => [ClassProjectFeedbackResponse])
+  classProjectFeedbacks: ClassProjectFeedbackResponse[];
 
   @GqlField(() => Pagination)
   pagination: Pagination;
 }
 
 @InputType()
-export class CreateThesisFeedbackInput {
+export class CreateClassProjectFeedbackInput {
   @GqlField(() => ID)
   @IsString()
-  thesis: string;
+  classProject: string;
 
   @GqlField(() => String)
   @IsString()
@@ -78,7 +78,7 @@ export class CreateThesisFeedbackInput {
 }
 
 @InputType()
-export class UpdateThesisFeedbackInput {
+export class UpdateClassProjectFeedbackInput {
   @GqlField(() => ID)
   @IsString()
   id: string;

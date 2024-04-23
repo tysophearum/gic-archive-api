@@ -36,7 +36,7 @@ export class ThesisCommentResolver {
 
   @Query(() => ListThesisCommentResponse)
   async listThesisComment(
-    @Arg('thesisId') thesisId: string,
+    @Arg('documentId') thesisId: string,
     @Arg('pager', () => PaginationInput, { nullable: true }) pager: PaginationInput,
   ) {
     return await listThesisCommentAction(pager, {

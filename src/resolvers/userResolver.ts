@@ -1,5 +1,5 @@
-import { listUsersAction, registerUserAction, getUserByIdAction } from '../controllers/user';
-import { ListUsersResponse, User, UserRegisterInput, UserResponse } from '../entities/user';
+import { listUsersAction, registerUserAction, getUserByIdAction, searchUserAction } from '../controllers/user';
+import { ListUsersResponse, MinUser, User, UserRegisterInput, UserResponse } from '../entities/user';
 import { Arg, Mutation, Query, Resolver, UseMiddleware } from 'type-graphql';
 import { FileUpload, GraphQLUpload } from 'graphql-upload-minimal';
 import { PaginationInput } from '../typeDefs';
@@ -28,5 +28,10 @@ export class UserResolver {
   @Query(() => User)
   async getUserById(@Arg('id') id: string) {
     return await getUserByIdAction(id);
+  }
+
+  @Query(() => [MinUser])
+  async searchUsers(@Arg('name') name: string) {
+    return await searchUserAction(name);
   }
 }

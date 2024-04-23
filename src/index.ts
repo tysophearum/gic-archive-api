@@ -9,6 +9,8 @@ import { graphqlUploadExpress } from 'graphql-upload-minimal';
 
 async function startServer() {
   const app = express();
+
+  app.use(graphqlUploadExpress({ maxFileSize: 10000000, maxFiles: 5 }));
   await connectDB();
   // await connectAmqp();
 
@@ -21,14 +23,13 @@ async function startServer() {
   // Create an ApolloServer instance with your schema
   const server = new ApolloServer({
     schema,
+    // uploads: false,
     context: ({ req }) => {
       return req.headers;
     },
   });
 
   await server.start();
-
-  app.use(graphqlUploadExpress());
   // Apply the Apollo middleware to Express
   server.applyMiddleware({ app });
 

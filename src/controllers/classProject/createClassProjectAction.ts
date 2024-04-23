@@ -9,7 +9,7 @@ import validateClassProjectCategoryId from '../../util/validateClassProjectCateg
 const createClassProjectAction = async (
   user: User,
   classProjectInput: CreateClassProjectInput,
-  file: FileUpload,
+  file: FileUpload[],
   imageInput: FileUpload,
 ): Promise<ClassProjectResponse> => {
   const classProjectRepository = new ClassProjectRepositoryImpl();

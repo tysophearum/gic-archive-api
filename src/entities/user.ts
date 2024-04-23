@@ -32,22 +32,26 @@ export class User {
 
   @GqlField(() => String, { nullable: false })
   @DBField({ type: String, required: true })
-  firstName: string;
+  name: string;
 
   @GqlField(() => String, { nullable: false })
   @DBField({ type: String, required: true })
-  lastName: string;
+  studentId: string;
+
+  @GqlField(() => String, { nullable: true })
+  @DBField({ type: String, required: false })
+  bio?: string;
 
   @GqlField(() => String, { nullable: false })
   @DBField({ type: String, required: true, unique: true, index: true })
   email: string;
 
-  @GqlField(() => String, { nullable: false })
-  @DBField({ type: String, required: true })
-  gender: string;
-
   @DBField({ type: String, required: true })
   password: string;
+
+  @GqlField(() => String, { nullable: false })
+  @DBField({ type: String, enum: ['male', 'female'], default: 'male' })
+  gender: string;
 
   @GqlField(() => [ContactInfo], { nullable: true })
   @DBField({ type: [ContactInfo], _id: false, default: [] })
@@ -57,13 +61,21 @@ export class User {
   @DBField({ type: String, required: false })
   image: string;
 
+  @GqlField(() => String, { nullable: true })
+  @DBField({ type: String, required: false })
+  coverImage?: string;
+
   @GqlField(() => String)
-  @DBField({ type: String, enum: ['student', 'teacher', 'admin'], default: 'user' })
+  @DBField({ type: String, enum: ['student', 'teacher', 'admin'], default: 'student' })
   role: string;
 
   @GqlField(() => [ClassProjectCategory], { nullable: true })
   @DBField({ type: [String], ref: ClassProjectCategory, required: false, default: [] })
   classProjectCategory?: ClassProjectCategory[];
+
+  @GqlField(() => [ClassProjectCategory], { nullable: true })
+  @DBField({ type: [String], required: false, default: [] })
+  tags?: ClassProjectCategory[];
 
   @GqlField(() => Float, { name: 'createdAt' })
   @DBField({
@@ -88,10 +100,10 @@ export class MinUser {
   readonly _id?: Types.ObjectId;
 
   @GqlField(() => String, { nullable: false })
-  firstName: string;
+  name: string;
 
   @GqlField(() => String, { nullable: false })
-  lastName: string;
+  studentId: string;
 
   @GqlField(() => String, { nullable: false })
   email: string;
@@ -141,11 +153,11 @@ export class ListUsersResponse {
 export class UserRegisterInput {
   @GqlField(() => String)
   @IsString()
-  firstName: string;
+  name: string;
 
   @GqlField(() => String)
   @IsString()
-  lastName: string;
+  studentId: string;
 
   @GqlField(() => String)
   @IsEmail()
