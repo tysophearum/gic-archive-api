@@ -6,11 +6,13 @@ import {
   getThesisAction,
   deleteThesisAction,
   updateThesisAction,
+  updateThesisApprovalAction,
 } from '../../controllers/thesis';
 import { FileUpload, GraphQLUpload } from 'graphql-upload-minimal';
 import { PaginationInput } from '../../typeDefs';
 import StudentMiddleware from '../../middleware/StudentMiddleware';
 import OptionalMiddleware from '../../middleware/OptionalMiddleware';
+import TeacherMiddleware from '../../middleware/TeacherMiddleware';
 
 @Resolver()
 export class ThesisResolver {
@@ -18,11 +20,10 @@ export class ThesisResolver {
   @UseMiddleware(StudentMiddleware)
   async createThesis(
     @Arg('thesis') thesis: CreateThesisInput,
-    @Arg('file', () => GraphQLUpload, { nullable: true }) file: FileUpload | null,
     @Arg('image', () => GraphQLUpload, { nullable: true }) image: FileUpload | null,
     @Ctx() { user }: any,
   ) {
-    return await createThesisAction(user, thesis, file, image);
+    return await createThesisAction(user, thesis, image);
   }
 
   @Query(() => ListThesisResponse)
@@ -95,6 +96,30 @@ export class ThesisResolver {
   }
 
   @Query(() => ListThesisResponse)
+  @UseMiddleware(TeacherMiddleware)
+  async listUnapprovedThesisByTeacherId(
+    @Arg('pager', () => PaginationInput, { nullable: true }) pager: PaginationInput,
+    @Ctx() { user }: any,
+  ) {
+    return await listThesisAction(user, pager, {
+      isApproved: false,
+      teacher: user._id
+    });
+  }
+
+  @Query(() => ListThesisResponse)
+  @UseMiddleware(TeacherMiddleware)
+  async listApprovedThesisByTeacherId(
+    @Arg('pager', () => PaginationInput, { nullable: true }) pager: PaginationInput,
+    @Ctx() { user }: any,
+  ) {
+    return await listThesisAction(user, pager, {
+      isApproved: true,
+      teacher: user._id
+    });
+  }
+
+  @Query(() => ListThesisResponse)
   @UseMiddleware(OptionalMiddleware)
   async listThesisByUser(
     @Arg('userId', () => String, { nullable: false }) userId: string,
@@ -113,7 +138,7 @@ export class ThesisResolver {
   }
 
   @Mutation(() => Boolean)
-  async deleteThesis(@Arg('id', () => String, { nullable: false }) id: string) {
+  async deleteThesis(@Arg('thesisId', () => String, { nullable: false }) id: string) {
     return await deleteThesisAction(id);
   }
 
@@ -126,5 +151,14 @@ export class ThesisResolver {
     @Ctx() { user }: any,
   ) {
     return await updateThesisAction(user, thesis, file, image);
+  }
+
+  @Mutation(() => ThesisResponse)
+  @UseMiddleware(TeacherMiddleware)
+  async updateThesisApproval(
+    @Arg('thesisId') id: string,
+    @Arg('approval') approval: boolean,
+  ) {
+    return await updateThesisApprovalAction(id, approval);
   }
 }

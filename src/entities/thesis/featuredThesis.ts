@@ -30,9 +30,17 @@ export class FeaturedThesis {
   updated_at?: number;
 }
 
-@InputType()
-export class CreateFeaturedThesisInput {
-  @GqlField(() => ID)
-  @IsString()
+@ObjectType()
+export class MinFeaturedThesis {
+  @GqlField(() => ID, { name: 'id' })
+  readonly _id?: Types.ObjectId;
+
+  @GqlField(() => String)
   thesis: string;
+
+  @GqlField(() => Float, { name: 'createdAt' })
+  created_at?: number;
+
+  @GqlField(() => Float, { name: 'updatedAt' })
+  updated_at?: number;
 }

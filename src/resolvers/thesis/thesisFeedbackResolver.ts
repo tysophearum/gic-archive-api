@@ -37,7 +37,7 @@ export class ThesisFeedbackResolver {
   @Query(() => ListThesisFeedbackResponse)
   @UseMiddleware(StudentMiddleware)
   async listThesisFeedback(
-    @Arg('thesisId') thesisId: string,
+    @Arg('documentId') thesisId: string,
     @Arg('pager', () => PaginationInput, { nullable: true }) pager: PaginationInput,
     @Ctx() { user }: any,
   ) {

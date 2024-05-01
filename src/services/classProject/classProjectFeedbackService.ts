@@ -35,12 +35,12 @@ export class ClassProjectFeedbackService {
     pager: PaginationInput = { page: 1, limit: Number(process.env.MAX_LIMIT) },
     query: any = null,
   ): Promise<ListClassProjectFeedbackResponse> {
-    const classProjectFeedbacks = await this.classProjectFeedbackRepository.findClassProjectFeedbacks(pager, query);
+    const feedbacks = await this.classProjectFeedbackRepository.findClassProjectFeedbacks(pager, query);
     const totalClassProjectFeedback = await this.classProjectFeedbackRepository.countClassProjectFeedbacks(query);
     const pagination = calculatePaginationResponse(pager, totalClassProjectFeedback);
 
     return {
-      classProjectFeedbacks,
+      feedbacks,
       pagination,
     };
   }

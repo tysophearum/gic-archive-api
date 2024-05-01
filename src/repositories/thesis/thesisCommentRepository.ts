@@ -31,7 +31,7 @@ export class ThesisCommentRepositoryImpl implements ThesisCommentRepository {
   async findThesisComments({ page, limit }: PaginationInput, query: any): Promise<ThesisComment[]> {
     const skip = (page - 1) * limit;
 
-    return await this.thesisCommentModel.find(query).populate('user').skip(skip).limit(limit).exec();
+    return await this.thesisCommentModel.find(query).populate('user').sort({ created_at: -1 }).skip(skip).limit(limit).exec();
   }
 
   async countThesisComments(query: any): Promise<number> {

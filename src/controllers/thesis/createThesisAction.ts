@@ -9,7 +9,6 @@ import validateThesisCategoryId from '../../util/validateThesisCategoryId';
 const createThesisAction = async (
   user: User,
   thesisInput: CreateThesisInput,
-  file: FileUpload,
   imageInput: FileUpload,
 ): Promise<ThesisResponse> => {
   const thesisRepository = new ThesisRepositoryImpl();
@@ -45,9 +44,6 @@ const createThesisAction = async (
     }),
   );
 
-  if (!file) {
-    throw new Error('File is required');
-  }
   const thesisLink = 'await saveFile(file);';
 
   const image = 'await saveFile(imageInput);';

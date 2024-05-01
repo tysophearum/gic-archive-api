@@ -16,6 +16,10 @@ import deleteThesisFeedbackAction from './feedback/deleteThesisFeedbackAction';
 import updateThesisFeedbackAction from './feedback/updateThesisFeedbackAction';
 import listThesisFeedbackAction from './feedback/listThesisFeedbackAction';
 import createThesisLikeAction from './like/createThesisLikeAction';
+import addFeaturedThesisAction from './featured/addFeaturedThesisAction';
+import removeFeaturedThesisAction from './featured/removeFeaturedThesisAction';
+import listFeaturedThesisAction from './featured/listFeaturedThesisAction';
+import updateThesisApprovalAction from './updateThesisApprovalAction';
 
 export {
   createThesisAction,
@@ -36,4 +40,8 @@ export {
   updateThesisFeedbackAction,
   listThesisFeedbackAction,
   createThesisLikeAction,
+  addFeaturedThesisAction,
+  listFeaturedThesisAction,
+  updateThesisApprovalAction,
+  removeFeaturedThesisAction
 };

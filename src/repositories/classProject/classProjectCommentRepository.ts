@@ -31,7 +31,13 @@ export class ClassProjectCommentRepositoryImpl implements ClassProjectCommentRep
   async findClassProjectComments({ page, limit }: PaginationInput, query: any): Promise<ClassProjectComment[]> {
     const skip = (page - 1) * limit;
 
-    return await this.classProjectCommentModel.find(query).populate('user').skip(skip).limit(limit).exec();
+    return await this.classProjectCommentModel
+      .find(query)
+      .sort({ created_at: -1 })
+      .populate('user')
+      .skip(skip)
+      .limit(limit)
+      .exec();
   }
 
   async countClassProjectComments(query: any): Promise<number> {

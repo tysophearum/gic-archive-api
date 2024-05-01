@@ -11,7 +11,6 @@ import { Types } from 'mongoose';
 const updateClassProjectAction = async (
   user: User,
   classProjectInput: UpdateClassProjectInput,
-  file: FileUpload,
   imageInput: FileUpload,
 ): Promise<ClassProjectResponse> => {
   const classProjectRepository = new ClassProjectRepositoryImpl();
@@ -44,9 +43,6 @@ const updateClassProjectAction = async (
     }),
   );
 
-  if (!file) {
-    throw new Error('File is required');
-  }
   const classProjectLink = 'await saveFile(file);';
 
   const image = 'await saveFile(imageInput);';

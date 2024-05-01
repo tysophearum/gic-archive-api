@@ -9,6 +9,8 @@ import { ClassProjectCategoryResolver } from './classProject/classProjectCategor
 import { ClassProjectCommentResolver } from './classProject/classProjectCommentResolver';
 import { ClassProjectFeedbackResolver } from './classProject/classProjectFeedbackResolver';
 import { ClassProjectLikeResolver } from './classProject/classProjectLikeResolver';
+import { FeaturedClassProjectResolver } from './classProject/featuredClassProjectResolver';
+import { FeaturedThesisResolver } from './thesis/featuredThesisResolver';
 
 export default [
   UserResolver,
@@ -21,5 +23,7 @@ export default [
   ClassProjectCategoryResolver,
   ClassProjectCommentResolver,
   ClassProjectFeedbackResolver,
-  ClassProjectLikeResolver
+  ClassProjectLikeResolver,
+  FeaturedClassProjectResolver,
+  FeaturedThesisResolver,
 ];

@@ -73,9 +73,9 @@ export class User {
   @DBField({ type: [String], ref: ClassProjectCategory, required: false, default: [] })
   classProjectCategory?: ClassProjectCategory[];
 
-  @GqlField(() => [ClassProjectCategory], { nullable: true })
+  @GqlField(() => [String], { nullable: true })
   @DBField({ type: [String], required: false, default: [] })
-  tags?: ClassProjectCategory[];
+  tags?: string[];
 
   @GqlField(() => Float, { name: 'createdAt' })
   @DBField({
@@ -115,19 +115,9 @@ export class MinUser {
   image: string;
 
   @GqlField(() => Float, { name: 'createdAt' })
-  @DBField({
-    type: Number,
-    default: Date.now,
-    alias: 'createdAt',
-  })
   created_at?: number;
 
   @GqlField(() => Float, { name: 'updatedAt' })
-  @DBField({
-    type: Number,
-    default: 0,
-    alias: 'updatedAt',
-  })
   updated_at?: number;
 }
 
@@ -174,4 +164,43 @@ export class UserRegisterInput {
   @IsOptional()
   @GqlField(() => [ContactInfoInput])
   contacts: ContactInfoInput[];
+}
+
+@InputType()
+export class UpdateUserInput {
+  @GqlField(() => String)
+  @IsString()
+  name: string;
+
+  @GqlField(() => String)
+  @IsString()
+  studentId: string;
+
+  @GqlField(() => String)
+  @IsString()
+  bio: string;
+
+  @GqlField(() => String)
+  @IsString()
+  gender: string;
+
+  @GqlField(() => String)
+  @IsEmail()
+  email: string;
+
+  @IsOptional()
+  @GqlField(() => [ContactInfoInput], {nullable: true})
+  contacts: ContactInfoInput[];
+
+  @GqlField(() => [String], { nullable: true })
+  tags?: string[];
+}
+
+@ObjectType()
+export class Contribution {
+  @GqlField(() => Number)
+  classProjectCount: number;
+
+  @GqlField(() => Number)
+  thesisCount: number;
 }

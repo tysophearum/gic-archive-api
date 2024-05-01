@@ -30,9 +30,17 @@ export class FeaturedClassProject {
   updated_at?: number;
 }
 
-@InputType()
-export class CreateFeaturedClassProjectInput {
-  @GqlField(() => ID)
-  @IsString()
+@ObjectType()
+export class MinFeaturedClassProject {
+  @GqlField(() => ID, { name: 'id' })
+  readonly _id?: Types.ObjectId;
+
+  @GqlField(() => String)
   classProject: string;
+
+  @GqlField(() => Float, { name: 'createdAt' })
+  created_at?: number;
+
+  @GqlField(() => Float, { name: 'updatedAt' })
+  updated_at?: number;
 }

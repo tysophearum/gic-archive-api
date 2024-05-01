@@ -37,7 +37,7 @@ export class ClassProjectFeedbackResolver {
   @Query(() => ListClassProjectFeedbackResponse)
   @UseMiddleware(StudentMiddleware)
   async listClassProjectFeedback(
-    @Arg('classProjectId') classProjectId: string,
+    @Arg('documentId') classProjectId: string,
     @Arg('pager', () => PaginationInput, { nullable: true }) pager: PaginationInput,
     @Ctx() { user }: any,
   ) {

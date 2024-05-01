@@ -36,4 +36,8 @@ export class UserService {
   async searchUsers(name: string): Promise<MinUser[]> {
     return await this.userRepository.searchUsers(name);
   }
+
+  async updateUser(user: User) {
+    return await this.userRepository.updateUser(user);
+  }
 }

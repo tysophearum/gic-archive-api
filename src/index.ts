@@ -1,29 +1,29 @@
 import 'reflect-metadata';
 import express from 'express';
 import { ApolloServer } from 'apollo-server-express';
-import { Arg, buildSchema, Mutation, Query, Resolver, Field as GqlField } from 'type-graphql';
+import { buildSchema } from 'type-graphql';
 import { connectDB } from './config/DBConfig';
 import Resolvers from './resolvers';
-import { connectAmqp } from './config/rabbitmqConfig';
 import { graphqlUploadExpress } from 'graphql-upload-minimal';
+import uploadRouter from './controllers/uploadController';
+import cors from 'cors';
 
 async function startServer() {
   const app = express();
+  // app.use(cors());
+  // Use graphqlUploadExpress for handling GraphQL file uploads
+  app.use('/graphql', graphqlUploadExpress({ maxFileSize: 10000000, maxFiles: 5 }));
 
-  app.use(graphqlUploadExpress({ maxFileSize: 10000000, maxFiles: 5 }));
   await connectDB();
-  // await connectAmqp();
 
   // Build GraphQL schema
   const schema = await buildSchema({
     resolvers: Resolvers as any,
-    // validate: { forbidUnknownValues: false }
   });
 
   // Create an ApolloServer instance with your schema
   const server = new ApolloServer({
     schema,
-    // uploads: false,
     context: ({ req }) => {
       return req.headers;
     },
@@ -32,6 +32,9 @@ async function startServer() {
   await server.start();
   // Apply the Apollo middleware to Express
   server.applyMiddleware({ app });
+
+  // Mount the upload router
+  // app.use('/upload', uploadRouter);
 
   // Define the port to listen on
   const PORT = process.env.PORT || 4000;

@@ -17,11 +17,6 @@ const createClassProjectFeedbackAction = async (user: User, classProjectFeedback
       throw new Error('You are not authorize for this action');
     }
   } 
-  // else if (user.role == 'teacher') {
-  //   if (!user.classProjectCategory.includes(findClassProject.classProjectCategory)) {
-  //     throw new Error('You are not authorize for this action');
-  //   }
-  // }
 
   const newClassProjectFeedback: ClassProjectFeedback = {
     ...classProjectFeedbackInput,

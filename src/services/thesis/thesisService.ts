@@ -47,4 +47,8 @@ export class ThesisService {
   async decrementThesisLike(id: string): Promise<boolean> {
     return await this.thesisRepository.decrementThesisLike(id);
   }
+
+  async countThesis(query: any): Promise<number> {
+    return await this.thesisRepository.countThesis(query);
+  }
 }

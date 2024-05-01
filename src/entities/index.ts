@@ -1,4 +1,4 @@
-import { User, MinUser, UserRegisterInput, UserResponse, ContactInfo } from './user';
+import { User, MinUser, UserRegisterInput, UserResponse, ContactInfo, Contribution } from './user';
 import {
   Thesis,
   MinThesis,
@@ -8,7 +8,7 @@ import {
   ThesisResponse,
 } from './thesis/thesis';
 import { ThesisCategory, CreateThesisCategoryInput, UpdateThesisCategoryInput } from './thesis/thesisCategory';
-import { FeaturedThesis, CreateFeaturedThesisInput } from './thesis/featuredThesis';
+import { FeaturedThesis, MinFeaturedThesis } from './thesis/featuredThesis';
 import {
   ThesisComment,
   CreateThesisCommentInput,
@@ -32,7 +32,7 @@ import {
   ListClassProjectResponse,
   ClassProjectResponse, } from './classProject/classProject';
 import { ClassProjectCategory, CreateClassProjectCategoryInput, UpdateClassProjectCategoryInput } from './classProject/classProjectCategory';
-import { FeaturedClassProject, CreateFeaturedClassProjectInput } from './classProject/featuredClassProject';
+import { FeaturedClassProject, MinFeaturedClassProject } from './classProject/featuredClassProject';
 import { 
   ClassProjectComment, 
   CreateClassProjectCommentInput,
@@ -64,7 +64,6 @@ export {
   UserRegisterInput,
   CreateThesisInput,
   CreateThesisCategoryInput,
-  CreateFeaturedThesisInput,
   CreateThesisCommentInput,
   CreateThesisFeedbackInput,
   CreateThesisLikeInput,
@@ -72,7 +71,6 @@ export {
   CreateClassProjectCategoryInput,
   CreateClassProjectCommentInput,
   CreateClassProjectLikeInput,
-  CreateFeaturedClassProjectInput,
   UpdateThesisInput,
   UpdateThesisCategoryInput,
   UserResponse,
@@ -100,4 +98,7 @@ export {
   ClassProjectFeedbackResponse,
   ListClassProjectFeedbackResponse,
   UpdateClassProjectFeedbackInput,
+  Contribution,
+  MinFeaturedClassProject,
+  MinFeaturedThesis
 };

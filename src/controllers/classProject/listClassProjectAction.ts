@@ -8,18 +8,18 @@ const listClassProjectAction = async (user: User, pager: PaginationInput, query:
   const classProjectService = new ClassProjectService(classProjectRepository);
   const classProjectLikeService = new ClassProjectLikeService(new ClassProjectLikeRepositoryImpl());
 
-  const theses = await classProjectService.getClassProject(pager, query);
+  const classProjects = await classProjectService.getClassProject(pager, query);
 
-  theses.data.forEach(async (classProject) => {
+  classProjects.data.forEach(async (classProject) => {
     classProject.liked = false;
   });
   if (user) {
-    for (let i = 0; i < theses.data.length; i++) {
-      theses.data[i].liked = await classProjectLikeService.hasLiked(user._id.toString(), theses.data[i]._id.toString());
+    for (let i = 0; i < classProjects.data.length; i++) {
+      classProjects.data[i].liked = await classProjectLikeService.hasLiked(user._id.toString(), classProjects.data[i]._id.toString());
     }
   }
 
-  return theses;
+  return classProjects;
 };
 
 export default listClassProjectAction;

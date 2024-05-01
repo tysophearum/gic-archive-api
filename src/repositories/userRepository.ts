@@ -29,7 +29,7 @@ export class UserRepositoryImpl implements UserRepository {
   }
 
   async findUserById(id: string): Promise<User> {
-    return await this.userModel.findById(id).exec();
+    return await this.userModel.findById(id).populate('classProjectCategory').exec();
   }
 
   async deleteUser(id: string): Promise<void> {
@@ -37,7 +37,7 @@ export class UserRepositoryImpl implements UserRepository {
   }
 
   async updateUser(user: User): Promise<User> {
-    return await this.userModel.findByIdAndUpdate(user._id, user, { new: true }).exec();
+    return await this.userModel.findByIdAndUpdate(user._id, user, { new: true }).populate('classProjectCategory').exec();
   }
   async searchUsers(name: string): Promise<User[]> {
     return await this.userModel.find({ name: { $regex: name, $options: 'i' } }).limit(8).exec();

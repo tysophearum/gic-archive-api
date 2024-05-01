@@ -34,7 +34,7 @@ const TeacherMiddleware: MiddlewareFn<any> = async ({ context }, next) => {
       throw new Error('Invalid token');
     }
     // If the token is valid, you can attach the user ID to the context
-    context.userId = user;
+    context.user = user;
 
     // Continue with the next middleware or resolver
     return next();

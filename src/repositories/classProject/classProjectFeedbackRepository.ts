@@ -1,7 +1,6 @@
 import { getModelForClass } from '@typegoose/typegoose';
-import { ClassProjectFeedback } from '../../entities';
+import { ClassProjectFeedback, ClassProjectFeedbackResponse } from '../../entities';
 import { PaginationInput } from '../../typeDefs';
-import { ClassProjectFeedbackResponse } from '../../entities/classProject/classProjectFeedback';
 
 export interface ClassProjectFeedbackRepository {
   createClassProjectFeedback(classProjectFeedback: ClassProjectFeedbackResponse): Promise<ClassProjectFeedbackResponse>;

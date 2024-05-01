@@ -47,4 +47,8 @@ export class ClassProjectService {
   async decrementClassProjectLike(id: string): Promise<boolean> {
     return await this.classProjectRepository.decrementClassProjectLike(id);
   }
+
+  async countClassProject(query: any): Promise<number> {
+    return await this.classProjectRepository.countClassProject(query);
+  }
 }

@@ -5,6 +5,7 @@ import {
   updateClassProjectCategoryAction,
   deleteClassProjectCategoryAction,
   listClassProjectCategoryAction,
+  getClassProjectCategoryByIdAction
 } from '../../controllers/classProject';
 import AdminMiddleware from '../../middleware/AdminMiddleware';
 
@@ -31,5 +32,12 @@ export class ClassProjectCategoryResolver {
   @Query(() => [ClassProjectCategory])
   async listClassProjectCategory() {
     return await listClassProjectCategoryAction();
+  }
+
+  @Query(() => ClassProjectCategory)
+  async getClassProjectCategoryById(
+    @Arg('categoryId') id: string
+  ) {
+    return await getClassProjectCategoryByIdAction(id);
   }
 }

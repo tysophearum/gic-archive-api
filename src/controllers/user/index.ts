@@ -1,6 +1,8 @@
 import registerUserAction from './registerUserAction';
 import listUsersAction from './listUsersAction';
 import getUserByIdAction from './getUserByIdAction';
-import searchUserAction from './searchUserAction';
+import getUserContribution from './getUserContribution';
+import updateUserAction from './updateUserAction';
+import updateTeacherClassProjectCategoryAction from './updateTeacherClassProjectCategoryAction';
 
-export { registerUserAction, listUsersAction, getUserByIdAction, searchUserAction };
+export { registerUserAction, listUsersAction, getUserByIdAction, getUserContribution, updateUserAction, updateTeacherClassProjectCategoryAction };

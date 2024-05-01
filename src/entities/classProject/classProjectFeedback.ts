@@ -60,7 +60,7 @@ export class ClassProjectFeedbackResponse {
 @ObjectType()
 export class ListClassProjectFeedbackResponse {
   @GqlField(() => [ClassProjectFeedbackResponse])
-  classProjectFeedbacks: ClassProjectFeedbackResponse[];
+  feedbacks: ClassProjectFeedbackResponse[];
 
   @GqlField(() => Pagination)
   pagination: Pagination;
