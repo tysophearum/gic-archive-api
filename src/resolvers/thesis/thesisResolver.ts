@@ -13,6 +13,7 @@ import { PaginationInput } from '../../typeDefs';
 import StudentMiddleware from '../../middleware/StudentMiddleware';
 import OptionalMiddleware from '../../middleware/OptionalMiddleware';
 import TeacherMiddleware from '../../middleware/TeacherMiddleware';
+import AdminMiddleware from '../../middleware/AdminMiddleware';
 
 @Resolver()
 export class ThesisResolver {
@@ -27,7 +28,7 @@ export class ThesisResolver {
   }
 
   @Query(() => ListThesisResponse)
-  @UseMiddleware(OptionalMiddleware)
+  @UseMiddleware(AdminMiddleware)
   async listThesis(
     @Arg('pager', () => PaginationInput, { nullable: true }) pager: PaginationInput,
     @Ctx() { user }: any,
@@ -61,7 +62,7 @@ export class ThesisResolver {
   }
 
   @Query(() => ListThesisResponse)
-  @UseMiddleware(OptionalMiddleware)
+  @UseMiddleware(StudentMiddleware)
   async listMyApprovedThesis(
     @Arg('pager', () => PaginationInput, { nullable: true }) pager: PaginationInput,
     @Ctx() { user }: any,
@@ -73,7 +74,7 @@ export class ThesisResolver {
   }
 
   @Query(() => ListThesisResponse)
-  @UseMiddleware(OptionalMiddleware)
+  @UseMiddleware(StudentMiddleware)
   async listMyUnapprovedThesis(
     @Arg('pager', () => PaginationInput, { nullable: true }) pager: PaginationInput,
     @Ctx() { user }: any,
@@ -85,7 +86,7 @@ export class ThesisResolver {
   }
 
   @Query(() => ListThesisResponse)
-  @UseMiddleware(OptionalMiddleware)
+  @UseMiddleware(AdminMiddleware)
   async listUnapprovedThesis(
     @Arg('pager', () => PaginationInput, { nullable: true }) pager: PaginationInput,
     @Ctx() { user }: any,
