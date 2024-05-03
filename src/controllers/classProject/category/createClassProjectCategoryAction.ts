@@ -16,6 +16,7 @@ const createClassProjectCategoryAction = async (classProjectCategoryInput: Creat
   const category: ClassProjectCategory = {
     name: classProjectCategoryInput.name,
     description: classProjectCategoryInput.description,
+    teachers: classProjectCategoryInput.teachers,
   };
 
   return await classProjectCategoryService.createClassProjectCategory(category);

@@ -5,6 +5,7 @@ import {
   updateThesisCategoryAction,
   deleteThesisCategoryAction,
   listThesisCategoryAction,
+  getThesisCategoryByIdAction,
 } from '../../controllers/thesis';
 import AdminMiddleware from '../../middleware/AdminMiddleware';
 
@@ -24,12 +25,19 @@ export class ThesisCategoryResolver {
 
   @Mutation(() => Boolean)
   @UseMiddleware(AdminMiddleware)
-  async deleteThesisCategory(@Arg('id') id: string) {
+  async deleteThesisCategory(@Arg('thesisId') id: string) {
     return await deleteThesisCategoryAction(id);
   }
 
   @Query(() => [ThesisCategory])
   async listThesisCategory() {
     return await listThesisCategoryAction();
+  }
+
+  @Query(() => ThesisCategory)
+  async getThesisCategoryById(
+    @Arg('categoryId') id: string
+  ) {
+    return await getThesisCategoryByIdAction(id);
   }
 }

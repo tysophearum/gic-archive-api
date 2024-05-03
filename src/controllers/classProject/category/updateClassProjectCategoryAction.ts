@@ -18,6 +18,7 @@ const updateClassProjectCategoryAction = async (classProjectCategoryInput: Updat
     _id: new Types.ObjectId(classProjectCategoryInput.id),
     name: classProjectCategoryInput.name,
     description: classProjectCategoryInput.description,
+    teachers: classProjectCategoryInput.teachers,
   };
 
   return await classProjectCategoryService.updateClassProjectCategory(category);

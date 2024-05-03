@@ -4,7 +4,6 @@ import { ThesisCategory } from '../../entities';
 export interface ThesisCategoryRepository {
   createThesisCategory(thesisCategory: ThesisCategory): Promise<ThesisCategory>;
   findThesisCategory(query: any): Promise<ThesisCategory[]>;
-  findThesisCategoryById(id: string): Promise<ThesisCategory>;
   updateThesisCategory(thesisCategory: ThesisCategory): Promise<ThesisCategory>;
   deleteThesisCategory(id: string): Promise<void>;
   getThesisCategoryById(id: string): Promise<ThesisCategory>;
@@ -19,10 +18,6 @@ export class ThesisCategoryRepositoryImpl implements ThesisCategoryRepository {
 
   async findThesisCategory(query: any): Promise<ThesisCategory[]> {
     return await this.thesisCategoryModel.find(query);
-  }
-
-  async findThesisCategoryById(id: string): Promise<ThesisCategory> {
-    return await this.thesisCategoryModel.findById(id);
   }
 
   async updateThesisCategory(thesisCategory: ThesisCategory): Promise<ThesisCategory> {

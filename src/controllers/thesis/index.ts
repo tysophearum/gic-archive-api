@@ -4,6 +4,7 @@ import getThesisAction from './getThesisAction';
 import createThesisCategoryAction from './category/createThesisCategoryAction';
 import updateThesisCategoryAction from './category/updateThesisCategoryAction';
 import deleteThesisCategoryAction from './category/deleteThesisCategoryAction';
+import getThesisCategoryByIdAction from './category/getThesisCategoryByIdAction';
 import listThesisCategoryAction from './category/listThesisCategoryAction';
 import deleteThesisAction from './deleteThesisAction';
 import updateThesisAction from './updateThesisAction';
@@ -27,6 +28,7 @@ export {
   createThesisCategoryAction,
   updateThesisCategoryAction,
   deleteThesisCategoryAction,
+  getThesisCategoryByIdAction,
   listThesisCategoryAction,
   getThesisAction,
   deleteThesisAction,

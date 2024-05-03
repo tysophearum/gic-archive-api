@@ -69,10 +69,6 @@ export class User {
   @DBField({ type: String, enum: ['student', 'teacher', 'admin'], default: 'student' })
   role: string;
 
-  @GqlField(() => [ClassProjectCategory], { nullable: true })
-  @DBField({ type: [String], ref: ClassProjectCategory, required: false, default: [] })
-  classProjectCategory?: ClassProjectCategory[];
-
   @GqlField(() => [String], { nullable: true })
   @DBField({ type: [String], required: false, default: [] })
   tags?: string[];

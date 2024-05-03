@@ -4,14 +4,12 @@ import { ClassProjectRepositoryImpl, UserRepositoryImpl } from '../../repositori
 import { ClassProjectService, UserService } from '../../services';
 import validateUserId from '../../util/validateUserId';
 import { FileUpload } from 'graphql-upload-minimal';
-import saveFile from '../../util/saveFileUtil';
 import validateClassProjectCategoryId from '../../util/validateClassProjectCategoryId';
 import { Types } from 'mongoose';
 
 const updateClassProjectAction = async (
   user: User,
   classProjectInput: UpdateClassProjectInput,
-  imageInput: FileUpload,
 ): Promise<ClassProjectResponse> => {
   const classProjectRepository = new ClassProjectRepositoryImpl();
   const classProjectService = new ClassProjectService(classProjectRepository);

@@ -21,10 +21,9 @@ export class ThesisResolver {
   @UseMiddleware(StudentMiddleware)
   async createThesis(
     @Arg('thesis') thesis: CreateThesisInput,
-    @Arg('image', () => GraphQLUpload, { nullable: true }) image: FileUpload | null,
     @Ctx() { user }: any,
   ) {
-    return await createThesisAction(user, thesis, image);
+    return await createThesisAction(user, thesis);
   }
 
   @Query(() => ListThesisResponse)
@@ -147,11 +146,9 @@ export class ThesisResolver {
   @UseMiddleware(StudentMiddleware)
   async updateThesis(
     @Arg('thesis') thesis: UpdateThesisInput,
-    @Arg('file', () => GraphQLUpload, { nullable: true }) file: FileUpload | null,
-    @Arg('image', () => GraphQLUpload, { nullable: true }) image: FileUpload | null,
     @Ctx() { user }: any,
   ) {
-    return await updateThesisAction(user, thesis, file, image);
+    return await updateThesisAction(user, thesis);
   }
 
   @Mutation(() => ThesisResponse)

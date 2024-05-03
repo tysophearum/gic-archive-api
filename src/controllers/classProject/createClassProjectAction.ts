@@ -9,7 +9,6 @@ import validateClassProjectCategoryId from '../../util/validateClassProjectCateg
 const createClassProjectAction = async (
   user: User,
   classProjectInput: CreateClassProjectInput,
-  imageInput: FileUpload,
 ): Promise<ClassProjectResponse> => {
   const classProjectRepository = new ClassProjectRepositoryImpl();
   const classProjectService = new ClassProjectService(classProjectRepository);
@@ -39,6 +38,7 @@ const createClassProjectAction = async (
   // if (!file) {
   //   throw new Error('File is required');
   // }
+  
   const classProjectLink = 'await saveFile(file);';
 
   const image = 'await saveFile(imageInput);';

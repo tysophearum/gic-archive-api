@@ -9,7 +9,6 @@ import validateThesisCategoryId from '../../util/validateThesisCategoryId';
 const createThesisAction = async (
   user: User,
   thesisInput: CreateThesisInput,
-  imageInput: FileUpload,
 ): Promise<ThesisResponse> => {
   const thesisRepository = new ThesisRepositoryImpl();
   const thesisService = new ThesisService(thesisRepository);

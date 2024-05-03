@@ -10,7 +10,7 @@ import cors from 'cors';
 
 async function startServer() {
   const app = express();
-  // app.use(cors());
+  app.use(cors());
   // Use graphqlUploadExpress for handling GraphQL file uploads
   app.use('/graphql', graphqlUploadExpress({ maxFileSize: 10000000, maxFiles: 5 }));
 
@@ -34,7 +34,7 @@ async function startServer() {
   server.applyMiddleware({ app });
 
   // Mount the upload router
-  // app.use('/upload', uploadRouter);
+  app.use('/upload', uploadRouter);
 
   // Define the port to listen on
   const PORT = process.env.PORT || 4000;

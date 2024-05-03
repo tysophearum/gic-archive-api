@@ -11,8 +11,6 @@ import { Types } from 'mongoose';
 const updateThesisAction = async (
   user: User,
   thesisInput: UpdateThesisInput,
-  file: FileUpload,
-  imageInput: FileUpload,
 ): Promise<ThesisResponse> => {
   const thesisRepository = new ThesisRepositoryImpl();
   const thesisService = new ThesisService(thesisRepository);
@@ -52,9 +50,9 @@ const updateThesisAction = async (
     }),
   );
 
-  if (!file) {
-    throw new Error('File is required');
-  }
+  // if (!file) {
+  //   throw new Error('File is required');
+  // }
   const thesisLink = 'await saveFile(file);';
 
   const image = 'await saveFile(imageInput);';

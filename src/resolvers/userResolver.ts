@@ -1,4 +1,4 @@
-import { listUsersAction, registerUserAction, getUserByIdAction, getUserContribution, updateUserAction, updateTeacherClassProjectCategoryAction } from '../controllers/user';
+import { listUsersAction, registerUserAction, getUserByIdAction, getUserContribution, updateUserAction } from '../controllers/user';
 import { Contribution, ListUsersResponse, MinUser, User, UserRegisterInput, UserResponse, UpdateUserInput } from '../entities/user';
 import { Arg, Ctx, Mutation, Query, Resolver, UseMiddleware } from 'type-graphql';
 import { FileUpload, GraphQLUpload } from 'graphql-upload-minimal';
@@ -74,14 +74,5 @@ export class UserResolver {
     @Arg('user') updateUserInput: UpdateUserInput
   ) {
     return await updateUserAction(user.id, updateUserInput);
-  }
-
-  @Mutation(() => User)
-  @UseMiddleware(AdminMiddleware)
-  async updateTeacherClassProjectCategory(
-    @Arg('teacherId') teacherId: string,
-    @Arg('categoryIds', () => [String]) categoryIds: string[],
-  ) {
-    return await updateTeacherClassProjectCategoryAction(teacherId, categoryIds);
   }
 }

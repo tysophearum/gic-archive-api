@@ -1,5 +1,5 @@
 import { Arg, Ctx, Mutation, Query, Resolver, UseMiddleware } from 'type-graphql';
-import { CreateClassProjectCategoryInput, ClassProjectCategory, UpdateClassProjectCategoryInput } from '../../entities';
+import { CreateClassProjectCategoryInput, ClassProjectCategory, UpdateClassProjectCategoryInput, ClassProjectCategoryResponse } from '../../entities';
 import {
   createClassProjectCategoryAction,
   updateClassProjectCategoryAction,
@@ -8,6 +8,7 @@ import {
   getClassProjectCategoryByIdAction
 } from '../../controllers/classProject';
 import AdminMiddleware from '../../middleware/AdminMiddleware';
+import TeacherMiddleware from '../../middleware/TeacherMiddleware';
 
 @Resolver()
 export class ClassProjectCategoryResolver {
@@ -25,16 +26,24 @@ export class ClassProjectCategoryResolver {
 
   @Mutation(() => Boolean)
   @UseMiddleware(AdminMiddleware)
-  async deleteClassProjectCategory(@Arg('id') id: string) {
+  async deleteClassProjectCategory(@Arg('classProjectId') id: string) {
     return await deleteClassProjectCategoryAction(id);
   }
 
-  @Query(() => [ClassProjectCategory])
+  @Query(() => [ClassProjectCategoryResponse])
   async listClassProjectCategory() {
     return await listClassProjectCategoryAction();
   }
 
-  @Query(() => ClassProjectCategory)
+  @Query(() => [ClassProjectCategoryResponse])
+  @UseMiddleware(TeacherMiddleware)
+  async listTeacherClassProjectCategory(
+    @Ctx() {user}: any
+  ) {
+    return await listClassProjectCategoryAction({teachers: user._id});
+  }
+
+  @Query(() => ClassProjectCategoryResponse)
   async getClassProjectCategoryById(
     @Arg('categoryId') id: string
   ) {

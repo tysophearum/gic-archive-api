@@ -31,7 +31,7 @@ import {
   UpdateClassProjectInput,
   ListClassProjectResponse,
   ClassProjectResponse, } from './classProject/classProject';
-import { ClassProjectCategory, CreateClassProjectCategoryInput, UpdateClassProjectCategoryInput } from './classProject/classProjectCategory';
+import { ClassProjectCategory, CreateClassProjectCategoryInput, UpdateClassProjectCategoryInput, ClassProjectCategoryResponse } from './classProject/classProjectCategory';
 import { FeaturedClassProject, MinFeaturedClassProject } from './classProject/featuredClassProject';
 import { 
   ClassProjectComment, 
@@ -100,5 +100,6 @@ export {
   UpdateClassProjectFeedbackInput,
   Contribution,
   MinFeaturedClassProject,
-  MinFeaturedThesis
+  MinFeaturedThesis,
+  ClassProjectCategoryResponse
 };

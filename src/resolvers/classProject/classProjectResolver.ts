@@ -12,7 +12,6 @@ import { FileUpload, GraphQLUpload } from 'graphql-upload-minimal';
 import { PaginationInput } from '../../typeDefs';
 import StudentMiddleware from '../../middleware/StudentMiddleware';
 import OptionalMiddleware from '../../middleware/OptionalMiddleware';
-import saveFile from '../../util/saveFileUtil';
 import TeacherMiddleware from '../../middleware/TeacherMiddleware';
 
 @Resolver()
@@ -21,10 +20,9 @@ export class ClassProjectResolver {
   @UseMiddleware(StudentMiddleware)
   async createClassProject(
     @Arg('classProject') classProject: CreateClassProjectInput,
-    @Arg('image', () => GraphQLUpload, { nullable: true }) image: FileUpload | null,
     @Ctx() { user }: any,
   ) {
-    return await createClassProjectAction(user, classProject, image);
+    return await createClassProjectAction(user, classProject);
   }
 
   @Query(() => ListClassProjectResponse)
@@ -136,10 +134,9 @@ export class ClassProjectResolver {
   @UseMiddleware(StudentMiddleware)
   async updateClassProject(
     @Arg('classProject') classProject: UpdateClassProjectInput,
-    @Arg('image', () => GraphQLUpload, { nullable: true }) image: FileUpload | null,
     @Ctx() { user }: any,
   ) {
-    return await updateClassProjectAction(user, classProject, image);
+    return await updateClassProjectAction(user, classProject);
   }
 
   @Mutation(() => ClassProjectResponse)

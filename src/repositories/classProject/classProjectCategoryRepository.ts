@@ -4,7 +4,6 @@ import { ClassProjectCategory } from '../../entities';
 export interface ClassProjectCategoryRepository {
   createClassProjectCategory(classProjectCategory: ClassProjectCategory): Promise<ClassProjectCategory>;
   findClassProjectCategory(query: any): Promise<ClassProjectCategory[]>;
-  findClassProjectCategoryById(id: string): Promise<ClassProjectCategory>;
   updateClassProjectCategory(classProjectCategory: ClassProjectCategory): Promise<ClassProjectCategory>;
   deleteClassProjectCategory(id: string): Promise<void>;
   getClassProjectCategoryById(id: string): Promise<ClassProjectCategory>;
@@ -18,11 +17,7 @@ export class ClassProjectCategoryRepositoryImpl implements ClassProjectCategoryR
   }
 
   async findClassProjectCategory(query: any): Promise<ClassProjectCategory[]> {
-    return await this.classProjectCategoryModel.find(query);
-  }
-
-  async findClassProjectCategoryById(id: string): Promise<ClassProjectCategory> {
-    return await this.classProjectCategoryModel.findById(id);
+    return await this.classProjectCategoryModel.find(query).populate('teachers');
   }
 
   async updateClassProjectCategory(classProjectCategory: ClassProjectCategory): Promise<ClassProjectCategory> {
@@ -34,6 +29,6 @@ export class ClassProjectCategoryRepositoryImpl implements ClassProjectCategoryR
   }
 
   async getClassProjectCategoryById(id: string): Promise<ClassProjectCategory> {
-    return await this.classProjectCategoryModel.findById(id);
+    return await this.classProjectCategoryModel.findById(id).populate('teachers');
   }
 }
