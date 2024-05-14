@@ -18,8 +18,8 @@ export class Thesis {
   @DBField({ type: String, required: true })
   description: string;
 
-  @GqlField(() => String, { nullable: false })
-  @DBField({ type: String, required: true })
+  @GqlField(() => String, { nullable: true })
+  @DBField({ type: String, required: false })
   image: string;
 
   @GqlField(() => User)
@@ -38,9 +38,9 @@ export class Thesis {
   @DBField({ type: [String], ref: () => User, required: false, default: [] })
   collaborators: string[];
 
-  @GqlField(() => String, { nullable: false })
-  @DBField({ type: String, required: true })
-  thesisLink: string;
+  @GqlField(() => [String], { nullable: false })
+  @DBField({ type: [String], required: true, default: [] })
+  thesisLink: string[];
 
   @GqlField(() => String, { nullable: false })
   @DBField({ type: String, required: true })
@@ -86,7 +86,7 @@ export class ThesisResponse {
   @GqlField(() => String, { nullable: false })
   description: string;
 
-  @GqlField(() => String, { nullable: false })
+  @GqlField(() => String, { nullable: true })
   image: string;
 
   @GqlField(() => MinUser)
@@ -101,8 +101,8 @@ export class ThesisResponse {
   @GqlField(() => [MinUser], { nullable: true })
   collaborators: any[];
 
-  @GqlField(() => String, { nullable: false })
-  thesisLink: string;
+  @GqlField(() => [String], { nullable: false })
+  thesisLink: string[];
 
   @GqlField(() => String, { nullable: false })
   repositoryLink: string;
@@ -134,7 +134,7 @@ export class MinThesis {
   @GqlField(() => String, { nullable: false })
   description: string;
 
-  @GqlField(() => String, { nullable: false })
+  @GqlField(() => String, { nullable: true })
   image: string;
 
   @GqlField(() => MinUser, {nullable: true})
@@ -143,8 +143,8 @@ export class MinThesis {
   @GqlField(() => ThesisCategory)
   thesisCategory: string;
 
-  @GqlField(() => String, { nullable: false })
-  thesisLink: string;
+  @GqlField(() => [String], { nullable: false })
+  thesisLink: string[];
 
   @GqlField(() => String, { nullable: false })
   repositoryLink: string;
@@ -200,9 +200,9 @@ export class CreateThesisInput {
   @IsString({ each: true })
   collaborators: string[];
 
-  @GqlField(() => String, { nullable: false })
+  @GqlField(() => [String], { nullable: false })
   @IsString()
-  thesisLink: string;
+  thesisLink: string[];
 
   @GqlField(() => String, { nullable: false })
   @IsString()
@@ -241,9 +241,9 @@ export class UpdateThesisInput {
   @IsString({ each: true })
   collaborators: string[];
 
-  @GqlField(() => String, { nullable: false })
+  @GqlField(() => [String], { nullable: false })
   @IsString()
-  thesisLink: string;
+  thesisLink: string[];
 
   @GqlField(() => String, { nullable: false })
   @IsString()

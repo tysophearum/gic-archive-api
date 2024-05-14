@@ -41,15 +41,11 @@ const updateClassProjectAction = async (
     }),
   );
 
-  const classProjectLink = 'await saveFile(file);';
-
-  const image = 'await saveFile(imageInput);';
-
   const classProject: ClassProject = {
     _id: new Types.ObjectId(id),
     title,
     description,
-    classProjectLink,
+    classProjectLink: valClassProject.classProjectLink,
     repositoryLink,
     user: user._id.toString(),
     collaborators,
@@ -57,7 +53,7 @@ const updateClassProjectAction = async (
     likeAmount: 0,
     classProjectCategory,
     videoLink,
-    image,
+    image: valClassProject.image,
   };
   return await classProjectService.updateClassProject(classProject);
 };

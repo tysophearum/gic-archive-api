@@ -2,8 +2,6 @@ import { CreateClassProjectInput } from '../../entities/classProject/classProjec
 import { ClassProject, ClassProjectResponse, User } from '../../entities';
 import { ClassProjectRepositoryImpl, UserRepositoryImpl } from '../../repositories';
 import { ClassProjectService, UserService } from '../../services';
-import { FileUpload } from 'graphql-upload-minimal';
-import saveFile from '../../util/saveFileUtil';
 import validateClassProjectCategoryId from '../../util/validateClassProjectCategoryId';
 
 const createClassProjectAction = async (
@@ -39,9 +37,9 @@ const createClassProjectAction = async (
   //   throw new Error('File is required');
   // }
   
-  const classProjectLink = 'await saveFile(file);';
+  const classProjectLink = [''];
 
-  const image = 'await saveFile(imageInput);';
+  const image = '1';
 
   const classProject: ClassProject = {
     title,

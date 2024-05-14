@@ -1,6 +1,7 @@
 import { ThesisLikeService, ThesisService, FeaturedThesisService } from "../../../services";
 import { ThesisLikeRepositoryImpl, ThesisRepositoryImpl, FeaturedThesisRepositoryImpl } from "../../../repositories";
 import { User } from "../../../entities";
+import { getObjectSignedUrl } from "../../../util/s3";
 
 const listFeaturedThesisAction = async (user: User, query: any) => {
   const featuredThesisRepository = new FeaturedThesisRepositoryImpl();
@@ -15,9 +16,11 @@ const listFeaturedThesisAction = async (user: User, query: any) => {
   
   const theses = await thesisService.getThesis({limit: 8, page: 1}, { _id: { $in: thesisIds } });
 
-  theses.data.forEach(async (thesis) => {
+  for (let i = 0; i < theses.data.length; i++) {
+    let thesis = theses.data[i];
     thesis.liked = false;
-  });
+    thesis.image = await getObjectSignedUrl(thesis.image);
+  }
   if (user) {
     for (let i = 0; i < theses.data.length; i++) {
       theses.data[i].liked = await thesisLikeService.hasLiked(user._id.toString(), theses.data[i]._id.toString());

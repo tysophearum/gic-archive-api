@@ -49,19 +49,16 @@ const updateThesisAction = async (
       }
     }),
   );
+  
+  // const thesisLink = ['await saveFile(file);'];
 
-  // if (!file) {
-  //   throw new Error('File is required');
-  // }
-  const thesisLink = 'await saveFile(file);';
-
-  const image = 'await saveFile(imageInput);';
+  // const image = 'await saveFile(imageInput);';
 
   const thesis: Thesis = {
     _id: new Types.ObjectId(id),
     title,
     description,
-    thesisLink,
+    thesisLink: valThesis.thesisLink,
     repositoryLink,
     user: user._id.toString(),
     collaborators,
@@ -70,7 +67,7 @@ const updateThesisAction = async (
     thesisCategory,
     teacher,
     videoLink,
-    image,
+    image: valThesis.image,
   };
   return await thesisService.updateThesis(thesis);
 };

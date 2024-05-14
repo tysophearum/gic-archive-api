@@ -8,7 +8,6 @@ import {
   updateThesisAction,
   updateThesisApprovalAction,
 } from '../../controllers/thesis';
-import { FileUpload, GraphQLUpload } from 'graphql-upload-minimal';
 import { PaginationInput } from '../../typeDefs';
 import StudentMiddleware from '../../middleware/StudentMiddleware';
 import OptionalMiddleware from '../../middleware/OptionalMiddleware';

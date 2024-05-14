@@ -34,9 +34,9 @@ export class ClassProject {
   @DBField({ type: [String], ref: () => User, required: false, default: [] })
   collaborators: string[];
 
-  @GqlField(() => String, { nullable: false })
-  @DBField({ type: String, required: true })
-  classProjectLink: string;
+  @GqlField(() => [String], { nullable: false })
+  @DBField({ type: [String], required: true })
+  classProjectLink: string[];
 
   @GqlField(() => String, { nullable: false })
   @DBField({ type: String, required: true })
@@ -94,8 +94,8 @@ export class ClassProjectResponse {
   @GqlField(() => [MinUser], { nullable: true })
   collaborators: any[];
 
-  @GqlField(() => String, { nullable: false })
-  classProjectLink: string;
+  @GqlField(() => [String], { nullable: false })
+  classProjectLink: string[];
 
   @GqlField(() => String, { nullable: false })
   repositoryLink: string;
@@ -136,8 +136,8 @@ export class MinClassProject {
   @GqlField(() => ClassProjectCategory)
   classProjectCategory: string;
 
-  @GqlField(() => String, { nullable: false })
-  classProjectLink: string;
+  @GqlField(() => [String], { nullable: false })
+  classProjectLink: string[];
 
   @GqlField(() => String, { nullable: false })
   repositoryLink: string;
@@ -189,9 +189,9 @@ export class CreateClassProjectInput {
   @IsString({ each: true })
   collaborators: string[];
 
-  @GqlField(() => String, { nullable: false })
+  @GqlField(() => [String], { nullable: false })
   @IsString()
-  classProjectLink: string;
+  classProjectLink: string[];
 
   @GqlField(() => String, { nullable: false })
   @IsString()
@@ -226,9 +226,9 @@ export class UpdateClassProjectInput {
   @IsString({ each: true })
   collaborators: string[];
 
-  @GqlField(() => String, { nullable: false })
+  @GqlField(() => [String], { nullable: false })
   @IsString()
-  classProjectLink: string;
+  classProjectLink: string[];
 
   @GqlField(() => String, { nullable: false })
   @IsString()

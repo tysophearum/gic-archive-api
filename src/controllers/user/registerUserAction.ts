@@ -18,9 +18,7 @@ const registerUserAction = async (
   }
 
   let image = '';
-  if (file) {
-    image = await saveFile(file);
-  }
+  let coverImage = '';
 
   const hashedPassword = await bcrypt.hash(password, 10);
 
@@ -33,6 +31,7 @@ const registerUserAction = async (
     contacts,
     image,
     role: 'student',
+    coverImage
   };
 
   const registeredUser = await userService.register(user);

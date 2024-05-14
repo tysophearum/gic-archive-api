@@ -172,7 +172,7 @@ export class UpdateUserInput {
   @IsString()
   studentId: string;
 
-  @GqlField(() => String)
+  @GqlField(() => String, {nullable: true})
   @IsString()
   bio: string;
 

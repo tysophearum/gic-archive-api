@@ -2,6 +2,7 @@ import { PaginationInput } from '../../typeDefs';
 import { ClassProjectLikeRepositoryImpl, ClassProjectRepositoryImpl } from '../../repositories';
 import { ClassProjectLikeService, ClassProjectService } from '../../services';
 import { ListClassProjectResponse, User } from '../../entities';
+import { getObjectSignedUrl } from '../../util/s3';
 
 const listClassProjectAction = async (user: User, pager: PaginationInput, query: any): Promise<ListClassProjectResponse> => {
   const classProjectRepository = new ClassProjectRepositoryImpl();
@@ -10,9 +11,11 @@ const listClassProjectAction = async (user: User, pager: PaginationInput, query:
 
   const classProjects = await classProjectService.getClassProject(pager, query);
 
-  classProjects.data.forEach(async (classProject) => {
+  for (let i = 0; i < classProjects.data.length; i++) {
+    let classProject = classProjects.data[i];
     classProject.liked = false;
-  });
+    classProject.image = await getObjectSignedUrl(classProject.image);
+  }
   if (user) {
     for (let i = 0; i < classProjects.data.length; i++) {
       classProjects.data[i].liked = await classProjectLikeService.hasLiked(user._id.toString(), classProjects.data[i]._id.toString());

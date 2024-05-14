@@ -43,9 +43,9 @@ const createThesisAction = async (
     }),
   );
 
-  const thesisLink = 'await saveFile(file);';
+  const thesisLink = [''];
 
-  const image = 'await saveFile(imageInput);';
+  const image = '';
 
   const thesis: Thesis = {
     title,

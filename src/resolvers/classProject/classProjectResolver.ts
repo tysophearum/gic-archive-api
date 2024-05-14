@@ -1,4 +1,4 @@
-import { CreateClassProjectInput, ListClassProjectResponse, User, UpdateClassProjectInput, ClassProjectResponse } from '../../entities';
+import { CreateClassProjectInput, ListClassProjectResponse, UpdateClassProjectInput, ClassProjectResponse } from '../../entities';
 import { Arg, Ctx, Mutation, Query, Resolver, UseMiddleware } from 'type-graphql';
 import {
   createClassProjectAction,
@@ -8,7 +8,6 @@ import {
   updateClassProjectAction,
   updateClassProjectApprovalAction
 } from '../../controllers/classProject';
-import { FileUpload, GraphQLUpload } from 'graphql-upload-minimal';
 import { PaginationInput } from '../../typeDefs';
 import StudentMiddleware from '../../middleware/StudentMiddleware';
 import OptionalMiddleware from '../../middleware/OptionalMiddleware';
@@ -22,6 +21,8 @@ export class ClassProjectResolver {
     @Arg('classProject') classProject: CreateClassProjectInput,
     @Ctx() { user }: any,
   ) {
+    console.log(classProject);
+    
     return await createClassProjectAction(user, classProject);
   }
 
