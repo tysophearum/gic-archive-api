@@ -2,7 +2,7 @@ import { getModelForClass } from '@typegoose/typegoose';
 import { FeaturedClassProject, ClassProject, MinFeaturedClassProject } from '../../entities';
 
 export interface FeaturedClassProjectRepository {
-  findFeaturedClassProject(query: any): Promise<FeaturedClassProject[]>;
+  findFeaturedClassProject(query: any, sort?: any): Promise<FeaturedClassProject[]>;
   addFeaturedClassProject(featuredClassProject: FeaturedClassProject): Promise<MinFeaturedClassProject>;
   removeFeaturedClassProject(id: string): Promise<boolean>;
 }
@@ -11,8 +11,8 @@ export class FeaturedClassProjectRepositoryImpl implements FeaturedClassProjectR
   private featuredClassProjectModel = getModelForClass(FeaturedClassProject);
   private classProjectModel = getModelForClass(ClassProject);
 
-  async findFeaturedClassProject(query: any): Promise<MinFeaturedClassProject[]> {
-    return this.featuredClassProjectModel.find(query);
+  async findFeaturedClassProject(query: any, sort: any = { created_at: -1 }): Promise<MinFeaturedClassProject[]> {
+    return this.featuredClassProjectModel.find(query).sort(sort).exec();
   }
 
   async addFeaturedClassProject(featuredClassProject: FeaturedClassProject): Promise<MinFeaturedClassProject> {

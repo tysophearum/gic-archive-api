@@ -3,14 +3,14 @@ import { ClassProjectLikeRepositoryImpl, ClassProjectRepositoryImpl, FeaturedCla
 import { User } from "../../../entities";
 import { getObjectSignedUrl } from "../../../util/s3";
 
-const listFeaturedClassProjectAction = async (user: User, query: any) => {
+const listFeaturedClassProjectAction = async (user: User, query: any, sort?: any) => {
   const featuredClassProjectRepository = new FeaturedClassProjectRepositoryImpl();
   const featuredClassProjectService = new FeaturedClassProjectService(featuredClassProjectRepository);
   const classProjectRepository = new ClassProjectRepositoryImpl();
   const classProjectService = new ClassProjectService(classProjectRepository);
   const classProjectLikeService = new ClassProjectLikeService(new ClassProjectLikeRepositoryImpl());
 
-  const featuredClassProjects = await featuredClassProjectService.listFeaturedClassProjects(query);
+  const featuredClassProjects = await featuredClassProjectService.listFeaturedClassProjects(query, sort);
 
   const classProjectIds = featuredClassProjects.map(featuredClassProject => featuredClassProject.classProject);
   

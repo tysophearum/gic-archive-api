@@ -4,7 +4,7 @@ import { PaginationInput } from '../../typeDefs';
 
 export interface ThesisRepository {
   createThesis(thesis: Thesis): Promise<ThesisResponse>;
-  findThesis(pager: PaginationInput, query: any): Promise<Thesis[]>;
+  findThesis(pager: PaginationInput, query: any, sort?: any): Promise<Thesis[]>;
   countThesis(query: any): Promise<number>;
   findThesisById(id: string): Promise<ThesisResponse>;
   updateThesis(thesis: Thesis): Promise<ThesisResponse>;
@@ -32,7 +32,7 @@ export class ThesisRepositoryImpl implements ThesisRepository {
     return createdThesis;
   }
 
-  async findThesis({ page, limit }: PaginationInput, query: any = null): Promise<Thesis[]> {
+  async findThesis({ page, limit }: PaginationInput, query: any = null, sort: any = { created_at: -1 }): Promise<Thesis[]> {
     const skip = (page - 1) * limit;
 
     return await this.thesisModel
@@ -42,6 +42,7 @@ export class ThesisRepositoryImpl implements ThesisRepository {
       .lean()
       .skip(skip)
       .limit(limit)
+      .sort(sort)
       .exec();
   }
 

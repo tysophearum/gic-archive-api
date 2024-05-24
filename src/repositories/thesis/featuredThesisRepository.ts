@@ -2,7 +2,7 @@ import { getModelForClass } from '@typegoose/typegoose';
 import { FeaturedThesis, Thesis, MinFeaturedThesis } from '../../entities';
 
 export interface FeaturedThesisRepository {
-  findFeaturedThesis(query: any): Promise<FeaturedThesis[]>;
+  findFeaturedThesis(query: any, sort?: any): Promise<FeaturedThesis[]>;
   addFeaturedThesis(featuredThesis: FeaturedThesis): Promise<MinFeaturedThesis>;
   removeFeaturedThesis(id: string): Promise<boolean>;
 }
@@ -11,8 +11,8 @@ export class FeaturedThesisRepositoryImpl implements FeaturedThesisRepository {
   private featuredThesisModel = getModelForClass(FeaturedThesis);
   private thesisModel = getModelForClass(Thesis);
 
-  async findFeaturedThesis(query: any): Promise<MinFeaturedThesis[]> {
-    return this.featuredThesisModel.find(query);
+  async findFeaturedThesis(query: any, sort: any = { created_at: -1 }): Promise<MinFeaturedThesis[]> {
+    return this.featuredThesisModel.find(query).sort(sort).exec();
   }
 
   async addFeaturedThesis(featuredThesis: FeaturedThesis): Promise<MinFeaturedThesis> {

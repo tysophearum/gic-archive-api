@@ -21,8 +21,6 @@ export class ClassProjectResolver {
     @Arg('classProject') classProject: CreateClassProjectInput,
     @Ctx() { user }: any,
   ) {
-    console.log(classProject);
-    
     return await createClassProjectAction(user, classProject);
   }
 
@@ -32,8 +30,7 @@ export class ClassProjectResolver {
     @Arg('pager', () => PaginationInput, { nullable: true }) pager: PaginationInput,
     @Ctx() { user }: any,
   ) {
-    const a = await listClassProjectAction(user, pager, {});
-    return a;
+    return await listClassProjectAction(user, pager, {});
   }
 
   @Query(() => ListClassProjectResponse)
@@ -147,5 +144,29 @@ export class ClassProjectResolver {
     @Arg('approval') approval: boolean,
   ) {
     return await updateClassProjectApprovalAction(id, approval);
+  }
+
+  @Query(() => ListClassProjectResponse)
+  @UseMiddleware(OptionalMiddleware)
+  async searchApprovedClassProject(
+    @Arg('title') title: string,
+    @Arg('pager', () => PaginationInput, { nullable: true }) pager: PaginationInput,
+    @Ctx() { user }: any,
+  ) {
+    return await listClassProjectAction(user, pager, {
+      title: { $regex: title, $options: 'i' }, 
+      isApproved: true,
+    });
+  }
+  
+  @Query(() => ListClassProjectResponse)
+  @UseMiddleware(OptionalMiddleware)
+  async searchClassProject(
+    @Arg('title') title: string,
+    @Arg('pager', () => PaginationInput, { nullable: true }) pager: PaginationInput,
+    @Ctx() { user }: any,
+  ) {
+    const ClassProject = await listClassProjectAction(user, pager, { title: { $regex: title, $options: 'i' }, isApproved: true });
+    return ClassProject;
   }
 }

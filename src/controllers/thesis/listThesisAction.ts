@@ -4,12 +4,12 @@ import { ThesisLikeService, ThesisService } from '../../services';
 import { ListThesisResponse, User } from '../../entities';
 import { getObjectSignedUrl } from '../../util/s3';
 
-const listThesisAction = async (user: User, pager: PaginationInput, query: any): Promise<ListThesisResponse> => {
+const listThesisAction = async (user: User, pager: PaginationInput, query: any, sort?: any): Promise<ListThesisResponse> => {
   const thesisRepository = new ThesisRepositoryImpl();
   const thesisService = new ThesisService(thesisRepository);
   const thesisLikeService = new ThesisLikeService(new ThesisLikeRepositoryImpl());
 
-  const theses = await thesisService.getThesis(pager, query);
+  const theses = await thesisService.getThesis(pager, query, sort);
 
   for (let i = 0; i < theses.data.length; i++) {
     let thesis = theses.data[i];

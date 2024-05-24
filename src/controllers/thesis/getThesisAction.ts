@@ -10,7 +10,12 @@ const getThesisAction = async (id: string): Promise<ThesisResponse> => {
   let thesis = await thesisService.getThesisById(id);
 
   thesis.image = await getObjectSignedUrl(thesis.image);
+  thesis.user.image = await getObjectSignedUrl(thesis.user.image);
+  thesis.teacher.image = await getObjectSignedUrl(thesis.teacher.image);
 
+  for (let i = 0; i < thesis.collaborators.length; i++) {
+    thesis.collaborators[i].image = await getObjectSignedUrl(thesis.collaborators[i].image);
+  }
   return thesis;
 };
 

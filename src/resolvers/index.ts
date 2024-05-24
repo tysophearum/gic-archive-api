@@ -11,6 +11,7 @@ import { ClassProjectFeedbackResolver } from './classProject/classProjectFeedbac
 import { ClassProjectLikeResolver } from './classProject/classProjectLikeResolver';
 import { FeaturedClassProjectResolver } from './classProject/featuredClassProjectResolver';
 import { FeaturedThesisResolver } from './thesis/featuredThesisResolver';
+import { DocumentResolver } from './documentResolver';
 
 export default [
   UserResolver,
@@ -26,4 +27,5 @@ export default [
   ClassProjectLikeResolver,
   FeaturedClassProjectResolver,
   FeaturedThesisResolver,
+  DocumentResolver
 ];

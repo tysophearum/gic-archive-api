@@ -45,7 +45,7 @@ export class ThesisCommentResponse {
   readonly _id?: Types.ObjectId;
 
   @GqlField(() => MinUser)
-  user: string;
+  user: any;
 
   @GqlField(() => String, { nullable: false })
   comment: string;

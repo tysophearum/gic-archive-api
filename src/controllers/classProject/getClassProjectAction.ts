@@ -10,6 +10,11 @@ const getClassProjectAction = async (id: string): Promise<ClassProjectResponse> 
   let classProject = await classProjectService.getClassProjectById(id);
 
   classProject.image = await getObjectSignedUrl(classProject.image);
+  classProject.user.image = await getObjectSignedUrl(classProject.user.image);
+  
+  for (let i = 0; i < classProject.collaborators.length; i++) {
+    classProject.collaborators[i].image = await getObjectSignedUrl(classProject.collaborators[i].image);
+  }
 
   return classProject;
 };

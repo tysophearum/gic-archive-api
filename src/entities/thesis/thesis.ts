@@ -137,8 +137,8 @@ export class MinThesis {
   @GqlField(() => String, { nullable: true })
   image: string;
 
-  @GqlField(() => MinUser, {nullable: true})
-  user?: string;
+  @GqlField(() => MinUser)
+  user: any;
 
   @GqlField(() => ThesisCategory)
   thesisCategory: string;

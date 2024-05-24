@@ -1,4 +1,4 @@
-import { CreateThesisInput, ListThesisResponse, User, UpdateThesisInput, ThesisResponse } from '../../entities';
+import { CreateThesisInput, ListThesisResponse, User, UpdateThesisInput, ThesisResponse, MinThesis } from '../../entities';
 import { Arg, Ctx, Mutation, Query, Resolver, UseMiddleware } from 'type-graphql';
 import {
   createThesisAction,
@@ -157,5 +157,29 @@ export class ThesisResolver {
     @Arg('approval') approval: boolean,
   ) {
     return await updateThesisApprovalAction(id, approval);
+  }
+
+  @Query(() => ListThesisResponse)
+  @UseMiddleware(OptionalMiddleware)
+  async searchApprovedThesis(
+    @Arg('title') title: string,
+    @Arg('pager', () => PaginationInput, { nullable: true }) pager: PaginationInput,
+    @Ctx() { user }: any,
+  ) {
+    return await listThesisAction(user, pager, {
+      title: { $regex: title, $options: 'i' }, 
+      isApproved: true,
+    });
+  }
+  
+  @Query(() => ListThesisResponse)
+  @UseMiddleware(OptionalMiddleware)
+  async searchThesis(
+    @Arg('title') title: string,
+    @Arg('pager', () => PaginationInput, { nullable: true }) pager: PaginationInput,
+    @Ctx() { user }: any,
+  ) {
+    const thesis = await listThesisAction(user, pager, { title: { $regex: title, $options: 'i' }, isApproved: true });
+    return thesis;
   }
 }

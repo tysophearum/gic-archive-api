@@ -4,7 +4,7 @@ import { PaginationInput } from '../../typeDefs';
 
 export interface ClassProjectRepository {
   createClassProject(classProject: ClassProject): Promise<ClassProjectResponse>;
-  findClassProject(pager: PaginationInput, query: any): Promise<ClassProject[]>;
+  findClassProject(pager: PaginationInput, query: any, sort?: any): Promise<ClassProject[]>;
   countClassProject(query: any): Promise<number>;
   findClassProjectById(id: string): Promise<ClassProjectResponse>;
   updateClassProject(classProject: ClassProject): Promise<ClassProjectResponse>;
@@ -32,7 +32,7 @@ export class ClassProjectRepositoryImpl implements ClassProjectRepository {
     return createdClassProject;
   }
 
-  async findClassProject({ page, limit }: PaginationInput, query: any = null): Promise<ClassProject[]> {
+  async findClassProject({ page, limit }: PaginationInput, query: any = null, sort: any = { created_at: -1 }): Promise<ClassProject[]> {
     const skip = (page - 1) * limit;
 
     return await this.classProjectModel
@@ -42,6 +42,7 @@ export class ClassProjectRepositoryImpl implements ClassProjectRepository {
       .lean()
       .skip(skip)
       .limit(limit)
+      .sort(sort)
       .exec();
   }
 

@@ -18,8 +18,9 @@ export class ThesisService {
   async getThesis(
     pager: PaginationInput = { page: 1, limit: Number(process.env.MAX_LIMIT) },
     query: any = null,
+    sort?: any
   ): Promise<ListThesisResponse> {
-    const thesis = await this.thesisRepository.findThesis(pager, query);
+    const thesis = await this.thesisRepository.findThesis(pager, query, sort);
     const totalThesis = await this.thesisRepository.countThesis(query);
     const pagination = calculatePaginationResponse(pager, totalThesis);
 

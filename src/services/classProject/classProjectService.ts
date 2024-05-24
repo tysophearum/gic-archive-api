@@ -18,8 +18,9 @@ export class ClassProjectService {
   async getClassProject(
     pager: PaginationInput = { page: 1, limit: Number(process.env.MAX_LIMIT) },
     query: any = null,
+    sort?: any
   ): Promise<ListClassProjectResponse> {
-    const classProject = await this.classProjectRepository.findClassProject(pager, query);
+    const classProject = await this.classProjectRepository.findClassProject(pager, query, sort);
     const totalClassProject = await this.classProjectRepository.countClassProject(query);
     const pagination = calculatePaginationResponse(pager, totalClassProject);
 

@@ -47,6 +47,7 @@ import {
   UpdateClassProjectFeedbackInput,
 } from './classProject/classProjectFeedback';
 import { ClassProjectLike, CreateClassProjectLikeInput } from './classProject/classProjectLike';
+import { MinDocument, ListDocumentResponse } from './document';
 
 export {
   User,
@@ -101,5 +102,7 @@ export {
   Contribution,
   MinFeaturedClassProject,
   MinFeaturedThesis,
-  ClassProjectCategoryResponse
+  ClassProjectCategoryResponse,
+  ListDocumentResponse,
+  MinDocument,
 };

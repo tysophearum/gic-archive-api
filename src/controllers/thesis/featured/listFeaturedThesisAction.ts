@@ -3,14 +3,14 @@ import { ThesisLikeRepositoryImpl, ThesisRepositoryImpl, FeaturedThesisRepositor
 import { User } from "../../../entities";
 import { getObjectSignedUrl } from "../../../util/s3";
 
-const listFeaturedThesisAction = async (user: User, query: any) => {
+const listFeaturedThesisAction = async (user: User, query: any, sort?: any) => {
   const featuredThesisRepository = new FeaturedThesisRepositoryImpl();
   const featuredThesisService = new FeaturedThesisService(featuredThesisRepository);
   const thesisRepository = new ThesisRepositoryImpl();
   const thesisService = new ThesisService(thesisRepository);
   const thesisLikeService = new ThesisLikeService(new ThesisLikeRepositoryImpl());
 
-  const featuredThesiss = await featuredThesisService.listFeaturedThesiss(query);
+  const featuredThesiss = await featuredThesisService.listFeaturedThesiss(query, sort);
 
   const thesisIds = featuredThesiss.map(featuredThesis => featuredThesis.thesis);
   

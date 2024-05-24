@@ -8,8 +8,8 @@ export class FeaturedClassProjectService {
     this.featuredClassProjectRepository = featuredClassProjectRepository;
   }
 
-  async listFeaturedClassProjects(query: any): Promise<MinFeaturedClassProject[]> {
-    return this.featuredClassProjectRepository.findFeaturedClassProject(query);
+  async listFeaturedClassProjects(query: any, sort?: any): Promise<MinFeaturedClassProject[]> {
+    return this.featuredClassProjectRepository.findFeaturedClassProject(query, sort);
   }
 
   async addFeaturedClassProject(featuredClassProject: FeaturedClassProject): Promise<MinFeaturedClassProject> {

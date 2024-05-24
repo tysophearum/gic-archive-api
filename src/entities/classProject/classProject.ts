@@ -127,11 +127,11 @@ export class MinClassProject {
   @GqlField(() => String, { nullable: false })
   description: string;
 
-  @GqlField(() => String, { nullable: false })
+  @GqlField(() => String, { nullable: true })
   image: string;
 
   @GqlField(() => MinUser)
-  user: string;
+  user: any;
 
   @GqlField(() => ClassProjectCategory)
   classProjectCategory: string;

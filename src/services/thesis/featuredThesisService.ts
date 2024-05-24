@@ -8,8 +8,8 @@ export class FeaturedThesisService {
     this.featuredThesisRepository = featuredThesisRepository;
   }
 
-  async listFeaturedThesiss(query: any): Promise<MinFeaturedThesis[]> {
-    return this.featuredThesisRepository.findFeaturedThesis(query);
+  async listFeaturedThesiss(query: any, sort?: any): Promise<MinFeaturedThesis[]> {
+    return this.featuredThesisRepository.findFeaturedThesis(query, sort);
   }
 
   async addFeaturedThesis(featuredThesis: FeaturedThesis): Promise<MinFeaturedThesis> {
