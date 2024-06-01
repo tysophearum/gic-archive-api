@@ -45,8 +45,6 @@ const createThesisAction = async (
 
   const thesisLink = [''];
 
-  const image = '';
-
   const thesis: Thesis = {
     title,
     description,
@@ -59,7 +57,6 @@ const createThesisAction = async (
     thesisCategory,
     teacher,
     videoLink,
-    image,
   };
   return await thesisService.createThesis(thesis);
 };

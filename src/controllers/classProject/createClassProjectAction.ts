@@ -39,8 +39,6 @@ const createClassProjectAction = async (
   
   const classProjectLink = [''];
 
-  const image = '1';
-
   const classProject: ClassProject = {
     title,
     description,
@@ -52,7 +50,6 @@ const createClassProjectAction = async (
     likeAmount: 0,
     classProjectCategory,
     videoLink,
-    image,
   };
   return await classProjectService.createClassProject(classProject);
 };

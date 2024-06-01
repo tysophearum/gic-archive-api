@@ -19,8 +19,8 @@ export class ClassProject {
   description: string;
 
   @GqlField(() => String, { nullable: false })
-  @DBField({ type: String, required: true })
-  image: string;
+  @DBField({ type: String, required: false })
+  image?: string;
 
   @GqlField(() => User)
   @DBField({ type: String, ref: () => User, required: true })
@@ -82,8 +82,8 @@ export class ClassProjectResponse {
   @GqlField(() => String, { nullable: false })
   description: string;
 
-  @GqlField(() => String, { nullable: false })
-  image: string;
+  @GqlField(() => String, { nullable: true })
+  image?: string;
 
   @GqlField(() => MinUser)
   user: any;
@@ -128,7 +128,7 @@ export class MinClassProject {
   description: string;
 
   @GqlField(() => String, { nullable: true })
-  image: string;
+  image?: string;
 
   @GqlField(() => MinUser)
   user: any;

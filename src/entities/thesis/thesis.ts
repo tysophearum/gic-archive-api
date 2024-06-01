@@ -20,7 +20,7 @@ export class Thesis {
 
   @GqlField(() => String, { nullable: true })
   @DBField({ type: String, required: false })
-  image: string;
+  image?: string;
 
   @GqlField(() => User)
   @DBField({ type: String, ref: () => User, required: true })
@@ -87,7 +87,7 @@ export class ThesisResponse {
   description: string;
 
   @GqlField(() => String, { nullable: true })
-  image: string;
+  image?: string;
 
   @GqlField(() => MinUser)
   user: any;
@@ -135,7 +135,7 @@ export class MinThesis {
   description: string;
 
   @GqlField(() => String, { nullable: true })
-  image: string;
+  image?: string;
 
   @GqlField(() => MinUser)
   user: any;
