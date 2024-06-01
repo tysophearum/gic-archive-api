@@ -12,7 +12,7 @@ export class ThesisFeedback {
 
   @GqlField(() => User)
   @DBField({ type: String, ref: () => User, required: true })
-  user: string;
+  user: any;
 
   @GqlField(() => Thesis)
   @DBField({ type: String, ref: () => Thesis, required: true })
@@ -45,7 +45,7 @@ export class ThesisFeedbackResponse {
   readonly _id?: Types.ObjectId;
 
   @GqlField(() => MinUser)
-  user: string;
+  user: any;
 
   @GqlField(() => String, { nullable: false })
   feedback: string;

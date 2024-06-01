@@ -2,6 +2,7 @@ import { PaginationInput } from '../../../typeDefs';
 import { ThesisFeedbackRepositoryImpl, ThesisRepositoryImpl } from '../../../repositories';
 import { ThesisFeedbackService, ThesisService } from '../../../services';
 import { ListThesisFeedbackResponse, User } from '../../../entities';
+import { getObjectSignedUrl } from '../../../util/s3';
 
 const listThesisFeedbackAction = async (
   user: User,
@@ -28,7 +29,15 @@ const listThesisFeedbackAction = async (
     }
   }
 
-  return await thesisFeedbackService.getThesisFeedback(pager, query);
+  let feedbacks = await thesisFeedbackService.getThesisFeedback(pager, query);
+
+  const promises = feedbacks.feedbacks.map(async (feedback) => {
+    feedback.user.image = await getObjectSignedUrl(feedback.user.image);
+  });
+
+  await Promise.all(promises);
+
+  return feedbacks;
 };
 
 export default listThesisFeedbackAction;

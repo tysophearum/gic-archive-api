@@ -16,11 +16,13 @@ const listFeaturedClassProjectAction = async (user: User, query: any, sort?: any
   
   const classProjects = await classProjectService.getClassProject({limit: 8, page: 1}, { _id: { $in: classProjectIds } });
 
-  for (let i = 0; i < classProjects.data.length; i++) {
-    let classProject = classProjects.data[i];
+  const promises = classProjects.data.map(async (classProject) => {
     classProject.liked = false;
     classProject.image = await getObjectSignedUrl(classProject.image);
-  }
+  });
+  
+  // Wait for all promises to resolve
+  await Promise.all(promises);
   
   if (user) {
     for (let i = 0; i < classProjects.data.length; i++) {

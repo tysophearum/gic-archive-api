@@ -12,9 +12,11 @@ const getClassProjectAction = async (id: string): Promise<ClassProjectResponse> 
   classProject.image = await getObjectSignedUrl(classProject.image);
   classProject.user.image = await getObjectSignedUrl(classProject.user.image);
   
-  for (let i = 0; i < classProject.collaborators.length; i++) {
-    classProject.collaborators[i].image = await getObjectSignedUrl(classProject.collaborators[i].image);
-  }
+  const promises = classProject.collaborators.map(async (collaborator, i) => {
+    collaborator.image = await getObjectSignedUrl(collaborator.image);
+  });
+  
+  await Promise.all(promises);
 
   return classProject;
 };

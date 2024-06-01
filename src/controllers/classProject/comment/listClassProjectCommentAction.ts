@@ -10,9 +10,11 @@ const listClassProjectCommentAction = async (pager: PaginationInput, query: any)
 
   let comments = await classProjectCommentService.getClassProjectComment(pager, query);
 
-  for (let i = 0; i < comments.comment.length; i++) {
-    comments.comment[i].user.image = await getObjectSignedUrl(comments.comment[i].user.image);
-  }
+  const promises = comments.comment.map(async (comment) => {
+    comment.user.image = await getObjectSignedUrl(comment.user.image);
+  });
+
+  await Promise.all(promises);
 
   return comments;
 };

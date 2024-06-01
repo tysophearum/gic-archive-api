@@ -13,9 +13,12 @@ const getThesisAction = async (id: string): Promise<ThesisResponse> => {
   thesis.user.image = await getObjectSignedUrl(thesis.user.image);
   thesis.teacher.image = await getObjectSignedUrl(thesis.teacher.image);
 
-  for (let i = 0; i < thesis.collaborators.length; i++) {
-    thesis.collaborators[i].image = await getObjectSignedUrl(thesis.collaborators[i].image);
-  }
+  const promises = thesis.collaborators.map(async (collaborator) => {
+    collaborator.image = await getObjectSignedUrl(collaborator.image);
+  });
+  
+  // Wait for all promises to resolve
+  await Promise.all(promises);
   return thesis;
 };
 

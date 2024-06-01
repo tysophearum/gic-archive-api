@@ -11,12 +11,15 @@ const listClassProjectAction = async (user: User, pager: PaginationInput, query:
 
   const classProjects = await classProjectService.getClassProject(pager, query, sort);
 
-  for (let i = 0; i < classProjects.data.length; i++) {
-    let classProject = classProjects.data[i];
+  const promises = classProjects.data.map(async (classProject, i) => {
     classProject.liked = false;
     classProject.image = await getObjectSignedUrl(classProject.image);
     classProject.user.image = await getObjectSignedUrl(classProject.user.image);
-  }
+  });
+  
+  // Wait for all promises to resolve
+  await Promise.all(promises);
+
   if (user) {
     for (let i = 0; i < classProjects.data.length; i++) {
       classProjects.data[i].liked = await classProjectLikeService.hasLiked(user._id.toString(), classProjects.data[i]._id.toString());

@@ -16,11 +16,13 @@ const listFeaturedThesisAction = async (user: User, query: any, sort?: any) => {
   
   const theses = await thesisService.getThesis({limit: 8, page: 1}, { _id: { $in: thesisIds } });
 
-  for (let i = 0; i < theses.data.length; i++) {
-    let thesis = theses.data[i];
+  const promises = theses.data.map(async (thesis) => {
     thesis.liked = false;
     thesis.image = await getObjectSignedUrl(thesis.image);
-  }
+  });
+  
+  // Wait for all promises to resolve
+  await Promise.all(promises);
   if (user) {
     for (let i = 0; i < theses.data.length; i++) {
       theses.data[i].liked = await thesisLikeService.hasLiked(user._id.toString(), theses.data[i]._id.toString());

@@ -2,6 +2,7 @@ import { PaginationInput } from '../../../typeDefs';
 import { ClassProjectFeedbackRepositoryImpl, ClassProjectRepositoryImpl } from '../../../repositories';
 import { ClassProjectFeedbackService, ClassProjectService } from '../../../services';
 import { ListClassProjectFeedbackResponse, User } from '../../../entities';
+import { getObjectSignedUrl } from '../../../util/s3';
 
 const listClassProjectFeedbackAction = async (
   user: User,
@@ -22,14 +23,17 @@ const listClassProjectFeedbackAction = async (
     if (user._id.toString() != findClassProject.user._id.toString()) {
       throw new Error('You are not authorize for this action');
     }
-  } 
-  // else if (user.role == 'teacher') {
-  //   if (findClassProject.teacher._id.toString() != user._id.toString()) {
-  //     throw new Error('You are not authorize for this action');
-  //   }
-  // }
+  }
 
-  return await classProjectFeedbackService.getClassProjectFeedback(pager, query);
+  let feedbacks = await classProjectFeedbackService.getClassProjectFeedback(pager, query);
+
+  const promises = feedbacks.feedbacks.map(async (feedback) => {
+    feedback.user.image = await getObjectSignedUrl(feedback.user.image);
+  });
+
+  await Promise.all(promises);
+
+  return feedbacks;
 };
 
 export default listClassProjectFeedbackAction;
