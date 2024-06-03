@@ -24,7 +24,7 @@ router.post('/classProject/files', upload.array('files', 5), async (req: Request
     }
 
     // Initialize an array to store file links
-    let classProjectLink: string[] = [];
+    let classProjectFiles: string[] = [];
     const files = req.files as Express.Multer.File[];
 
     // Upload each file and store its link
@@ -33,7 +33,7 @@ router.post('/classProject/files', upload.array('files', 5), async (req: Request
       const filename = `file/classProject/${date + file.originalname}`;
       try {
         await uploadFile(file.buffer, filename, file.mimetype);
-        classProjectLink.push(filename);
+        classProjectFiles.push(filename);
       } catch (err) {
         console.error('Error uploading file:', err);
         return res.status(500).json({ error: 'Error uploading file' });
@@ -41,7 +41,7 @@ router.post('/classProject/files', upload.array('files', 5), async (req: Request
     }
 
     // Update the class project with new file links
-    classProject.classProjectLink = classProjectLink;
+    classProject.files = classProjectFiles;
     try {
       await classProjectService.updateClassProject(classProject);
     } catch (err) {
@@ -65,16 +65,16 @@ router.post('/thesis/files', upload.array('files', 5), async (req: Request, res:
     throw new Error('Class project not found');
   }
 
-  let thesisLink:string[] = [];
+  let thesisFiles:string[] = [];
   const files = req.files as Express.Multer.File[];
   for (const file of files) {
     const date = Date.now().toString();
     const filename = `file/thesis/${date+file.originalname}`;
     await uploadFile(file.buffer, filename, file.mimetype);
-    thesisLink.push(filename);
+    thesisFiles.push(filename);
   }
 
-  thesis.thesisLink = thesisLink;
+  thesis.files = thesisFiles;
   await thesisService.updateThesis(thesis);
 
   res.json({ message: 'Files uploaded successfully' });

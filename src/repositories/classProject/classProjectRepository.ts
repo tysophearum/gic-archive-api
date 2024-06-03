@@ -28,7 +28,7 @@ export class ClassProjectRepositoryImpl implements ClassProjectRepository {
 
   async createClassProject(classProject: ClassProject): Promise<ClassProjectResponse> {
     let createdClassProject = await this.classProjectModel.create(classProject);
-    createdClassProject = await this.populateFields(createdClassProject, ['user', 'collaborators', 'classProjectCategory']);
+    createdClassProject = await this.populateFields(createdClassProject, ['user', 'collaborators', 'category']);
     return createdClassProject;
   }
 
@@ -38,7 +38,7 @@ export class ClassProjectRepositoryImpl implements ClassProjectRepository {
     return await this.classProjectModel
       .find(query)
       .populate('user')
-      .populate('classProjectCategory')
+      .populate('category')
       .lean()
       .skip(skip)
       .limit(limit)
@@ -51,7 +51,7 @@ export class ClassProjectRepositoryImpl implements ClassProjectRepository {
       .findById(id)
       .populate('user')
       .populate('collaborators')
-      .populate('classProjectCategory')
+      .populate('category')
       .exec();
 
     return classProject;
@@ -59,7 +59,7 @@ export class ClassProjectRepositoryImpl implements ClassProjectRepository {
 
   async updateClassProject(classProject: ClassProject): Promise<ClassProjectResponse> {
     let updatedClassProject = await this.classProjectModel.findByIdAndUpdate(classProject._id, classProject, { new: true });
-    updatedClassProject = await this.populateFields(updatedClassProject, ['user', 'collaborators', 'classProjectCategory']);
+    updatedClassProject = await this.populateFields(updatedClassProject, ['user', 'collaborators', 'category']);
     return updatedClassProject;
   }
 

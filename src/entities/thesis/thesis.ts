@@ -32,7 +32,7 @@ export class Thesis {
 
   @GqlField(() => ThesisCategory)
   @DBField({ type: String, ref: () => ThesisCategory, required: true })
-  thesisCategory: string;
+  category: string;
 
   @GqlField(() => [User], { nullable: true })
   @DBField({ type: [String], ref: () => User, required: false, default: [] })
@@ -40,7 +40,7 @@ export class Thesis {
 
   @GqlField(() => [String], { nullable: false })
   @DBField({ type: [String], required: true, default: [] })
-  thesisLink: string[];
+  files: string[];
 
   @GqlField(() => String, { nullable: false })
   @DBField({ type: String, required: true })
@@ -96,13 +96,13 @@ export class ThesisResponse {
   teacher: any;
 
   @GqlField(() => ThesisCategory)
-  thesisCategory: string;
+  category: string;
 
   @GqlField(() => [MinUser], { nullable: true })
   collaborators: any[];
 
   @GqlField(() => [String], { nullable: false })
-  thesisLink: string[];
+  files: string[];
 
   @GqlField(() => String, { nullable: false })
   repositoryLink: string;
@@ -140,11 +140,14 @@ export class MinThesis {
   @GqlField(() => MinUser)
   user: any;
 
+  @GqlField(() => MinUser)
+  teacher: any;
+
   @GqlField(() => ThesisCategory)
-  thesisCategory: string;
+  category: string;
 
   @GqlField(() => [String], { nullable: false })
-  thesisLink: string[];
+  files: string[];
 
   @GqlField(() => String, { nullable: false })
   repositoryLink: string;
@@ -193,7 +196,7 @@ export class CreateThesisInput {
 
   @GqlField(() => ID)
   @IsString()
-  thesisCategory: string;
+  category: string;
 
   @IsOptional()
   @GqlField(() => [ID], { nullable: true })
@@ -202,7 +205,7 @@ export class CreateThesisInput {
 
   @GqlField(() => [String], { nullable: false })
   @IsString()
-  thesisLink: string[];
+  files: string[];
 
   @GqlField(() => String, { nullable: false })
   @IsString()
@@ -234,7 +237,7 @@ export class UpdateThesisInput {
 
   @GqlField(() => ID)
   @IsString()
-  thesisCategory: string;
+  category: string;
 
   @IsOptional()
   @GqlField(() => [ID], { nullable: true })
@@ -243,7 +246,7 @@ export class UpdateThesisInput {
 
   @GqlField(() => [String], { nullable: false })
   @IsString()
-  thesisLink: string[];
+  files: string[];
 
   @GqlField(() => String, { nullable: false })
   @IsString()

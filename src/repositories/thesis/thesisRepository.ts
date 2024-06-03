@@ -28,7 +28,7 @@ export class ThesisRepositoryImpl implements ThesisRepository {
 
   async createThesis(thesis: Thesis): Promise<ThesisResponse> {
     let createdThesis = await this.thesisModel.create(thesis);
-    createdThesis = await this.populateFields(createdThesis, ['user', 'collaborators', 'teacher', 'thesisCategory']);
+    createdThesis = await this.populateFields(createdThesis, ['user', 'collaborators', 'teacher', 'category']);
     return createdThesis;
   }
 
@@ -38,7 +38,7 @@ export class ThesisRepositoryImpl implements ThesisRepository {
     return await this.thesisModel
       .find(query)
       .populate('user')
-      .populate('thesisCategory')
+      .populate('category')
       .lean()
       .skip(skip)
       .limit(limit)
@@ -51,7 +51,7 @@ export class ThesisRepositoryImpl implements ThesisRepository {
       .findById(id)
       .populate('user')
       .populate('collaborators')
-      .populate('thesisCategory')
+      .populate('category')
       .populate('teacher')
       .exec();
 
@@ -60,7 +60,7 @@ export class ThesisRepositoryImpl implements ThesisRepository {
 
   async updateThesis(thesis: Thesis): Promise<ThesisResponse> {
     let updatedThesis = await this.thesisModel.findByIdAndUpdate(thesis._id, thesis, { new: true });
-    updatedThesis = await this.populateFields(updatedThesis, ['user', 'collaborators', 'teacher', 'thesisCategory']);
+    updatedThesis = await this.populateFields(updatedThesis, ['user', 'collaborators', 'teacher', 'category']);
     return updatedThesis;
   }
 

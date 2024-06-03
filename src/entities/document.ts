@@ -7,13 +7,12 @@ export const MinDocument = createUnionType({
   name: 'MinDocument',
   types: () => [MinClassProject, MinThesis] as const,
   resolveType: value => {
-    if ('classProjectCategory' in value) {
-      return MinClassProject;
-    }
-    if ('thesisCategory' in value) {
+    if ('teacher' in value) {
       return MinThesis;
     }
-    return undefined;
+    else {
+      return MinClassProject;
+    }
   },
 })
 

@@ -55,7 +55,7 @@ export class ThesisResolver {
   ) {
     return await listThesisAction(user, pager, {
       isApproved: true,
-      thesisCategory: categroyId
+      category: categroyId
     });
   }
 

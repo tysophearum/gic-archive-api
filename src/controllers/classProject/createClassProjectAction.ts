@@ -13,13 +13,13 @@ const createClassProjectAction = async (
   const userRepository = new UserRepositoryImpl();
   const userService = new UserService(userRepository);
 
-  const { title, description, classProjectCategory, collaborators, repositoryLink, videoLink } = classProjectInput;
+  const { title, description, category, collaborators, repositoryLink, videoLink } = classProjectInput;
 
-  if (!title || !description || !repositoryLink || !user || !classProjectCategory) {
+  if (!title || !description || !repositoryLink || !user || !category) {
     throw new Error('Invalid input');
   }
 
-  const haveCategory = await validateClassProjectCategoryId(classProjectCategory);
+  const haveCategory = await validateClassProjectCategoryId(category);
   if (!haveCategory) {
     throw new Error('Category not found');
   }
@@ -37,18 +37,18 @@ const createClassProjectAction = async (
   //   throw new Error('File is required');
   // }
   
-  const classProjectLink = [''];
+  const files = [''];
 
   const classProject: ClassProject = {
     title,
     description,
-    classProjectLink,
+    files,
     repositoryLink,
     user: user._id.toString(),
     collaborators,
     isApproved: false,
     likeAmount: 0,
-    classProjectCategory,
+    category,
     videoLink,
   };
   return await classProjectService.createClassProject(classProject);

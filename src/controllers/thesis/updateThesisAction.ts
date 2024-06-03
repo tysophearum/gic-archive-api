@@ -17,18 +17,18 @@ const updateThesisAction = async (
   const userRepository = new UserRepositoryImpl();
   const userService = new UserService(userRepository);
 
-  const { id, title, description, teacher, thesisCategory, collaborators, repositoryLink, videoLink } = thesisInput;
+  const { id, title, description, teacher, category, collaborators, repositoryLink, videoLink } = thesisInput;
 
   const valThesis = await thesisService.getThesisById(id);
   if (!valThesis) {
     throw new Error('Thesis not found');
   }
 
-  if (!title || !description || !repositoryLink || !user || !thesisCategory) {
+  if (!title || !description || !repositoryLink || !user || !category) {
     throw new Error('Invalid input');
   }
 
-  const haveCategory = await validateThesisCategoryId(thesisCategory);
+  const haveCategory = await validateThesisCategoryId(category);
   if (!haveCategory) {
     throw new Error('Category not found');
   }
@@ -58,13 +58,13 @@ const updateThesisAction = async (
     _id: new Types.ObjectId(id),
     title,
     description,
-    thesisLink: valThesis.thesisLink,
+    files: valThesis.files,
     repositoryLink,
     user: user._id.toString(),
     collaborators,
     isApproved: false,
     likeAmount: 0,
-    thesisCategory,
+    category,
     teacher,
     videoLink,
     image: valThesis.image,

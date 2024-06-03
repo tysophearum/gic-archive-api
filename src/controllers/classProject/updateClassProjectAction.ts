@@ -16,18 +16,18 @@ const updateClassProjectAction = async (
   const userRepository = new UserRepositoryImpl();
   const userService = new UserService(userRepository);
 
-  const { id, title, description, classProjectCategory, collaborators, repositoryLink, videoLink } = classProjectInput;
+  const { id, title, description, category, collaborators, repositoryLink, videoLink } = classProjectInput;
 
   const valClassProject = await classProjectService.getClassProjectById(id);
   if (!valClassProject) {
     throw new Error('ClassProject not found');
   }
 
-  if (!title || !description || !repositoryLink || !user || !classProjectCategory) {
+  if (!title || !description || !repositoryLink || !user || !category) {
     throw new Error('Invalid input');
   }
 
-  const haveCategory = await validateClassProjectCategoryId(classProjectCategory);
+  const haveCategory = await validateClassProjectCategoryId(category);
   if (!haveCategory) {
     throw new Error('Category not found');
   }
@@ -45,13 +45,13 @@ const updateClassProjectAction = async (
     _id: new Types.ObjectId(id),
     title,
     description,
-    classProjectLink: valClassProject.classProjectLink,
+    files: valClassProject.files,
     repositoryLink,
     user: user._id.toString(),
     collaborators,
     isApproved: false,
     likeAmount: 0,
-    classProjectCategory,
+    category,
     videoLink,
     image: valClassProject.image,
   };

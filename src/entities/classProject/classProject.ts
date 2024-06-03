@@ -28,7 +28,7 @@ export class ClassProject {
 
   @GqlField(() => ClassProjectCategory)
   @DBField({ type: String, ref: () => ClassProjectCategory, required: true })
-  classProjectCategory: string;
+  category: string;
 
   @GqlField(() => [User], { nullable: true })
   @DBField({ type: [String], ref: () => User, required: false, default: [] })
@@ -36,7 +36,7 @@ export class ClassProject {
 
   @GqlField(() => [String], { nullable: false })
   @DBField({ type: [String], required: true })
-  classProjectLink: string[];
+  files: string[];
 
   @GqlField(() => String, { nullable: false })
   @DBField({ type: String, required: true })
@@ -89,13 +89,13 @@ export class ClassProjectResponse {
   user: any;
 
   @GqlField(() => ClassProjectCategory)
-  classProjectCategory: string;
+  category: string;
 
   @GqlField(() => [MinUser], { nullable: true })
   collaborators: any[];
 
   @GqlField(() => [String], { nullable: false })
-  classProjectLink: string[];
+  files: string[];
 
   @GqlField(() => String, { nullable: false })
   repositoryLink: string;
@@ -134,10 +134,10 @@ export class MinClassProject {
   user: any;
 
   @GqlField(() => ClassProjectCategory)
-  classProjectCategory: string;
+  category: string;
 
   @GqlField(() => [String], { nullable: false })
-  classProjectLink: string[];
+  files: string[];
 
   @GqlField(() => String, { nullable: false })
   repositoryLink: string;
@@ -182,7 +182,7 @@ export class CreateClassProjectInput {
 
   @GqlField(() => ID)
   @IsString()
-  classProjectCategory: string;
+  category: string;
 
   @IsOptional()
   @GqlField(() => [ID], { nullable: true })
@@ -191,7 +191,7 @@ export class CreateClassProjectInput {
 
   @GqlField(() => [String], { nullable: false })
   @IsString()
-  classProjectLink: string[];
+  files: string[];
 
   @GqlField(() => String, { nullable: false })
   @IsString()
@@ -219,7 +219,7 @@ export class UpdateClassProjectInput {
 
   @GqlField(() => ID)
   @IsString()
-  classProjectCategory: string;
+  category: string;
 
   @IsOptional()
   @GqlField(() => [ID], { nullable: true })
@@ -228,7 +228,7 @@ export class UpdateClassProjectInput {
 
   @GqlField(() => [String], { nullable: false })
   @IsString()
-  classProjectLink: string[];
+  files: string[];
 
   @GqlField(() => String, { nullable: false })
   @IsString()

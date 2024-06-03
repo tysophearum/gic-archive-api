@@ -53,7 +53,7 @@ export class ClassProjectResolver {
   ) {
     return await listClassProjectAction(user, pager, {
       isApproved: true,
-      classProjectCategory: categroyId
+      category: categroyId
     });
   }
 
@@ -66,7 +66,7 @@ export class ClassProjectResolver {
   ) {
     return await listClassProjectAction(user, pager, {
       isApproved: false,
-      classProjectCategory: categroyId
+      category: categroyId
     });
   }
 
