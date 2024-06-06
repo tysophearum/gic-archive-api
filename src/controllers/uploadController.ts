@@ -3,7 +3,9 @@ import multer from 'multer';
 import { uploadFile } from '../util/s3';
 import { ClassProjectRepositoryImpl, ThesisRepositoryImpl, UserRepositoryImpl } from '../repositories';
 import { ClassProjectService, ThesisService, UserService } from '../services';
-
+import readUserFromCSV from '../util/readUserFromCSV';
+import { UserRegisterInput } from '../entities';
+import { registerUserAction } from './user';
 
 const upload = multer({
   storage: multer.memoryStorage(),
@@ -65,11 +67,11 @@ router.post('/thesis/files', upload.array('files', 5), async (req: Request, res:
     throw new Error('Class project not found');
   }
 
-  let thesisFiles:string[] = [];
+  let thesisFiles: string[] = [];
   const files = req.files as Express.Multer.File[];
   for (const file of files) {
     const date = Date.now().toString();
-    const filename = `file/thesis/${date+file.originalname}`;
+    const filename = `file/thesis/${date + file.originalname}`;
     await uploadFile(file.buffer, filename, file.mimetype);
     thesisFiles.push(filename);
   }
@@ -85,14 +87,14 @@ router.post('/classProject/image', upload.single('image'), async (req: Request, 
   const classProjectRepository = new ClassProjectRepositoryImpl();
   const classProjectService = new ClassProjectService(classProjectRepository);
   const filename = `image/classProject/${Date.now().toString()}`;
-  
+
   const classProject = await classProjectService.getClassProjectById(req.body.classProjectId);
   if (!classProject) {
     throw new Error('Class project not found');
   }
 
   const file = req.file;
-  
+
   await uploadFile(file.buffer, filename, file.mimetype);
   classProject.image = filename;
   await classProjectService.updateClassProject(classProject);
@@ -114,7 +116,7 @@ router.post('/thesis/image', upload.single('image'), async (req: Request, res: R
   await uploadFile(file.buffer, filename, file.mimetype);
   thesis.image = filename;
   await thesisService.updateThesis(thesis);
-  
+
   res.json({ message: 'Image uploaded successfully' });
 });
 
@@ -136,7 +138,7 @@ router.post('/profile/image', upload.single('image'), async (req: Request, res: 
   await uploadFile(file.buffer, filename, file.mimetype);
   user.image = filename;
   await userService.updateUser(user);
-  
+
   res.json({ message: 'Image uploaded successfully' });
 });
 
@@ -158,8 +160,32 @@ router.post('/profile/cover', upload.single('image'), async (req: Request, res: 
   await uploadFile(file.buffer, filename, file.mimetype);
   user.coverImage = filename;
   await userService.updateUser(user);
-  
+
   res.json({ message: 'Image uploaded successfully' });
 });
+
+router.post('/user/csv', upload.single('file'), async (req: Request, res: Response) => {
+  const file = req.file;
+
+  const [data, error] = await readUserFromCSV(file);
+  if (error) {
+    return res.status(400).json({ message: error.message });
+  }
+
+  const userInputs: UserRegisterInput[] = data;
+
+  try {
+    for (const userInput of userInputs) {
+      await registerUserAction(userInput);
+    }
+    
+    res.json({
+      message: 'CSV file successfully processed'
+    });
+  } catch (err) {
+    res.status(500).json({ message: 'Internal Server Error' });
+  }
+});
+
 
 export default router;

@@ -20,7 +20,7 @@ export class UserService {
     query: any = null,
   ): Promise<ListUsersResponse> {
     const users = await this.userRepository.findUsers(pager, query);
-    const totalUsers = await this.userRepository.countUsers();
+    const totalUsers = await this.userRepository.countUsers(query);
     const pagination = calculatePagination(pager, totalUsers);
 
     return {

@@ -15,8 +15,8 @@ export interface UserRepository {
 export class UserRepositoryImpl implements UserRepository {
   private userModel = getModelForClass(User);
 
-  async countUsers(): Promise<number> {
-    return await this.userModel.countDocuments();
+  async countUsers(query: any): Promise<number> {
+    return await this.userModel.countDocuments(query);
   }
 
   async createUser(user: User): Promise<User> {

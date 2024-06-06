@@ -8,7 +8,6 @@ import generateToken from '../../util/generateToken';
 
 const registerUserAction = async (
   { name, studentId, email, gender, password, contacts }: UserRegisterInput,
-  file: FileUpload,
 ): Promise<UserResponse> => {
   const userRepository = new UserRepositoryImpl();
   const userService = new UserService(userRepository);

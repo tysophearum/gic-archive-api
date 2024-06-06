@@ -1,7 +1,6 @@
 import { listUsersAction, registerUserAction, getUserByIdAction, getUserContribution, updateUserAction } from '../controllers/user';
 import { Contribution, ListUsersResponse, MinUser, User, UserRegisterInput, UserResponse, UpdateUserInput } from '../entities/user';
 import { Arg, Ctx, Mutation, Query, Resolver, UseMiddleware } from 'type-graphql';
-import { FileUpload, GraphQLUpload } from 'graphql-upload-minimal';
 import { PaginationInput } from '../typeDefs';
 import logInUserAction from '../controllers/user/logInUserActon';
 import StudentMiddleware from '../middleware/StudentMiddleware';
@@ -12,9 +11,8 @@ export class UserResolver {
   @Mutation(() => UserResponse)
   async register(
     @Arg('user') user: UserRegisterInput,
-    @Arg('file', () => GraphQLUpload, { nullable: true }) file: FileUpload | null,
   ): Promise<UserResponse> {
-    return await registerUserAction(user, file);
+    return await registerUserAction(user);
   }
 
   @Mutation(() => UserResponse)
@@ -36,6 +34,11 @@ export class UserResolver {
   @UseMiddleware(StudentMiddleware)
   async getMe(@Ctx() { user }: any,) {
     return await getUserByIdAction(user.id);
+  }
+
+  @Query(() => ListUsersResponse)
+  async listStudents(@Arg('pager', () => PaginationInput, { nullable: true }) pager: PaginationInput) {
+    return await listUsersAction(pager, {role: 'student'});
   }
 
   @Query(() => [MinUser])

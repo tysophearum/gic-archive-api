@@ -158,7 +158,7 @@ export class UserRegisterInput {
   password: string;
 
   @IsOptional()
-  @GqlField(() => [ContactInfoInput])
+  @GqlField(() => [ContactInfoInput], {nullable: true})
   contacts: ContactInfoInput[];
 }
 
