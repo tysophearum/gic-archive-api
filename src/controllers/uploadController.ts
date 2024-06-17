@@ -1,15 +1,16 @@
 import express, { Request, Response } from 'express';
 import multer from 'multer';
-import { uploadFile } from '../util/s3';
+import { uploadToS3 } from '../util/s3';
 import { ClassProjectRepositoryImpl, ThesisRepositoryImpl, UserRepositoryImpl } from '../repositories';
 import { ClassProjectService, ThesisService, UserService } from '../services';
 import readUserFromCSV from '../util/readUserFromCSV';
 import { UserRegisterInput } from '../entities';
 import { registerUserAction } from './user';
+import resizeImage from '../util/resizeImage';
 
 const upload = multer({
   storage: multer.memoryStorage(),
-  limits: { fileSize: 5 * 1024 * 1024 }
+  limits: { fileSize: 20 * 1024 * 1024 } // maximun 20 mb
 });
 
 const router = express.Router();
@@ -34,7 +35,7 @@ router.post('/classProject/files', upload.array('files', 5), async (req: Request
       const date = Date.now().toString();
       const filename = `file/classProject/${date + file.originalname}`;
       try {
-        await uploadFile(file.buffer, filename, file.mimetype);
+        await uploadToS3(file.buffer, filename, file.mimetype);
         classProjectFiles.push(filename);
       } catch (err) {
         console.error('Error uploading file:', err);
@@ -72,7 +73,7 @@ router.post('/thesis/files', upload.array('files', 5), async (req: Request, res:
   for (const file of files) {
     const date = Date.now().toString();
     const filename = `file/thesis/${date + file.originalname}`;
-    await uploadFile(file.buffer, filename, file.mimetype);
+    await uploadToS3(file.buffer, filename, file.mimetype);
     thesisFiles.push(filename);
   }
 
@@ -93,9 +94,13 @@ router.post('/classProject/image', upload.single('image'), async (req: Request, 
     throw new Error('Class project not found');
   }
 
-  const file = req.file;
+  let file = req.file;
 
-  await uploadFile(file.buffer, filename, file.mimetype);
+  const imageSizeMB = file.size / 1024 / 1024;
+  if (imageSizeMB > 0.5) {
+    file = await resizeImage(file, 0.5);
+  }
+  await uploadToS3(file.buffer, filename, file.mimetype);
   classProject.image = filename;
   await classProjectService.updateClassProject(classProject);
 
@@ -113,7 +118,7 @@ router.post('/thesis/image', upload.single('image'), async (req: Request, res: R
   }
 
   const file = req.file;
-  await uploadFile(file.buffer, filename, file.mimetype);
+  await uploadToS3(file.buffer, filename, file.mimetype);
   thesis.image = filename;
   await thesisService.updateThesis(thesis);
 
@@ -123,24 +128,40 @@ router.post('/thesis/image', upload.single('image'), async (req: Request, res: R
 router.post('/profile/image', upload.single('image'), async (req: Request, res: Response) => {
   const userRepository = new UserRepositoryImpl();
   const userService = new UserService(userRepository);
-  let filename = `image/user/profile/${Date.now().toString()}`;
 
-  const user = await userService.getUserById(req.body.userId);
-  if (!user) {
-    throw new Error('User not found');
+  try {
+    let filename = `image/user/profile/${Date.now().toString()}`;
+    const user = await userService.getUserById(req.body.userId);
+
+    if (!user) {
+      return res.status(404).json({ message: 'User not found' });
+    }
+
+    if (user.image) {
+      filename = `image/user/profile/${user.image}`;
+    }
+
+    let file = req.file;
+    if (!file) {
+      return res.status(400).json({ message: 'No file uploaded' });
+    }
+
+    const imageSizeMB = file.size / 1024 / 1024;
+    if (imageSizeMB > 0.15) {
+      file = await resizeImage(file, 0.15);
+    }
+
+    await uploadToS3(file.buffer, filename, file.mimetype);
+    user.image = filename;
+    await userService.updateUser(user);
+
+    res.json({ message: 'Image uploaded successfully' });
+  } catch (error) {
+    console.error('Error uploading image:', error);
+    res.status(500).json({ message: 'Internal Server Error' });
   }
-
-  if (user.image) {
-    filename = `image/user/profile/${user.image}`;
-  }
-
-  const file = req.file;
-  await uploadFile(file.buffer, filename, file.mimetype);
-  user.image = filename;
-  await userService.updateUser(user);
-
-  res.json({ message: 'Image uploaded successfully' });
 });
+
 
 router.post('/profile/cover', upload.single('image'), async (req: Request, res: Response) => {
   const userRepository = new UserRepositoryImpl();
@@ -157,7 +178,7 @@ router.post('/profile/cover', upload.single('image'), async (req: Request, res: 
   }
 
   const file = req.file;
-  await uploadFile(file.buffer, filename, file.mimetype);
+  await uploadToS3(file.buffer, filename, file.mimetype);
   user.coverImage = filename;
   await userService.updateUser(user);
 

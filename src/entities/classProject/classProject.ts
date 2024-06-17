@@ -97,6 +97,9 @@ export class ClassProjectResponse {
   @GqlField(() => [String], { nullable: false })
   files: string[];
 
+  @GqlField(() => [String], { nullable: true, defaultValue: null })
+  fileLinks?: string[];
+
   @GqlField(() => String, { nullable: false })
   repositoryLink: string;
 
