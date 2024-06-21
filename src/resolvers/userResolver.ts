@@ -41,13 +41,18 @@ export class UserResolver {
     return await listUsersAction(pager, {role: 'student'});
   }
 
-  @Query(() => [MinUser])
+  @Query(() => ListUsersResponse)
+  async listTeachers(@Arg('pager', () => PaginationInput, { nullable: true }) pager: PaginationInput) {
+    return await listUsersAction(pager, {role: 'teacher'});
+  }
+
+  @Query(() => [User])
   async searchStudents(@Arg('name') name: string) {
     const users = await listUsersAction({page: 1, limit: 8}, { name: { $regex: name, $options: 'i' }, role: 'student' });
     return users.users;
   }
 
-  @Query(() => [MinUser])
+  @Query(() => [User])
   async searchTeachers(@Arg('name') name: string) {
     const users = await listUsersAction({page: 1, limit: 8}, { name: { $regex: name, $options: 'i' }, role: 'teacher' });
     return users.users;

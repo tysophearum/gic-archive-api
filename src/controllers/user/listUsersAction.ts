@@ -9,9 +9,12 @@ const listUsersAction = async (pager: PaginationInput, query: any): Promise<List
   const userService = new UserService(userRepository);
 
   const users = await userService.getUsers(pager, query);
-  users.users.forEach(async (user) => {
+  const promises = users.users.map(async (user, i) => {
     user.image = await getObjectSignedUrl(user.image);
   });
+  
+  // Wait for all promises to resolve
+  await Promise.all(promises);
 
   return users;
 };
