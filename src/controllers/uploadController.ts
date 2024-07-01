@@ -1,6 +1,6 @@
 import express, { Request, Response } from 'express';
 import multer from 'multer';
-import { uploadToS3 } from '../util/s3';
+import { deleteFile, uploadToS3 } from '../util/s3';
 import { ClassProjectRepositoryImpl, ThesisRepositoryImpl, UserRepositoryImpl } from '../repositories';
 import { ClassProjectService, ThesisService, UserService } from '../services';
 import readUserFromCSV from '../util/readUserFromCSV';
@@ -53,10 +53,10 @@ router.post('/classProject/files', upload.array('files', 5), async (req: Request
     }
 
     // Send a success response
-    res.json({ message: 'Files uploaded successfully' });
+    return res.json({ message: 'Files uploaded successfully' });
   } catch (err) {
     console.error('Error processing request:', err);
-    res.status(500).json({ error: 'Internal server error' });
+    return res.status(500).json({ error: 'Internal server error' });
   }
 });
 
@@ -80,18 +80,29 @@ router.post('/thesis/files', upload.array('files', 5), async (req: Request, res:
   thesis.files = thesisFiles;
   await thesisService.updateThesis(thesis);
 
-  res.json({ message: 'Files uploaded successfully' });
+  return res.json({ message: 'Files uploaded successfully' });
 });
 
 
 router.post('/classProject/image', upload.single('image'), async (req: Request, res: Response) => {
   const classProjectRepository = new ClassProjectRepositoryImpl();
   const classProjectService = new ClassProjectService(classProjectRepository);
-  const filename = `image/classProject/${Date.now().toString()}`;
+  let filename = `image/classProject/${Date.now().toString()}`;
 
   const classProject = await classProjectService.getClassProjectById(req.body.classProjectId);
   if (!classProject) {
-    throw new Error('Class project not found');
+    return res.status(404).json({
+      success: false,
+      error: {
+        code: 'NOT_FOUND',
+        message: 'Class project not found',
+        details: 'The class project with the provided ID does not exist.'
+      }
+    });    
+  }
+
+  if (classProject.image) {
+    filename = classProject.image;
   }
 
   let file = req.file;
@@ -104,25 +115,34 @@ router.post('/classProject/image', upload.single('image'), async (req: Request, 
   classProject.image = filename;
   await classProjectService.updateClassProject(classProject);
 
-  res.json({ message: 'Image uploaded successfully' });
+  return res.json({ message: 'Image uploaded successfully' });
 });
 
 router.post('/thesis/image', upload.single('image'), async (req: Request, res: Response) => {
   const thesisRepository = new ThesisRepositoryImpl();
   const thesisService = new ThesisService(thesisRepository);
-  const filename = `image/thesis/${Date.now().toString()}`;
+  let filename = `image/thesis/${Date.now().toString()}`;
 
   const thesis = await thesisService.getThesisById(req.body.thesisId);
   if (!thesis) {
     throw new Error('Thesis not found');
   }
 
-  const file = req.file;
+  if (thesis.image) {
+    filename = thesis.image;
+  }
+
+  let file = req.file;
+
+  const imageSizeMB = file.size / 1024 / 1024;
+  if (imageSizeMB > 0.5) {
+    file = await resizeImage(file, 0.5);
+  }
   await uploadToS3(file.buffer, filename, file.mimetype);
   thesis.image = filename;
   await thesisService.updateThesis(thesis);
 
-  res.json({ message: 'Image uploaded successfully' });
+  return res.json({ message: 'Image uploaded successfully' });
 });
 
 router.post('/profile/image', upload.single('image'), async (req: Request, res: Response) => {
@@ -138,7 +158,7 @@ router.post('/profile/image', upload.single('image'), async (req: Request, res: 
     }
 
     if (user.image) {
-      filename = `image/user/profile/${user.image}`;
+      filename = user.image;
     }
 
     let file = req.file;
@@ -155,10 +175,10 @@ router.post('/profile/image', upload.single('image'), async (req: Request, res: 
     user.image = filename;
     await userService.updateUser(user);
 
-    res.json({ message: 'Image uploaded successfully' });
+    return res.json({ message: 'Image uploaded successfully' });
   } catch (error) {
     console.error('Error uploading image:', error);
-    res.status(500).json({ message: 'Internal Server Error' });
+    return res.status(500).json({ message: 'Internal Server Error' });
   }
 });
 
@@ -182,7 +202,7 @@ router.post('/profile/cover', upload.single('image'), async (req: Request, res: 
   user.coverImage = filename;
   await userService.updateUser(user);
 
-  res.json({ message: 'Image uploaded successfully' });
+  return res.json({ message: 'Image uploaded successfully' });
 });
 
 router.post('/user/csv', upload.single('file'), async (req: Request, res: Response) => {
@@ -200,7 +220,7 @@ router.post('/user/csv', upload.single('file'), async (req: Request, res: Respon
       await registerUserAction(userInput);
     }
     
-    res.json({
+    return res.json({
       message: 'CSV file successfully processed'
     });
   } catch (err) {
@@ -208,5 +228,11 @@ router.post('/user/csv', upload.single('file'), async (req: Request, res: Respon
   }
 });
 
+router.post('/test', upload.single('file'), async (req: Request, res: Response) => {
+  deleteFile(req.body.name)
+  return res.json({
+    message: 'Test route'
+  });
+})
 
 export default router;

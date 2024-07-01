@@ -48,8 +48,8 @@ export async function getObjectSignedUrl(key: string) {
       }
     
       const command = new GetObjectCommand(params);
-      const minute = 60
-      const url = await getSignedUrl(s3Client, command, { expiresIn: 30 * minute });
+      const minute = 60 // 1 minute
+      const url = await getSignedUrl(s3Client, command, { expiresIn: 60 * minute });
     
       return url
     } catch (error) {

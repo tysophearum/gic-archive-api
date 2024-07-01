@@ -3,7 +3,6 @@ import { ClassProject, ClassProjectResponse, User } from '../../entities';
 import { ClassProjectRepositoryImpl, UserRepositoryImpl } from '../../repositories';
 import { ClassProjectService, UserService } from '../../services';
 import validateUserId from '../../util/validateUserId';
-import { FileUpload } from 'graphql-upload-minimal';
 import validateClassProjectCategoryId from '../../util/validateClassProjectCategoryId';
 import { Types } from 'mongoose';
 
@@ -13,8 +12,6 @@ const updateClassProjectAction = async (
 ): Promise<ClassProjectResponse> => {
   const classProjectRepository = new ClassProjectRepositoryImpl();
   const classProjectService = new ClassProjectService(classProjectRepository);
-  const userRepository = new UserRepositoryImpl();
-  const userService = new UserService(userRepository);
 
   const { id, title, description, category, collaborators, repositoryLink, videoLink } = classProjectInput;
 
