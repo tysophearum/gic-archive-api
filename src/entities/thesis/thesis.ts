@@ -247,10 +247,6 @@ export class UpdateThesisInput {
   @IsString({ each: true })
   collaborators: string[];
 
-  @GqlField(() => [String], { nullable: false })
-  @IsString()
-  files: string[];
-
   @GqlField(() => String, { nullable: false })
   @IsString()
   repositoryLink: string;

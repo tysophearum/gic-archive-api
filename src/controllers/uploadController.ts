@@ -63,26 +63,128 @@ router.post('/classProject/files', upload.array('files', 5), async (req: Request
 router.post('/thesis/files', upload.array('files', 5), async (req: Request, res: Response) => {
   const thesisRepository = new ThesisRepositoryImpl();
   const thesisService = new ThesisService(thesisRepository);
-  let thesis = await thesisService.getThesisById(req.body.thesisId);
-  if (!thesis) {
-    throw new Error('Class project not found');
+
+  try {
+    // Retrieve class project
+    let thesis = await thesisService.getThesisById(req.body.thesisId);
+    if (!thesis) {
+      return res.status(404).json({ error: 'Class project not found' });
+    }
+
+    // Initialize an array to store file links
+    let thesisFiles: string[] = [];
+    const files = req.files as Express.Multer.File[];
+
+    // Upload each file and store its link
+    for (const file of files) {
+      const date = Date.now().toString();
+      const filename = `file/thesis/${date + file.originalname}`;
+      try {
+        await uploadToS3(file.buffer, filename, file.mimetype);
+        thesisFiles.push(filename);
+      } catch (err) {
+        console.error('Error uploading file:', err);
+        return res.status(500).json({ error: 'Error uploading file' });
+      }
+    }
+
+    // Update the class project with new file links
+    thesis.files = thesisFiles;
+    try {
+      await thesisService.updateThesis(thesis);
+    } catch (err) {
+      console.error('Error updating class project:', err);
+      return res.status(500).json({ error: 'Error updating class project' });
+    }
+
+    // Send a success response
+    return res.json({ message: 'Files uploaded successfully' });
+  } catch (err) {
+    console.error('Error processing request:', err);
+    return res.status(500).json({ error: 'Internal server error' });
   }
-
-  let thesisFiles: string[] = [];
-  const files = req.files as Express.Multer.File[];
-  for (const file of files) {
-    const date = Date.now().toString();
-    const filename = `file/thesis/${date + file.originalname}`;
-    await uploadToS3(file.buffer, filename, file.mimetype);
-    thesisFiles.push(filename);
-  }
-
-  thesis.files = thesisFiles;
-  await thesisService.updateThesis(thesis);
-
-  return res.json({ message: 'Files uploaded successfully' });
 });
 
+router.post('/classProject/files/delete', upload.single('file'), async (req: Request, res: Response) => {
+  const classProjectRepository = new ClassProjectRepositoryImpl();
+  const classProjectService = new ClassProjectService(classProjectRepository);
+  
+  try {
+    // Retrieve class project
+    let classProject = await classProjectService.getClassProjectById(req.body.classProjectId);
+    if (!classProject) {
+      return res.status(404).json({ error: 'Class project not found' });
+    }
+
+    const originalFiles = classProject.files;
+    const id = req.body.classProjectId;
+    const filesToDelete = req.body.filesToDelete;
+
+    for (const file of filesToDelete) {
+      try {
+        await deleteFile(file);
+      } catch (err) {
+        console.error('Error uploading file:', err);
+        return res.status(500).json({ error: 'Error deleting file' });
+      }
+    }
+
+    const updatedFiles = originalFiles.filter(item => !filesToDelete.includes(item));
+    classProject.files = updatedFiles
+    try {
+      await classProjectService.updateClassProject(classProject);
+    } catch (err) {
+      console.error('Error updating class project:', err);
+      return res.status(500).json({ error: 'Error updating class project' });
+    }
+
+    // Send a success response
+    return res.json({ message: 'Files deleted successfully' });
+  } catch (err) {
+    console.error('Error processing request:', err);
+    return res.status(500).json({ error: 'Internal server error' });
+  }
+});
+
+router.post('/thesis/files/delete', upload.single('file'), async (req: Request, res: Response) => {
+  const thesisRepository = new ThesisRepositoryImpl();
+  const thesisService = new ThesisService(thesisRepository);
+  
+  try {
+    let thesis = await thesisService.getThesisById(req.body.thesisId);
+    if (!thesis) {
+      return res.status(404).json({ error: 'Thesis not found' });
+    }
+
+    const originalFiles = thesis.files;
+    const id = req.body.thesisId;
+    const filesToDelete = req.body.filesToDelete;
+
+    for (const file of filesToDelete) {
+      try {
+        await deleteFile(file);
+      } catch (err) {
+        console.error('Error uploading file:', err);
+        return res.status(500).json({ error: 'Error deleting file' });
+      }
+    }
+
+    const updatedFiles = originalFiles.filter(item => !filesToDelete.includes(item));
+    thesis.files = updatedFiles
+    try {
+      await thesisService.updateThesis(thesis);
+    } catch (err) {
+      console.error('Error updating thesis:', err);
+      return res.status(500).json({ error: 'Error updating thesis' });
+    }
+
+    // Send a success response
+    return res.json({ message: 'Files deleted successfully' });
+  } catch (err) {
+    console.error('Error processing request:', err);
+    return res.status(500).json({ error: 'Internal server error' });
+  }
+});
 
 router.post('/classProject/image', upload.single('image'), async (req: Request, res: Response) => {
   const classProjectRepository = new ClassProjectRepositoryImpl();
