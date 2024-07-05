@@ -20,9 +20,25 @@ const updateClassProjectAction = async (
     throw new Error('ClassProject not found');
   }
 
-  if (!title || !description || !repositoryLink || !user || !category) {
-    throw new Error('Invalid input');
+  if (!title) {
+    throw new Error('Title is required');
   }
+  
+  if (!description) {
+    throw new Error('Description is required');
+  }
+  
+  if (!repositoryLink) {
+    throw new Error('Repository link is required');
+  }
+  
+  if (!user) {
+    throw new Error('User is required');
+  }
+  
+  if (!category) {
+    throw new Error('Category is required');
+  }  
 
   const haveCategory = await validateClassProjectCategoryId(category);
   if (!haveCategory) {

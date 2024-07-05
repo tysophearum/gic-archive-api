@@ -24,9 +24,29 @@ const updateThesisAction = async (
     throw new Error('Thesis not found');
   }
 
-  if (!title || !description || !repositoryLink || !user || !category) {
-    throw new Error('Invalid input');
+  if (!title) {
+    throw new Error('Title is required');
   }
+  
+  if (!description) {
+    throw new Error('Description is required');
+  }
+  
+  if (!repositoryLink) {
+    throw new Error('Repository link is required');
+  }
+  
+  if (!user) {
+    throw new Error('User is required');
+  }
+  
+  if (!category) {
+    throw new Error('Category is required');
+  }
+
+  if (!teacher) {
+    throw new Error('Teacher is required');
+  } 
 
   const haveCategory = await validateThesisCategoryId(category);
   if (!haveCategory) {

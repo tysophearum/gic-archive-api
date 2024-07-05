@@ -12,7 +12,9 @@ const deleteThesisAction = async (id: string): Promise<boolean> => {
   }
 
   try {
-    await deleteFile(thesis.image);
+    if (thesis.image) {
+      await deleteFile(thesis.image);
+    }
     await Promise.all(
       thesis.files.map(async (document) => {
         await deleteFile(document);

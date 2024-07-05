@@ -319,7 +319,31 @@ router.post('/user/csv', upload.single('file'), async (req: Request, res: Respon
 
   try {
     for (const userInput of userInputs) {
-      await registerUserAction(userInput);
+      await registerUserAction({...userInput, role: "student"});
+    }
+    
+    return res.json({
+      message: 'CSV file successfully processed'
+    });
+  } catch (err) {
+    res.status(500).json({ message: 'Internal Server Error' });
+  }
+});
+
+router.post('/teacher/csv', upload.single('file'), async (req: Request, res: Response) => {
+  const file = req.file;
+
+  const [data, error] = await readUserFromCSV(file);
+  if (error) {
+    return res.status(400).json({ message: error.message });
+  }
+
+  const userInputs: UserRegisterInput[] = data;
+
+  try {
+    for (let userInput of userInputs) {
+      userInput.studentId = "Teacher";
+      await registerUserAction({...userInput, role: "teacher"});
     }
     
     return res.json({

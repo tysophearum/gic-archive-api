@@ -40,4 +40,8 @@ export class UserService {
   async updateUser(user: User) {
     return await this.userRepository.updateUser(user);
   }
+
+  async deleteUser(id: string) {
+    return await this.userRepository.deleteUser(id);
+  }
 }

@@ -7,7 +7,7 @@ import bcrypt from 'bcrypt';
 import generateToken from '../../util/generateToken';
 
 const registerUserAction = async (
-  { name, studentId, email, gender, password, contacts }: UserRegisterInput,
+  { name, studentId, email, gender, password, contacts, role }: any,
 ): Promise<UserResponse> => {
   const userRepository = new UserRepositoryImpl();
   const userService = new UserService(userRepository);
@@ -29,7 +29,7 @@ const registerUserAction = async (
     password: hashedPassword,
     contacts,
     image,
-    role: 'student',
+    role,
     coverImage
   };
 

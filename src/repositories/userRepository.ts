@@ -7,7 +7,7 @@ export interface UserRepository {
   findUsers(pager: PaginationInput, query: any): Promise<User[]>;
   findUserById(id: string): Promise<User>;
   countUsers(query?: unknown): Promise<number>;
-  deleteUser(id: string): Promise<void>;
+  deleteUser(id: string): Promise<boolean>;
   updateUser(user: User): Promise<User>;
   searchUsers(name: string): Promise<User[]>;
 }
@@ -32,8 +32,13 @@ export class UserRepositoryImpl implements UserRepository {
     return await this.userModel.findById(id).exec();
   }
 
-  async deleteUser(id: string): Promise<void> {
-    await this.userModel.findByIdAndDelete(id).exec();
+  async deleteUser(id: string): Promise<boolean> {
+    try {
+      await this.userModel.findByIdAndDelete(id).exec();
+      return true;
+    } catch (error) {
+      return false;
+    }
   }
 
   async updateUser(user: User): Promise<User> {

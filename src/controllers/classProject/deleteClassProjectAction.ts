@@ -13,7 +13,9 @@ const deleteClassProjectAction = async (id: string): Promise<boolean> => {
   }
 
   try {
-    await deleteFile(classProject.image);
+    if (classProject.image) {
+      await deleteFile(classProject.image);
+    }
     await Promise.all(
       classProject.files.map(async (document) => {
         await deleteFile(document);

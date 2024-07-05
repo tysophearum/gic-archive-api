@@ -1,5 +1,5 @@
-import { listUsersAction, registerUserAction, getUserByIdAction, getUserContribution, updateUserAction } from '../controllers/user';
-import { Contribution, ListUsersResponse, MinUser, User, UserRegisterInput, UserResponse, UpdateUserInput } from '../entities/user';
+import { listUsersAction, registerUserAction, getUserByIdAction, getUserContribution, updateUserAction, deleteUserByIdAction } from '../controllers/user';
+import { Contribution, ListUsersResponse, User, UserRegisterInput, UserResponse, UpdateUserInput } from '../entities/user';
 import { Arg, Ctx, Mutation, Query, Resolver, UseMiddleware } from 'type-graphql';
 import { PaginationInput } from '../typeDefs';
 import logInUserAction from '../controllers/user/logInUserActon';
@@ -12,7 +12,23 @@ export class UserResolver {
   async register(
     @Arg('user') user: UserRegisterInput,
   ): Promise<UserResponse> {
-    return await registerUserAction(user);
+    return await registerUserAction({...user, role: 'student'});
+  }
+
+  @Mutation(() => UserResponse)
+  @UseMiddleware(AdminMiddleware)
+  async registerTeacher(
+    @Arg('user') user: UserRegisterInput,
+  ): Promise<UserResponse> {
+    return await registerUserAction({...user, role: 'teacher'});
+  }
+
+  @Mutation(() => UserResponse)
+  @UseMiddleware(AdminMiddleware)
+  async registerAdmin(
+    @Arg('user') user: UserRegisterInput,
+  ): Promise<UserResponse> {
+    return await registerUserAction({...user, role: 'admin'});
   }
 
   @Mutation(() => UserResponse)
@@ -30,6 +46,11 @@ export class UserResolver {
     return await getUserByIdAction(id);
   }
 
+  @Mutation(() => Boolean)
+  async deleteUserById(@Arg('userId') id: string) {
+    return await deleteUserByIdAction(id);
+  }
+
   @Query(() => User)
   @UseMiddleware(StudentMiddleware)
   async getMe(@Ctx() { user }: any,) {
@@ -44,6 +65,11 @@ export class UserResolver {
   @Query(() => ListUsersResponse)
   async listTeachers(@Arg('pager', () => PaginationInput, { nullable: true }) pager: PaginationInput) {
     return await listUsersAction(pager, {role: 'teacher'});
+  }
+
+  @Query(() => ListUsersResponse)
+  async listAdmins(@Arg('pager', () => PaginationInput, { nullable: true }) pager: PaginationInput) {
+    return await listUsersAction(pager, {role: 'admin'});
   }
 
   @Query(() => [User])

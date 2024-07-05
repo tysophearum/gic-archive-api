@@ -1,4 +1,4 @@
-import { ClassProject, ClassProjectResponse } from '../../entities';
+import { ClassProjectResponse } from '../../entities';
 import { ClassProjectRepositoryImpl } from '../../repositories';
 import { ClassProjectService } from '../../services';
 import { getObjectSignedUrl } from '../../util/s3';
