@@ -28,6 +28,9 @@ router.post('/classProject/files', upload.array('files', 5), async (req: Request
 
     // Initialize an array to store file links
     let classProjectFiles: string[] = [];
+    if (classProject.files?.length) {
+      classProjectFiles = classProject.files
+    }
     const files = req.files as Express.Multer.File[];
 
     // Upload each file and store its link
@@ -73,6 +76,9 @@ router.post('/thesis/files', upload.array('files', 5), async (req: Request, res:
 
     // Initialize an array to store file links
     let thesisFiles: string[] = [];
+    if (thesis.files?.length) {
+      thesisFiles = thesis.files
+    }
     const files = req.files as Express.Multer.File[];
 
     // Upload each file and store its link

@@ -1,5 +1,6 @@
 import { UserService } from '../../services';
 import { UserRepositoryImpl } from '../../repositories';
+import { deleteFile } from '../../util/s3';
 
 const deleteUserByIdAction = async (userId: string) => {
   if (!userId) {
@@ -13,9 +14,19 @@ const deleteUserByIdAction = async (userId: string) => {
   const userRepository = new UserRepositoryImpl();
   const userService = new UserService(userRepository);
 
-  let user = await userService.deleteUser(userId);
+  const user = await userService.getUserById(userId);
 
-  return user;
+  if (user.image) {
+    await deleteFile(user.image);
+  }
+
+  if (user.coverImage) {
+    await deleteFile(user.coverImage);
+  }
+
+  const deletedUser = await userService.deleteUser(userId);
+
+  return deletedUser;
 };
 
 export default deleteUserByIdAction;

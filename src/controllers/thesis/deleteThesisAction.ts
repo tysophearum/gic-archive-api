@@ -17,7 +17,9 @@ const deleteThesisAction = async (id: string): Promise<boolean> => {
     }
     await Promise.all(
       thesis.files.map(async (document) => {
-        await deleteFile(document);
+        if (document) {
+          await deleteFile(document);
+        }
       })
     );
   } catch (error) {
