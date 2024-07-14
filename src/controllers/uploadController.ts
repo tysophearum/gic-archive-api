@@ -28,7 +28,7 @@ router.post('/classProject/files', upload.array('files', 5), async (req: Request
 
     // Initialize an array to store file links
     let classProjectFiles: string[] = [];
-    if (classProject.files?.length) {
+    if (classProject.files?.length && classProject?.files?.[0] !== "") {
       classProjectFiles = classProject.files
     }
     const files = req.files as Express.Multer.File[];
@@ -76,7 +76,7 @@ router.post('/thesis/files', upload.array('files', 5), async (req: Request, res:
 
     // Initialize an array to store file links
     let thesisFiles: string[] = [];
-    if (thesis.files?.length) {
+    if (thesis.files?.length && thesis?.files?.[0] !== "") {
       thesisFiles = thesis.files
     }
     const files = req.files as Express.Multer.File[];
@@ -216,9 +216,10 @@ router.post('/classProject/image', upload.single('image'), async (req: Request, 
   let file = req.file;
 
   const imageSizeMB = file.size / 1024 / 1024;
-  if (imageSizeMB > 0.5) {
-    file = await resizeImage(file, 0.5);
+  if (imageSizeMB > 0.15) {
+    file = await resizeImage(file, 0.15);
   }
+
   await uploadToS3(file.buffer, filename, file.mimetype);
   classProject.image = filename;
   await classProjectService.updateClassProject(classProject);
@@ -243,8 +244,8 @@ router.post('/thesis/image', upload.single('image'), async (req: Request, res: R
   let file = req.file;
 
   const imageSizeMB = file.size / 1024 / 1024;
-  if (imageSizeMB > 0.5) {
-    file = await resizeImage(file, 0.5);
+  if (imageSizeMB > 0.15) {
+    file = await resizeImage(file, 0.15);
   }
   await uploadToS3(file.buffer, filename, file.mimetype);
   thesis.image = filename;
